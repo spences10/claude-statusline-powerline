@@ -5,12 +5,20 @@ import * as path from 'path';
 import { load_config } from './config';
 import { ClaudeStatusInput, GitInfo, SeparatorStyle } from './types';
 
-// Powerline symbols (using Unicode escape sequences like claude-powerline)
+// Powerline symbols - only using glyphs that work with Victor Mono
 const SEPARATORS = {
+	// Basic powerline (core compatibility)
 	left: '\uE0B2',
 	right: '\uE0B0',
 	leftThin: '\uE0B3',
 	rightThin: '\uE0B1',
+	// Powerline-extra-symbols that work in Victor Mono
+	curvy: '\uE0B4', // ] curved right
+	curvyLeft: '\uE0B6', // [ curved left
+	angly: '\uE0B8', // \ angular
+	anglyLeft: '\uE0B9', // / angular left
+	angly2: '\uE0BC', // / angular style 2
+	angly2Left: '\uE0BD', // / angular style 2 left
 } as const;
 
 // Git symbols that work with most powerline fonts
@@ -89,14 +97,20 @@ function create_styled_separator(
 		case 'thick':
 			return `${to_color}${from_color}${SEPARATORS.right}${COLORS.reset}`;
 		case 'flame':
-			// Double separator for "flame" effect
-			return `${to_color}${from_color}${SEPARATORS.right}${SEPARATORS.rightThin}${COLORS.reset}`;
+			// Use angly2 since flame glyphs don't work in Victor Mono
+			return `${to_color}${from_color}${SEPARATORS.angly2}${COLORS.reset}`;
 		case 'wave':
-			// Alternating thick/thin for wave effect
-			return `${to_color}${from_color}${SEPARATORS.rightThin}${SEPARATORS.right}${COLORS.reset}`;
+			// Using curvy separators for wave effect
+			return `${to_color}${from_color}${SEPARATORS.curvy}${COLORS.reset}`;
 		case 'lightning':
-			// Triple separator for lightning effect
-			return `${to_color}${from_color}${SEPARATORS.right}${SEPARATORS.rightThin}${SEPARATORS.right}${COLORS.reset}`;
+			// Using angular separators for lightning effect
+			return `${to_color}${from_color}${SEPARATORS.angly}${COLORS.reset}`;
+		case 'curvy':
+			return `${to_color}${from_color}${SEPARATORS.curvy}${COLORS.reset}`;
+		case 'angly':
+			return `${to_color}${from_color}${SEPARATORS.angly}${COLORS.reset}`;
+		case 'angly2':
+			return `${to_color}${from_color}${SEPARATORS.angly2}${COLORS.reset}`;
 		case 'none':
 			return '';
 		default:

@@ -27,6 +27,9 @@ export type SeparatorStyle =
 	| 'flame'
 	| 'wave'
 	| 'lightning'
+	| 'curvy'
+	| 'angly'
+	| 'angly2'
 	| 'none';
 
 export interface SeparatorConfig {
