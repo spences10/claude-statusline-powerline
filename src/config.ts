@@ -54,6 +54,33 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		},
 		noGit: 'flame',
 	},
+
+	// Powerline-extra-symbols themes for Victor Mono compatibility
+	curvy: {
+		modelToDirectory: 'curvy',
+		directoryToGit: {
+			clean: 'curvy',
+			dirty: 'angly',
+		},
+		gitEnd: {
+			clean: 'curvy',
+			dirty: 'flame',
+		},
+		noGit: 'curvy',
+	},
+
+	angular: {
+		modelToDirectory: 'angly',
+		directoryToGit: {
+			clean: 'angly',
+			dirty: 'angly2',
+		},
+		gitEnd: {
+			clean: 'angly',
+			dirty: 'flame',
+		},
+		noGit: 'angly',
+	},
 };
 
 // Default configuration
