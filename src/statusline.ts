@@ -73,8 +73,24 @@ function create_segment(content: string, bg_color: string, fg_color: string = CO
   return `${bg_color}${fg_color} ${content} ${COLORS.reset}`;
 }
 
-function create_separator(from_color: string, to_color: string = ''): string {
-  return `${to_color}${from_color}${SEPARATORS.right}${COLORS.reset}`;
+function create_separator(from_color: string, to_color: string = '', style: 'thick' | 'thin' = 'thick'): string {
+  const separator = style === 'thin' ? SEPARATORS.rightThin : SEPARATORS.right;
+  return `${to_color}${from_color}${separator}${COLORS.reset}`;
+}
+
+function create_flame_separator(from_color: string, to_color: string = ''): string {
+  // Double separator for "flame" effect
+  return `${to_color}${from_color}${SEPARATORS.right}${SEPARATORS.rightThin}${COLORS.reset}`;
+}
+
+function create_wave_separator(from_color: string, to_color: string = ''): string {
+  // Alternating thick/thin for wave effect
+  return `${to_color}${from_color}${SEPARATORS.rightThin}${SEPARATORS.right}${COLORS.reset}`;
+}
+
+function create_lightning_separator(from_color: string, to_color: string = ''): string {
+  // Triple separator for lightning effect
+  return `${to_color}${from_color}${SEPARATORS.right}${SEPARATORS.rightThin}${SEPARATORS.right}${COLORS.reset}`;
 }
 
 function build_statusline(data: ClaudeStatusInput): string {
@@ -83,9 +99,9 @@ function build_statusline(data: ClaudeStatusInput): string {
   
   const segments: string[] = [];
   
-  // Model segment (blue background)
+  // Model segment (blue background) - use wave separator for smooth flow
   segments.push(create_segment(` ${model}`, COLORS.bg.blue));
-  segments.push(create_separator(COLORS.fg.blue, COLORS.bg.gray));
+  segments.push(create_wave_separator(COLORS.fg.blue, COLORS.bg.gray));
   
   // Directory segment (gray background)
   const dir_name = path.basename(cwd);
@@ -98,11 +114,20 @@ function build_statusline(data: ClaudeStatusInput): string {
     const git_fg = git_info.isDirty ? COLORS.fg.yellow : COLORS.fg.green;
     const status_icon = git_info.isDirty ? '±' : '✓';
     
-    segments.push(create_separator(COLORS.fg.gray, git_bg));
-    segments.push(create_segment(`${SYMBOLS.branch} ${git_info.branch} ${status_icon}`, git_bg, COLORS.black));
-    segments.push(create_separator(git_fg));
+    // Use flame separator for dirty repos (attention-grabbing)
+    if (git_info.isDirty) {
+      segments.push(create_flame_separator(COLORS.fg.gray, git_bg));
+      segments.push(create_segment(`${SYMBOLS.branch} ${git_info.branch} ${status_icon}`, git_bg, COLORS.black));
+      segments.push(create_lightning_separator(git_fg)); // Triple separator for dirty repos!
+    } else {
+      // Clean repo gets smooth wave transition
+      segments.push(create_wave_separator(COLORS.fg.gray, git_bg));
+      segments.push(create_segment(`${SYMBOLS.branch} ${git_info.branch} ${status_icon}`, git_bg, COLORS.black));
+      segments.push(create_separator(git_fg, '', 'thick'));
+    }
   } else {
-    segments.push(create_separator(COLORS.fg.gray));
+    // No git repo gets simple thin separator
+    segments.push(create_separator(COLORS.fg.gray, '', 'thin'));
   }
   
   return segments.join('');
