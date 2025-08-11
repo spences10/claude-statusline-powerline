@@ -63,14 +63,14 @@ export const DEFAULT_CONFIG: StatuslineConfig = {
 };
 
 // Load configuration from environment or use default
-export function loadConfig(): StatuslineConfig {
-	const themeFromEnv = process.env
+export function load_config(): StatuslineConfig {
+	const theme_from_env = process.env
 		.STATUSLINE_THEME as keyof typeof SEPARATOR_THEMES;
 
-	if (themeFromEnv && SEPARATOR_THEMES[themeFromEnv]) {
+	if (theme_from_env && SEPARATOR_THEMES[theme_from_env]) {
 		return {
-			separators: SEPARATOR_THEMES[themeFromEnv],
-			theme: themeFromEnv as any,
+			separators: SEPARATOR_THEMES[theme_from_env],
+			theme: theme_from_env as any,
 		};
 	}
 

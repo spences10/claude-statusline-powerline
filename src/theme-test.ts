@@ -14,8 +14,8 @@ const mockInput = JSON.stringify({
 
 console.log('🎨 Separator Theme Showcase\n');
 
-Object.entries(SEPARATOR_THEMES).forEach(([themeName, config]) => {
-	console.log(`📍 Theme: ${themeName.toUpperCase()}`);
+Object.entries(SEPARATOR_THEMES).forEach(([theme_name, config]) => {
+	console.log(`📍 Theme: ${theme_name.toUpperCase()}`);
 	console.log(`   Model→Directory: ${config.modelToDirectory}`);
 	console.log(
 		`   Directory→Git (clean): ${config.directoryToGit.clean}`,
