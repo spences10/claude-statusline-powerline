@@ -11,9 +11,19 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "pnpm run build && node dist/test.js",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm run build && changeset publish"
   },
-  "keywords": ["claude-code", "statusline", "powerline", "git"],
+  "keywords": [
+    "claude-code",
+    "statusline",
+    "powerline",
+    "git"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "engines": {
@@ -21,6 +31,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.2.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "prettier": "^3.0.0",
+    "@changesets/cli": "^2.27.0"
   }
 }
