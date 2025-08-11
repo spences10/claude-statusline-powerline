@@ -1,6 +1,7 @@
 # Claude Statusline Powerline
 
-A beautiful powerline-style statusline for Claude Code with git integration.
+A beautiful powerline-style statusline for Claude Code with git
+integration.
 
 ## Features
 
@@ -10,17 +11,56 @@ A beautiful powerline-style statusline for Claude Code with git integration.
 - 📱 **Model info** - shows which Claude model you're using
 - ⚡ **Fast** - minimal overhead, updates smoothly
 - 🛠️ **TypeScript** - fully typed and maintainable
+- 🎨 **Configurable separator effects** - flame, wave, lightning, and
+  more
+- 🎯 **Context-aware** - different effects for clean vs dirty repos
 
 ## Preview
+
+**Expressive theme (default):**
 
 ```
  Claude Sonnet 4  📁 my-project   main ✓
 ```
 
-When you have uncommitted changes:
+**When you have uncommitted changes (attention-grabbing separators):**
 
 ```
  Claude Sonnet 4  📁 my-project   main ±
+```
+
+## Separator Themes
+
+### 🎨 Built-in Themes:
+
+- **`minimal`** - Subtle thin separators, clean and professional
+- **`expressive`** - Full range of dynamic effects (default)
+- **`subtle`** - Balanced thick separators with gentle waves
+- **`electric`** - Maximum drama with lightning everywhere! ⚡
+
+### ⚡ Available Separator Styles:
+
+- `thick` - Standard powerline separator
+- `thin` - Thin powerline separator
+- `flame` - Double separator 🔥
+- `wave` - Alternating thick/thin 🌊
+- `lightning` - Triple separator ⚡
+- `none` - No separator
+
+## Configuration
+
+### Environment Variable
+
+```bash
+# Set theme via environment variable
+export STATUSLINE_THEME=electric
+```
+
+### Testing Themes
+
+```bash
+STATUSLINE_THEME=minimal claude-statusline
+STATUSLINE_THEME=electric claude-statusline
 ```
 
 ## Installation
@@ -63,11 +103,13 @@ Then configure manually in your `~/.claude/settings.json`:
 For the best experience, use a powerline-compatible font:
 
 **Recommended fonts:**
+
 - **Victor Mono** (excellent powerline support)
-- **JetBrains Mono Nerd Font** 
+- **JetBrains Mono Nerd Font**
 - Any [Nerd Font](https://www.nerdfonts.com/)
 
-The statusline uses these symbols: `` (powerline separators) and `` (git branch)
+The statusline uses these symbols: `(powerline separators) and` (git
+branch)
 
 ## How It Works
 
@@ -81,7 +123,8 @@ Claude Code sends session information via stdin as JSON:
 }
 ```
 
-The statusline script processes this and outputs a colored powerline-style status.
+The statusline script processes this and outputs a colored
+powerline-style status.
 
 ## Development
 
