@@ -12,13 +12,13 @@ export interface ClaudeStatusInput {
 
 export interface GitInfo {
 	branch: string;
-	isDirty: boolean;
+	is_dirty: boolean;
 }
 
 export interface StatusSegment {
 	content: string;
-	bgColor: string;
-	fgColor: string;
+	bg_color: string;
+	fg_color: string;
 }
 
 export type SeparatorStyle =

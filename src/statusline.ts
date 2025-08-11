@@ -2,7 +2,7 @@
 
 import { execSync } from 'child_process';
 import * as path from 'path';
-import { loadConfig } from './config';
+import { load_config } from './config';
 import { ClaudeStatusInput, GitInfo, SeparatorStyle } from './types';
 
 // Powerline symbols (using Unicode escape sequences like claude-powerline)
@@ -64,7 +64,7 @@ function get_git_info(cwd: string): GitInfo | null {
 		});
 		const is_dirty = status.trim().length > 0;
 
-		return { branch, isDirty: is_dirty };
+		return { branch, is_dirty };
 	} catch (error) {
 		return null;
 	}
@@ -107,7 +107,7 @@ function create_styled_separator(
 function build_statusline(data: ClaudeStatusInput): string {
 	const cwd = data.workspace?.current_dir || process.cwd();
 	const model = data.model?.display_name || 'Claude';
-	const config = loadConfig();
+	const config = load_config();
 
 	const segments: string[] = [];
 
@@ -130,25 +130,29 @@ function build_statusline(data: ClaudeStatusInput): string {
 	// Git segment (green/red background)
 	const git_info = get_git_info(cwd);
 	if (git_info) {
-		const git_bg = git_info.isDirty
+		const git_bg = git_info.is_dirty
 			? COLORS.bg.yellow
 			: COLORS.bg.green;
-		const git_fg = git_info.isDirty
+		const git_fg = git_info.is_dirty
 			? COLORS.fg.yellow
 			: COLORS.fg.green;
-		const status_icon = git_info.isDirty ? '±' : '✓';
+		const status_icon = git_info.is_dirty ? '±' : '✓';
 
 		// Use configured separator based on git status
-		const dirToGitStyle = git_info.isDirty
+		const dir_to_git_style = git_info.is_dirty
 			? config.separators.directoryToGit.dirty
 			: config.separators.directoryToGit.clean;
 
-		const gitEndStyle = git_info.isDirty
+		const git_end_style = git_info.is_dirty
 			? config.separators.gitEnd.dirty
 			: config.separators.gitEnd.clean;
 
 		segments.push(
-			create_styled_separator(COLORS.fg.gray, git_bg, dirToGitStyle),
+			create_styled_separator(
+				COLORS.fg.gray,
+				git_bg,
+				dir_to_git_style,
+			),
 		);
 		segments.push(
 			create_segment(
@@ -157,7 +161,7 @@ function build_statusline(data: ClaudeStatusInput): string {
 				COLORS.black,
 			),
 		);
-		segments.push(create_styled_separator(git_fg, '', gitEndStyle));
+		segments.push(create_styled_separator(git_fg, '', git_end_style));
 	} else {
 		// No git repo uses configured noGit separator
 		segments.push(
