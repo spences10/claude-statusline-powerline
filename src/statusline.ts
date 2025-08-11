@@ -2,14 +2,20 @@
 
 import { execSync } from 'child_process';
 import * as path from 'path';
-import { ClaudeStatusInput, GitInfo, StatusSegment } from './types';
+import { ClaudeStatusInput, GitInfo } from './types';
 
-// Powerline symbols
+// Powerline symbols (using Unicode escape sequences like claude-powerline)
 const SEPARATORS = {
-  left: '',
-  right: '',
-  leftThin: '',
-  rightThin: ''
+  left: '\uE0B2',
+  right: '\uE0B0',
+  leftThin: '\uE0B3',
+  rightThin: '\uE0B1'
+} as const;
+
+// Git symbols that work with most powerline fonts
+const SYMBOLS = {
+  branch: '\uE0A0', // Git branch symbol (same as claude-powerline)
+  folder: '📁'
 } as const;
 
 // ANSI color codes
@@ -83,7 +89,7 @@ function build_statusline(data: ClaudeStatusInput): string {
   
   // Directory segment (gray background)
   const dir_name = path.basename(cwd);
-  segments.push(create_segment(`📁 ${dir_name}`, COLORS.bg.gray));
+  segments.push(create_segment(`${SYMBOLS.folder} ${dir_name}`, COLORS.bg.gray));
   
   // Git segment (green/red background)
   const git_info = get_git_info(cwd);
@@ -93,7 +99,7 @@ function build_statusline(data: ClaudeStatusInput): string {
     const status_icon = git_info.isDirty ? '±' : '✓';
     
     segments.push(create_separator(COLORS.fg.gray, git_bg));
-    segments.push(create_segment(` ${git_info.branch} ${status_icon}`, git_bg, COLORS.black));
+    segments.push(create_segment(`${SYMBOLS.branch} ${git_info.branch} ${status_icon}`, git_bg, COLORS.black));
     segments.push(create_separator(git_fg));
   } else {
     segments.push(create_separator(COLORS.fg.gray));

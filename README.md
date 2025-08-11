@@ -60,11 +60,14 @@ Then configure manually in your `~/.claude/settings.json`:
 
 ## Font Setup
 
-For the best experience, install a powerline-compatible font:
+For the best experience, use a powerline-compatible font:
 
-1. Install [Nerd Fonts](https://www.nerdfonts.com/)
-2. Set your terminal to use a Nerd Font (e.g., "JetBrains Mono Nerd Font")
-3. The statusline uses these symbols: ` ` (powerline separators)
+**Recommended fonts:**
+- **Victor Mono** (excellent powerline support)
+- **JetBrains Mono Nerd Font** 
+- Any [Nerd Font](https://www.nerdfonts.com/)
+
+The statusline uses these symbols: `` (powerline separators) and `` (git branch)
 
 ## How It Works
 
