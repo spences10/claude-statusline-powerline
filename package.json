@@ -1,0 +1,26 @@
+{
+  "name": "claude-statusline-powerline",
+  "version": "0.0.0",
+  "description": "A powerline-style statusline for Claude Code with git integration",
+  "main": "dist/statusline.js",
+  "bin": {
+    "claude-statusline": "./dist/statusline.js",
+    "claude-statusline-install": "./dist/install.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "pnpm run build && node dist/test.js",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": ["claude-code", "statusline", "powerline", "git"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "typescript": "^5.9.2"
+  }
+}
