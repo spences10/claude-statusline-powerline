@@ -78,6 +78,9 @@ export interface StatuslineConfig {
 		| 'curvy'
 		| 'angular'
 		| 'custom';
+	// New theme system
+	colorTheme?: string; // 'dark', 'electric', etc.
+	currentTheme?: any; // Will be populated with actual theme object
 }
 
 export interface SessionUsage {

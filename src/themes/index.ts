@@ -1,4 +1,9 @@
-export { BaseTheme, StatuslineTheme, ColorPalette, SegmentTheme } from './base';
+export {
+	BaseTheme,
+	ColorPalette,
+	SegmentTheme,
+	StatuslineTheme,
+} from './base';
 export { DarkTheme } from './dark';
 export { ElectricTheme } from './electric';
 
@@ -13,6 +18,6 @@ export const THEMES: Record<string, StatuslineTheme> = {
 	// Add more themes here
 };
 
-export function getTheme(name: string): StatuslineTheme {
+export function get_theme(name: string): StatuslineTheme {
 	return THEMES[name] || THEMES.dark;
 }

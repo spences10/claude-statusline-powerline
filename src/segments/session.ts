@@ -62,11 +62,22 @@ export class SessionSegment extends BaseSegment {
 			context_display = ` ${Math.round(context_remaining / 1000)}k left`;
 		}
 
+		const theme = config.currentTheme?.segments.session;
+		if (!theme) {
+			// Fallback colors
+			return this.createSegment(
+				`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
+				COLORS.bg.purple,
+				COLORS.white,
+				COLORS.fg.purple,
+			);
+		}
+
 		return this.createSegment(
 			`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
-			COLORS.bg.purple,
-			COLORS.white,
-			COLORS.fg.purple,
+			theme.background,
+			theme.foreground,
+			theme.separatorColor,
 		);
 	}
 
