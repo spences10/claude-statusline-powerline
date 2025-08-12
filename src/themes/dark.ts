@@ -30,31 +30,31 @@ export class DarkTheme extends BaseTheme {
 
 	segments = {
 		model: {
-			background: this.colors.bg.blue,
-			foreground: this.colors.fg.white,
-			separatorColor: this.colors.fg.blue,
+			background: '\x1b[44m',      // Bright blue background
+			foreground: '\x1b[97m',      // Bright white foreground  
+			separatorColor: '\x1b[34m',  // Blue foreground
 		} as SegmentTheme,
 		directory: {
-			background: this.colors.bg.gray,
-			foreground: this.colors.fg.white,
-			separatorColor: this.colors.fg.gray,
+			background: '\x1b[100m',     // Dark gray background
+			foreground: '\x1b[97m',      // Bright white foreground
+			separatorColor: '\x1b[90m',  // Dark gray foreground
 		} as SegmentTheme,
 		git: {
 			clean: {
-				background: this.colors.bg.green,
-				foreground: this.colors.fg.black,
-				separatorColor: this.colors.fg.green,
+				background: '\x1b[42m',      // Bright green background
+				foreground: '\x1b[30m',      // Black foreground
+				separatorColor: '\x1b[32m',  // Green foreground
 			} as SegmentTheme,
 			dirty: {
-				background: this.colors.bg.yellow,
-				foreground: this.colors.fg.black,
-				separatorColor: this.colors.fg.yellow,
+				background: '\x1b[43m',      // Bright yellow background
+				foreground: '\x1b[30m',      // Black foreground
+				separatorColor: '\x1b[33m',  // Yellow foreground
 			} as SegmentTheme,
 		},
 		session: {
-			background: this.colors.bg.purple,
-			foreground: this.colors.fg.white,
-			separatorColor: this.colors.fg.purple,
+			background: '\x1b[45m',      // Bright purple background
+			foreground: '\x1b[97m',      // Bright white foreground
+			separatorColor: '\x1b[35m',  // Purple foreground
 		} as SegmentTheme,
 	};
 }

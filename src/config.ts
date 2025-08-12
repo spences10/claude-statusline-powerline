@@ -171,12 +171,13 @@ function load_segment_visibility(): SegmentVisibility {
 
 // Load configuration from environment or use default
 export function load_config(): StatuslineConfig {
-	const theme_from_env = process.env
-		.STATUSLINE_THEME as keyof typeof SEPARATOR_THEMES;
+	const theme_from_env = process.env.STATUSLINE_THEME;
 	const separator_profile_from_env =
 		process.env.STATUSLINE_SEPARATOR_PROFILE;
-	const color_theme_from_env =
-		process.env.STATUSLINE_COLOR_THEME || 'dark';
+	const color_theme_from_env = process.env.STATUSLINE_COLOR_THEME || 'dark';
+	
+	// Debug: remove after testing
+	console.error(`DEBUG CONFIG: theme_from_env=${theme_from_env}, color_theme_from_env=${color_theme_from_env}`);
 
 	// Get base theme
 	let config: StatuslineConfig;

@@ -16,15 +16,9 @@ export class ModelSegment extends BaseSegment {
 		const display_model = model.length > 15 ? `${model.slice(0, 12)}...` : model;
 		
 		const theme = config.currentTheme?.segments.model;
-		// Debug: log theme info
-		console.error(`DEBUG: Theme exists: ${!!config.currentTheme}, Model theme: ${!!theme}`);
-		if (theme) {
-			console.error(`DEBUG: Model colors - bg: ${theme.background}, fg: ${theme.foreground}`);
-		}
 		
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
-			console.error('DEBUG: Using fallback colors');
 			return this.createSegment(
 				` ${display_model}`,
 				'\x1b[44m',
