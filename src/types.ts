@@ -77,4 +77,12 @@ export interface SessionUsage {
 	totalOutputTokens: number;
 	totalCacheTokens: number;
 	totalCost: number;
+	modelUsed?: string;
+	sessionDuration?: number;
+}
+
+export interface ModelPricing {
+	inputTokens: number;
+	outputTokens: number;
+	cacheTokens: number;
 }

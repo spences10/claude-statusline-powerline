@@ -2,7 +2,11 @@
 
 import { execSync } from 'child_process';
 import * as path from 'path';
-import { load_config } from './config';
+import {
+	DEFAULT_PRICING,
+	load_config,
+	MODEL_PRICING,
+} from './config';
 import { get_font_profile } from './font-profiles';
 import {
 	ClaudeStatusInput,
@@ -234,10 +238,25 @@ function parse_session_usage(
 		let total_input_tokens = 0;
 		let total_output_tokens = 0;
 		let total_cache_tokens = 0;
+		let model_used = '';
+		let first_timestamp: Date | null = null;
+		let last_timestamp: Date | null = null;
 
 		for (const line of lines) {
 			try {
 				const entry = JSON.parse(line);
+
+				// Track session timing
+				if (entry.timestamp) {
+					const timestamp = new Date(entry.timestamp);
+					if (!first_timestamp || timestamp < first_timestamp) {
+						first_timestamp = timestamp;
+					}
+					if (!last_timestamp || timestamp > last_timestamp) {
+						last_timestamp = timestamp;
+					}
+				}
+
 				if (entry.type === 'assistant' && entry.message?.usage) {
 					const usage = entry.message.usage;
 					total_input_tokens += usage.input_tokens || 0;
@@ -245,6 +264,11 @@ function parse_session_usage(
 					total_cache_tokens +=
 						(usage.cache_creation_input_tokens || 0) +
 						(usage.cache_read_input_tokens || 0);
+
+					// Extract model info
+					if (entry.message.model && !model_used) {
+						model_used = entry.message.model;
+					}
 				}
 			} catch (parseError) {
 				// Skip malformed lines
@@ -252,18 +276,34 @@ function parse_session_usage(
 			}
 		}
 
-		// Simple cost estimation (Claude Sonnet pricing as baseline)
-		// Input: $3/M tokens, Output: $15/M tokens, Cache: $0.30/M tokens
-		const input_cost = (total_input_tokens / 1000000) * 3;
-		const output_cost = (total_output_tokens / 1000000) * 15;
-		const cache_cost = (total_cache_tokens / 1000000) * 0.3;
+		// Get pricing for the model used
+		const pricing = MODEL_PRICING[model_used] || DEFAULT_PRICING;
+
+		// Calculate cost using model-specific pricing
+		const input_cost =
+			(total_input_tokens / 1000000) * pricing.inputTokens;
+		const output_cost =
+			(total_output_tokens / 1000000) * pricing.outputTokens;
+		const cache_cost =
+			(total_cache_tokens / 1000000) * pricing.cacheTokens;
 		const total_cost = input_cost + output_cost + cache_cost;
+
+		// Calculate session duration in minutes
+		let session_duration = 0;
+		if (first_timestamp && last_timestamp) {
+			session_duration = Math.round(
+				(last_timestamp.getTime() - first_timestamp.getTime()) /
+					(1000 * 60),
+			);
+		}
 
 		return {
 			totalInputTokens: total_input_tokens,
 			totalOutputTokens: total_output_tokens,
 			totalCacheTokens: total_cache_tokens,
 			totalCost: total_cost,
+			modelUsed: model_used,
+			sessionDuration: session_duration,
 		};
 	} catch (error) {
 		return null;
