@@ -95,8 +95,8 @@ export interface StatuslineConfig {
 		| 'angular'
 		| 'custom';
 	// New theme system
-	colorTheme?: string; // 'dark', 'electric', etc.
-	currentTheme?: any; // Will be populated with actual theme object
+	color_theme?: string; // 'dark', 'electric', etc.
+	current_theme?: any; // Will be populated with actual theme object
 }
 
 export interface SessionUsage {

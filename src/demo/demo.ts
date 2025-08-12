@@ -36,9 +36,9 @@ const SEPARATOR_PROFILES = [
 ] as const;
 
 interface DemoConfig {
-	colorTheme?: string;
-	separatorTheme?: string;
-	separatorProfile?: string;
+	color_theme?: string;
+	separator_theme?: string;
+	separator_profile?: string;
 	display?: {
 		lines: Array<{
 			segments: {
@@ -113,36 +113,36 @@ class StatuslineDemo {
 	private async runStatusline(
 		data: ClaudeStatusInput,
 		config: DemoConfig = {},
-		options: { fontProfile?: string } = {},
+		options: { font_profile?: string } = {},
 	): Promise<string> {
 		return new Promise((resolve, reject) => {
 			const fs = require('fs');
 			const env = { ...process.env };
 
 			// Create a temporary config file if multiline display is specified
-			let configFilePath: string | undefined;
+			let config_file_path: string | undefined;
 			if (config.display) {
-				configFilePath = 'temp-multiline-config.json';
+				config_file_path = 'temp-multiline-config.json';
 				const configData = {
 					display: config.display,
-					colorTheme: config.colorTheme || 'electric',
-					theme: config.separatorTheme || 'expressive',
+					color_theme: config.color_theme || 'electric',
+					theme: config.separator_theme || 'expressive',
 				};
 				fs.writeFileSync(
-					configFilePath,
+					config_file_path,
 					JSON.stringify(configData, null, 2),
 				);
-				env.STATUSLINE_CONFIG = configFilePath;
+				env.STATUSLINE_CONFIG = config_file_path;
 			}
 
-			if (config.colorTheme && !config.display)
-				env.STATUSLINE_COLOR_THEME = config.colorTheme;
-			if (config.separatorTheme && !config.display)
-				env.STATUSLINE_THEME = config.separatorTheme;
-			if (config.separatorProfile)
-				env.STATUSLINE_SEPARATOR_PROFILE = config.separatorProfile;
-			if (options.fontProfile)
-				env.STATUSLINE_FONT_PROFILE = options.fontProfile;
+			if (config.color_theme && !config.display)
+				env.STATUSLINE_COLOR_THEME = config.color_theme;
+			if (config.separator_theme && !config.display)
+				env.STATUSLINE_THEME = config.separator_theme;
+			if (config.separator_profile)
+				env.STATUSLINE_SEPARATOR_PROFILE = config.separator_profile;
+			if (options.font_profile)
+				env.STATUSLINE_FONT_PROFILE = options.font_profile;
 			if (config.segments?.model === false)
 				env.STATUSLINE_SHOW_MODEL = 'false';
 			if (config.segments?.directory === false)
@@ -153,19 +153,19 @@ class StatuslineDemo {
 				env.STATUSLINE_SHOW_SESSION = 'false';
 
 			// Debug: log environment variables being passed
-			if (config.separatorTheme) {
+			if (config.separator_theme) {
 				console.error(
-					`DEBUG: Setting STATUSLINE_THEME=${config.separatorTheme}`,
+					`DEBUG: Setting STATUSLINE_THEME=${config.separator_theme}`,
 				);
 			}
-			if (options.fontProfile) {
+			if (options.font_profile) {
 				console.error(
-					`DEBUG: Setting STATUSLINE_FONT_PROFILE=${options.fontProfile}`,
+					`DEBUG: Setting STATUSLINE_FONT_PROFILE=${options.font_profile}`,
 				);
 			}
-			if (configFilePath) {
+			if (config_file_path) {
 				console.error(
-					`DEBUG: Using multiline config file: ${configFilePath}`,
+					`DEBUG: Using multiline config file: ${config_file_path}`,
 				);
 			}
 
@@ -187,8 +187,8 @@ class StatuslineDemo {
 
 			child.on('close', (code) => {
 				// Cleanup temporary config file
-				if (configFilePath && fs.existsSync(configFilePath)) {
-					fs.unlinkSync(configFilePath);
+				if (config_file_path && fs.existsSync(config_file_path)) {
+					fs.unlinkSync(config_file_path);
 				}
 
 				if (code === 0) {
@@ -228,13 +228,13 @@ class StatuslineDemo {
 
 		this.printSubheader('🌑 Dark Theme (Classic Blue/Gray/Yellow)');
 		const darkResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'dark',
+			color_theme: 'dark',
 		});
 		console.log(darkResult);
 
 		this.printSubheader('⚡ Electric Theme (Purple/Cyan/Red)');
 		const electricResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'electric',
+			color_theme: 'electric',
 		});
 		console.log(electricResult);
 
@@ -248,10 +248,10 @@ class StatuslineDemo {
 			const result = await this.runStatusline(
 				BASE_DATA,
 				{
-					colorTheme: 'dark',
-					separatorTheme,
+					color_theme: 'dark',
+					separator_theme: separatorTheme,
 				},
-				{ fontProfile: 'nerd-font' },
+				{ font_profile: 'nerd-font' },
 			);
 			console.log(result);
 		}
@@ -261,8 +261,8 @@ class StatuslineDemo {
 		for (const separatorProfile of SEPARATOR_PROFILES) {
 			this.printSubheader(`Profile: ${separatorProfile}`);
 			const result = await this.runStatusline(BASE_DATA, {
-				colorTheme: 'electric',
-				separatorProfile,
+				color_theme: 'electric',
+				separator_profile: separatorProfile,
 			});
 			console.log(result);
 		}
@@ -273,16 +273,16 @@ class StatuslineDemo {
 			'Powerline vs Nerd Font profiles with new separator variations',
 		);
 
-		for (const fontProfile of FONT_PROFILES) {
-			this.printSubheader(`📝 ${fontProfile} profile`);
+		for (const font_profile of FONT_PROFILES) {
+			this.printSubheader(`📝 ${font_profile} profile`);
 			for (const separatorTheme of ['curvy', 'angular', 'electric']) {
 				const result = await this.runStatusline(
 					BASE_DATA,
 					{
-						colorTheme: 'electric',
-						separatorTheme,
+						color_theme: 'electric',
+						separator_theme: separatorTheme,
 					},
-					{ fontProfile },
+					{ font_profile },
 				);
 				console.log(`  ${separatorTheme}:`, result);
 			}
@@ -292,23 +292,23 @@ class StatuslineDemo {
 		this.printHeader('5. 🎭 Theme + Style Combinations');
 		const combinations = [
 			{
-				colorTheme: 'dark',
-				separatorTheme: 'minimal',
+				color_theme: 'dark',
+				separator_theme: 'minimal',
 				label: 'Dark + Minimal',
 			},
 			{
-				colorTheme: 'dark',
-				separatorTheme: 'electric',
+				color_theme: 'dark',
+				separator_theme: 'electric',
 				label: 'Dark + Electric Separators',
 			},
 			{
-				colorTheme: 'electric',
-				separatorTheme: 'expressive',
+				color_theme: 'electric',
+				separator_theme: 'expressive',
 				label: 'Electric + Expressive',
 			},
 			{
-				colorTheme: 'electric',
-				separatorTheme: 'curvy',
+				color_theme: 'electric',
+				separator_theme: 'curvy',
 				label: 'Electric + Curvy',
 			},
 		];
@@ -339,7 +339,7 @@ class StatuslineDemo {
 		for (const config of segmentConfigs) {
 			this.printSubheader(`📋 ${config.label}`);
 			const result = await this.runStatusline(BASE_DATA, {
-				colorTheme: 'electric',
+				color_theme: 'electric',
 				...config,
 			});
 			console.log(result);
@@ -354,8 +354,8 @@ class StatuslineDemo {
 		// Single line (default)
 		this.printSubheader('🔸 Single Line (Default)');
 		const singleLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'electric',
-			separatorTheme: 'expressive',
+			color_theme: 'electric',
+			separator_theme: 'expressive',
 		});
 		console.log(singleLineResult);
 
@@ -364,8 +364,8 @@ class StatuslineDemo {
 			'🔸 Two Lines: [Directory, Git, Model] + [Session]',
 		);
 		const twoLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'electric',
-			separatorTheme: 'expressive',
+			color_theme: 'electric',
+			separator_theme: 'expressive',
 			display: {
 				lines: [
 					{
@@ -390,8 +390,8 @@ class StatuslineDemo {
 			'🔸 Three Lines: Directory | Git + Model | Session',
 		);
 		const threeLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'dark',
-			separatorTheme: 'curvy',
+			color_theme: 'dark',
+			separator_theme: 'curvy',
 			display: {
 				lines: [
 					{
@@ -428,7 +428,7 @@ class StatuslineDemo {
 			this.printSubheader(`🤖 ${model.display_name}`);
 			const data = { ...BASE_DATA, model };
 			const result = await this.runStatusline(data, {
-				colorTheme: 'electric',
+				color_theme: 'electric',
 			});
 			console.log(result);
 		}

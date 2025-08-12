@@ -1,7 +1,7 @@
-import { BaseSegment, SegmentData } from './base';
-import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_font_profile } from '../font-profiles';
+import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_git_info } from '../utils/git';
+import { BaseSegment, SegmentData } from './base';
 
 // ANSI color codes
 const COLORS = {
@@ -27,7 +27,10 @@ export class GitSegment extends BaseSegment {
 		return config.segments.git;
 	}
 
-	build(data: ClaudeStatusInput, config: StatuslineConfig): SegmentData | null {
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null {
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const git_info = get_git_info(cwd);
 		const font_profile = get_font_profile();
@@ -36,21 +39,24 @@ export class GitSegment extends BaseSegment {
 			const status_icon = git_info.is_dirty
 				? font_profile.symbols.dirty
 				: font_profile.symbols.clean;
-			
+
 			const separator_style = git_info.is_dirty
 				? config.separators.git.dirty
 				: config.separators.git.clean;
 
 			// Use theme colors
-			const theme = git_info.is_dirty 
-				? config.currentTheme?.segments.git.dirty
-				: config.currentTheme?.segments.git.clean;
-
+			const theme = git_info.is_dirty
+				? config.current_theme?.segments.git.dirty
+				: config.current_theme?.segments.git.clean;
 			if (!theme) {
 				// Fallback colors
-				const fallback_bg = git_info.is_dirty ? COLORS.bg.yellow : COLORS.bg.green;
-				const fallback_separator = git_info.is_dirty ? COLORS.fg.yellow : COLORS.fg.green;
-				
+				const fallback_bg = git_info.is_dirty
+					? COLORS.bg.yellow
+					: COLORS.bg.green;
+				const fallback_separator = git_info.is_dirty
+					? COLORS.fg.yellow
+					: COLORS.fg.green;
+
 				return this.createSegment(
 					`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
 					fallback_bg,
@@ -64,12 +70,12 @@ export class GitSegment extends BaseSegment {
 				`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
 				theme.background,
 				theme.foreground,
-				theme.separatorColor,
+				theme.separator_color,
 				separator_style,
 			);
 		} else {
 			// Fallback for no git repo - use directory theme
-			const theme = config.currentTheme?.segments.directory;
+			const theme = config.current_theme?.segments.directory;
 			if (!theme) {
 				return this.createSegment(
 					`${font_profile.symbols.folder} no git`,
@@ -84,7 +90,7 @@ export class GitSegment extends BaseSegment {
 				`${font_profile.symbols.folder} no git`,
 				theme.background,
 				theme.foreground,
-				theme.separatorColor,
+				theme.separator_color,
 				config.separators.directory.noGit,
 			);
 		}

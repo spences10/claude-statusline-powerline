@@ -11,7 +11,7 @@ export interface ColorPalette {
 		black: string;
 		white: string;
 	};
-	// Foreground colors  
+	// Foreground colors
 	fg: {
 		blue: string;
 		green: string;
@@ -28,7 +28,7 @@ export interface ColorPalette {
 export interface SegmentTheme {
 	background: string;
 	foreground: string;
-	separatorColor: string;
+	separator_color: string;
 }
 
 export interface StatuslineTheme {

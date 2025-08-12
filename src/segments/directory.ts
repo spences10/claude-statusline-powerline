@@ -1,8 +1,8 @@
 import * as path from 'path';
-import { BaseSegment, SegmentData } from './base';
-import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_font_profile } from '../font-profiles';
+import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_git_info } from '../utils/git';
+import { BaseSegment, SegmentData } from './base';
 
 // Fallback colors
 const FALLBACK_COLORS = {
@@ -19,15 +19,18 @@ export class DirectorySegment extends BaseSegment {
 		return config.segments.directory;
 	}
 
-	build(data: ClaudeStatusInput, config: StatuslineConfig): SegmentData | null {
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null {
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const dir_name = path.basename(cwd) || '~';
 		const font_profile = get_font_profile();
-		
+
 		// Determine separator style based on git status and next segment
 		const git_info = get_git_info(cwd);
 		let separator_style: string;
-		
+
 		if (config.segments.git) {
 			separator_style = git_info?.is_dirty
 				? config.separators.directory.dirty
@@ -35,8 +38,8 @@ export class DirectorySegment extends BaseSegment {
 		} else {
 			separator_style = config.separators.directory.noGit;
 		}
-		
-		const theme = config.currentTheme?.segments.directory;
+
+		const theme = config.current_theme?.segments.directory;
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
@@ -47,12 +50,12 @@ export class DirectorySegment extends BaseSegment {
 				separator_style,
 			);
 		}
-		
+
 		return this.createSegment(
 			`${font_profile.symbols.folder} ${dir_name}`,
 			theme.background,
 			theme.foreground,
-			theme.separatorColor,
+			theme.separator_color,
 			separator_style,
 		);
 	}

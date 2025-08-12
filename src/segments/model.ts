@@ -1,5 +1,5 @@
-import { BaseSegment, SegmentData } from './base';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import { BaseSegment, SegmentData } from './base';
 
 export class ModelSegment extends BaseSegment {
 	name = 'model';
@@ -9,14 +9,18 @@ export class ModelSegment extends BaseSegment {
 		return config.segments.model;
 	}
 
-	build(data: ClaudeStatusInput, config: StatuslineConfig): SegmentData | null {
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null {
 		const model = data.model?.display_name || 'Claude';
-		
+
 		// Truncate long model names
-		const display_model = model.length > 15 ? `${model.slice(0, 12)}...` : model;
-		
-		const theme = config.currentTheme?.segments.model;
-		
+		const display_model =
+			model.length > 15 ? `${model.slice(0, 12)}...` : model;
+
+		const theme = config.current_theme?.segments.model;
+
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
@@ -27,12 +31,12 @@ export class ModelSegment extends BaseSegment {
 				config.separators.model,
 			);
 		}
-		
+
 		return this.createSegment(
 			` ${display_model}`,
 			theme.background,
 			theme.foreground,
-			theme.separatorColor,
+			theme.separator_color,
 			config.separators.model,
 		);
 	}

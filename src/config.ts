@@ -235,15 +235,15 @@ export function load_config(): StatuslineConfig {
 			separators: SEPARATOR_THEMES[theme_from_env],
 			segments: load_segment_visibility(),
 			theme: theme_from_env as any,
-			colorTheme: color_theme_from_env,
-			currentTheme: get_theme(color_theme_from_env),
+			color_theme: color_theme_from_env,
+			current_theme: get_theme(color_theme_from_env),
 		};
 	} else {
 		config = {
 			...DEFAULT_CONFIG,
 			segments: load_segment_visibility(),
-			colorTheme: color_theme_from_env,
-			currentTheme: get_theme(color_theme_from_env),
+			color_theme: color_theme_from_env,
+			current_theme: get_theme(color_theme_from_env),
 		};
 	}
 
@@ -253,8 +253,8 @@ export function load_config(): StatuslineConfig {
 			...config,
 			...file_config,
 			// Ensure theme gets updated if specified in file
-			currentTheme: get_theme(
-				file_config.colorTheme || config.colorTheme || 'dark',
+			current_theme: get_theme(
+				file_config.color_theme || config.color_theme || 'dark',
 			),
 		};
 	}
