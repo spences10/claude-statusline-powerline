@@ -1,4 +1,5 @@
 import {
+	ModelPricing,
 	SeparatorConfig,
 	SeparatorProfile,
 	StatuslineConfig,
@@ -180,3 +181,68 @@ export function load_config(): StatuslineConfig {
 
 	return config;
 }
+
+// Model pricing configuration (per million tokens)
+export const MODEL_PRICING: Record<string, ModelPricing> = {
+	// Claude 3.5 Sonnet
+	'claude-sonnet-3.5': {
+		inputTokens: 3,
+		outputTokens: 15,
+		cacheTokens: 0.3,
+	},
+	'claude-3-5-sonnet-20241022': {
+		inputTokens: 3,
+		outputTokens: 15,
+		cacheTokens: 0.3,
+	},
+
+	// Claude 4 Sonnet (placeholder - adjust when pricing is announced)
+	'claude-sonnet-4': {
+		inputTokens: 3,
+		outputTokens: 15,
+		cacheTokens: 0.3,
+	},
+	'claude-sonnet-4-20250514': {
+		inputTokens: 3,
+		outputTokens: 15,
+		cacheTokens: 0.3,
+	},
+
+	// Claude 3 Opus
+	'claude-opus-3': {
+		inputTokens: 15,
+		outputTokens: 75,
+		cacheTokens: 1.5,
+	},
+	'claude-3-opus-20240229': {
+		inputTokens: 15,
+		outputTokens: 75,
+		cacheTokens: 1.5,
+	},
+
+	// Claude 4 Opus (placeholder)
+	'claude-opus-4': {
+		inputTokens: 15,
+		outputTokens: 75,
+		cacheTokens: 1.5,
+	},
+
+	// Claude 3 Haiku
+	'claude-haiku-3': {
+		inputTokens: 0.25,
+		outputTokens: 1.25,
+		cacheTokens: 0.03,
+	},
+	'claude-3-haiku-20240307': {
+		inputTokens: 0.25,
+		outputTokens: 1.25,
+		cacheTokens: 0.03,
+	},
+};
+
+// Default pricing for unknown models (Sonnet rates)
+export const DEFAULT_PRICING: ModelPricing = {
+	inputTokens: 3,
+	outputTokens: 15,
+	cacheTokens: 0.3,
+};
