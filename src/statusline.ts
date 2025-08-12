@@ -13,6 +13,7 @@ import {
 	GitInfo,
 	SeparatorStyle,
 	SessionUsage,
+	StatuslineConfig,
 } from './types';
 
 // Get the current font profile (Victor Mono by default)
@@ -111,34 +112,52 @@ function create_styled_separator(
 	}
 }
 
-function build_statusline(data: ClaudeStatusInput): string {
-	const cwd = data.workspace?.current_dir || process.cwd();
+// Enhanced segment builder that handles visibility and fallbacks
+interface SegmentData {
+	content: string;
+	bg_color: string;
+	fg_color: string;
+	separator_from_color: string;
+	separator_style?: SeparatorStyle;
+}
+
+function build_model_segment(
+	data: ClaudeStatusInput,
+): SegmentData | null {
 	const model = data.model?.display_name || 'Claude';
-	const config = load_config();
+	// Truncate long model names
+	const display_model =
+		model.length > 15 ? `${model.slice(0, 12)}...` : model;
 
-	const segments: string[] = [];
+	return {
+		content: ` ${display_model}`,
+		bg_color: COLORS.bg.blue,
+		fg_color: COLORS.white,
+		separator_from_color: COLORS.fg.blue,
+	};
+}
 
-	// Model segment (blue background)
-	segments.push(create_segment(` ${model}`, COLORS.bg.blue));
-	segments.push(
-		create_styled_separator(
-			COLORS.fg.blue,
-			COLORS.bg.gray,
-			config.separators.model,
-		),
-	);
+function build_directory_segment(
+	data: ClaudeStatusInput,
+): SegmentData | null {
+	const cwd = data.workspace?.current_dir || process.cwd();
+	const dir_name = path.basename(cwd) || '~';
 
-	// Directory segment (gray background)
-	const dir_name = path.basename(cwd);
-	segments.push(
-		create_segment(
-			`${font_profile.symbols.folder} ${dir_name}`,
-			COLORS.bg.gray,
-		),
-	);
+	return {
+		content: `${font_profile.symbols.folder} ${dir_name}`,
+		bg_color: COLORS.bg.gray,
+		fg_color: COLORS.white,
+		separator_from_color: COLORS.fg.gray,
+	};
+}
 
-	// Git segment (green/red background)
+function build_git_segment(
+	data: ClaudeStatusInput,
+	config: StatuslineConfig,
+): SegmentData | null {
+	const cwd = data.workspace?.current_dir || process.cwd();
 	const git_info = get_git_info(cwd);
+
 	if (git_info) {
 		const git_bg = git_info.is_dirty
 			? COLORS.bg.yellow
@@ -150,96 +169,160 @@ function build_statusline(data: ClaudeStatusInput): string {
 			? font_profile.symbols.dirty
 			: font_profile.symbols.clean;
 
-		// Use configured separator based on git status
-		const dir_to_git_style = git_info.is_dirty
-			? config.separators.directory.dirty
-			: config.separators.directory.clean;
-
-		const git_end_style = git_info.is_dirty
+		const separator_style = git_info.is_dirty
 			? config.separators.git.dirty
 			: config.separators.git.clean;
 
-		segments.push(
-			create_styled_separator(
-				COLORS.fg.gray,
-				git_bg,
-				dir_to_git_style,
-			),
-		);
-		segments.push(
-			create_segment(
-				`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
-				git_bg,
-				COLORS.black,
-			),
-		);
-		segments.push(
-			create_styled_separator(
-				git_fg,
-				COLORS.bg.purple,
-				git_end_style,
-			),
-		);
+		return {
+			content: `${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
+			bg_color: git_bg,
+			fg_color: COLORS.black,
+			separator_from_color: git_fg,
+			separator_style,
+		};
 	} else {
-		// No git repo uses configured noGit separator
-		segments.push(
-			create_styled_separator(
-				COLORS.fg.gray,
-				COLORS.bg.purple,
-				config.separators.directory.noGit,
-			),
-		);
+		// Fallback for no git repo
+		return {
+			content: `${font_profile.symbols.folder} no git`,
+			bg_color: COLORS.bg.gray,
+			fg_color: COLORS.white,
+			separator_from_color: COLORS.fg.gray,
+			separator_style: config.separators.directory.noGit,
+		};
+	}
+}
+
+function build_session_segment(
+	data: ClaudeStatusInput,
+): SegmentData | null {
+	if (!data.transcript_path) {
+		return null; // Hide segment if no session data
 	}
 
-	// Session segment (purple background) - show usage if available
-	if (data.transcript_path) {
-		const usage = parse_session_usage(data.transcript_path);
+	const usage = parse_session_usage(data.transcript_path);
+	if (!usage) {
+		return null; // Hide segment if parsing fails
+	}
 
-		if (usage) {
-			const total_tokens =
-				usage.totalInputTokens + usage.totalOutputTokens;
-			const cost_str =
-				usage.totalCost < 0.01
-					? '< $0.01'
-					: `$${usage.totalCost.toFixed(2)}`;
+	const total_tokens =
+		usage.totalInputTokens + usage.totalOutputTokens;
+	const cost_str =
+		usage.totalCost < 0.01
+			? '< $0.01'
+			: `$${usage.totalCost.toFixed(2)}`;
 
-			// Calculate context usage
-			const pricing =
-				MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
-			const context_used = total_tokens;
-			const context_remaining = pricing.contextWindow - context_used;
-			const context_percent = Math.round(
-				(context_used / pricing.contextWindow) * 100,
-			);
+	// Calculate context usage
+	const pricing =
+		MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
+	const context_used = total_tokens;
+	const context_remaining = pricing.contextWindow - context_used;
+	const context_percent = Math.round(
+		(context_used / pricing.contextWindow) * 100,
+	);
 
-			// Format context display
-			let context_display = '';
-			if (context_percent >= 90) {
-				context_display = ` !${context_percent}%`; // Warning at 90%
-			} else if (context_percent >= 75) {
-				context_display = ` ${context_percent}%`; // Show percentage at 75%
+	// Format context display
+	let context_display = '';
+	if (context_percent >= 90) {
+		context_display = ` !${context_percent}%`;
+	} else if (context_percent >= 75) {
+		context_display = ` ${context_percent}%`;
+	} else {
+		context_display = ` ${Math.round(context_remaining / 1000)}k left`;
+	}
+
+	return {
+		content: `💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
+		bg_color: COLORS.bg.purple,
+		fg_color: COLORS.white,
+		separator_from_color: COLORS.fg.purple,
+	};
+}
+
+function build_statusline(data: ClaudeStatusInput): string {
+	const config = load_config();
+	const segments: SegmentData[] = [];
+
+	// Build segments based on configuration
+	if (config.segments.model) {
+		const segment = build_model_segment(data);
+		if (segment) {
+			segment.separator_style = config.separators.model;
+			segments.push(segment);
+		}
+	}
+
+	if (config.segments.directory) {
+		const segment = build_directory_segment(data);
+		if (segment) {
+			// Determine directory separator style based on git status and next segment
+			const cwd = data.workspace?.current_dir || process.cwd();
+			const git_info = get_git_info(cwd);
+
+			if (config.segments.git) {
+				segment.separator_style = git_info?.is_dirty
+					? config.separators.directory.dirty
+					: config.separators.directory.clean;
 			} else {
-				context_display = ` ${Math.round(context_remaining / 1000)}k left`; // Show remaining tokens
+				segment.separator_style = config.separators.directory.noGit;
 			}
+			segments.push(segment);
+		}
+	}
 
-			segments.push(
-				create_segment(
-					`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
-					COLORS.bg.purple,
+	if (config.segments.git) {
+		const segment = build_git_segment(data, config);
+		if (segment) {
+			segments.push(segment);
+		}
+	}
+
+	if (config.segments.session) {
+		const segment = build_session_segment(data);
+		if (segment) {
+			segments.push(segment);
+		}
+	}
+
+	// Build output with dynamic separators
+	const output: string[] = [];
+
+	for (let i = 0; i < segments.length; i++) {
+		const current = segments[i];
+		const next = segments[i + 1];
+
+		// Add the segment content
+		output.push(
+			create_segment(
+				current.content,
+				current.bg_color,
+				current.fg_color,
+			),
+		);
+
+		// Add separator to next segment (if there is one)
+		if (next) {
+			const separator_style = current.separator_style || 'thick';
+			output.push(
+				create_styled_separator(
+					current.separator_from_color,
+					next.bg_color,
+					separator_style,
 				),
 			);
 		} else {
-			segments.push(
-				create_segment(`💰 No usage data`, COLORS.bg.purple),
+			// Final separator
+			const separator_style = current.separator_style || 'thick';
+			output.push(
+				create_styled_separator(
+					current.separator_from_color,
+					'',
+					separator_style,
+				),
 			);
 		}
-
-		segments.push(
-			create_styled_separator(COLORS.fg.purple, '', 'thick'),
-		);
 	}
 
-	return segments.join('');
+	return output.join('');
 }
 
 function parse_session_usage(

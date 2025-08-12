@@ -59,9 +59,17 @@ export interface SeparatorProfile {
 	};
 }
 
+export interface SegmentVisibility {
+	model: boolean;
+	directory: boolean;
+	git: boolean;
+	session: boolean;
+}
+
 export interface StatuslineConfig {
 	separators: SeparatorConfig;
 	separatorProfile?: SeparatorProfile;
+	segments: SegmentVisibility;
 	theme:
 		| 'minimal'
 		| 'expressive'
