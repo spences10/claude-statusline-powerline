@@ -11,9 +11,12 @@ integration.
 - 📱 **Model info** - shows which Claude model you're using
 - ⚡ **Fast** - minimal overhead, updates smoothly
 - 🛠️ **TypeScript** - fully typed and maintainable
-- 🎨 **Configurable separator effects** - flame, wave, lightning, and
-  more
+- 🎨 **Flexible separator system** - themes + profiles for infinite
+  combinations
+- 🔤 **Font compatibility** - Victor Mono, Nerd Fonts
 - 🎯 **Context-aware** - different effects for clean vs dirty repos
+- 🔧 **Highly configurable** - mix and match themes with separator
+  profiles
 
 ## Preview
 
@@ -29,7 +32,7 @@ integration.
  Claude Sonnet 4  📁 my-project   main ±
 ```
 
-## Separator Themes
+## Separator Themes & Profiles
 
 ### 🎨 Built-in Themes:
 
@@ -37,31 +40,72 @@ integration.
 - **`expressive`** - Full range of dynamic effects (default)
 - **`subtle`** - Balanced thick separators with gentle waves
 - **`electric`** - Maximum drama with lightning everywhere! ⚡
+- **`curvy`** - Smooth curved separators throughout
+- **`angular`** - Sharp angular separators for a modern look
+
+### 🔧 Separator Profiles (NEW!)
+
+Override any theme's separators with these profiles:
+
+- **`all-curvy`** - Make everything use curved separators
+- **`all-angly`** - All angular separators
+- **`mixed-dynamic`** - Curved by default, lightning/flame for dirty
+  repos
+- **`minimal-clean`** - Thin separators with thick accents for changes
+- **`electric-chaos`** - Maximum separator variety for power users
 
 ### ⚡ Available Separator Styles:
 
-- `thick` - Standard powerline separator
-- `thin` - Thin powerline separator
-- `flame` - Double separator 🔥
-- `wave` - Alternating thick/thin 🌊
-- `lightning` - Triple separator ⚡
+- `thick` - Standard powerline separator ▶
+- `thin` - Thin powerline separator →
+- `curvy` - Curved separator (Victor Mono compatible)
+- `angly` - Angular separator \
+- `angly2` - Alternative angular separator /
+- `flame` - Dramatic flame-style effect 🔥
+- `wave` - Wave-like alternating effect 🌊
+- `lightning` - High-energy lightning effect ⚡
 - `none` - No separator
 
 ## Configuration
 
-### Environment Variable
+### Environment Variables
 
 ```bash
 # Set theme via environment variable
 export STATUSLINE_THEME=electric
+
+# Override separators with a profile
+export STATUSLINE_SEPARATOR_PROFILE=all-curvy
+
+# Font profile (for compatibility)
+export STATUSLINE_FONT_PROFILE=victor-mono  # or nerd-font-full, minimal
 ```
 
-### Testing Themes
+### Testing Themes & Profiles
 
 ```bash
+# Test different themes
 STATUSLINE_THEME=minimal claude-statusline
 STATUSLINE_THEME=electric claude-statusline
+
+# Test separator profiles (can combine with any theme!)
+STATUSLINE_SEPARATOR_PROFILE=all-curvy claude-statusline
+STATUSLINE_SEPARATOR_PROFILE=electric-chaos STATUSLINE_THEME=minimal claude-statusline
+
+# Font profile examples
+STATUSLINE_FONT_PROFILE=minimal claude-statusline    # ASCII-safe
+STATUSLINE_FONT_PROFILE=nerd-font-full claude-statusline  # Full Nerd Font support
 ```
+
+### 🎯 Pro Tips:
+
+- **Combine themes + profiles**:
+  `STATUSLINE_THEME=minimal STATUSLINE_SEPARATOR_PROFILE=all-curvy`
+- **Victor Mono users**: The default font profile works great!
+- **Full Nerd Font users**: Set
+  `STATUSLINE_FONT_PROFILE=nerd-font-full` for more icons
+- **Universal compatibility**: Use `STATUSLINE_FONT_PROFILE=minimal`
+  for ASCII-only
 
 ## Installation
 
