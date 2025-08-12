@@ -34,6 +34,8 @@ export interface FontProfile {
 			angly2Left?: string;
 			flame?: string;
 			flameLeft?: string;
+			doubleChevron?: string;
+			doubleChevronLeft?: string;
 		};
 	};
 }
@@ -60,12 +62,14 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 				rightThin: '\uE0B1',
 			},
 			extra: {
-				curvy: '\uE0B0',
-				curvyLeft: '\uE0B2',
-				angly: '\uE0B0',
-				anglyLeft: '\uE0B2',
-				angly2: '\uE0B0',
-				angly2Left: '\uE0B2',
+				curvy: '\uE0B4',
+				curvyLeft: '\uE0B6',
+				angly: '\uE0B8',
+				anglyLeft: '\uE0B9',
+				angly2: '\uE0BC',
+				angly2Left: '\uE0BD',
+				doubleChevron: '\uE0B0\uE0B1',
+				doubleChevronLeft: '\uE0B2\uE0B3',
 			},
 		},
 	},
