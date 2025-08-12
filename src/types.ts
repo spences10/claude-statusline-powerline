@@ -51,11 +51,11 @@ export interface SeparatorProfile {
 	default?: SeparatorStyle;
 	overrides?: {
 		model?: SeparatorStyle;
-		directoryClean?: SeparatorStyle;
-		directoryDirty?: SeparatorStyle;
-		gitClean?: SeparatorStyle;
-		gitDirty?: SeparatorStyle;
-		directoryNoGit?: SeparatorStyle;
+		directory_clean?: SeparatorStyle;
+		directory_dirty?: SeparatorStyle;
+		git_clean?: SeparatorStyle;
+		git_dirty?: SeparatorStyle;
+		directory_no_git?: SeparatorStyle;
 	};
 }
 
