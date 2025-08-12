@@ -12,6 +12,7 @@
 		"dev": "tsc --watch",
 		"test": "pnpm run build && node dist/test.js",
 		"prepublishOnly": "pnpm run build",
+		"postinstall": "node dist/install.js",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"changeset": "changeset",
