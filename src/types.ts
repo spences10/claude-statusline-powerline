@@ -66,10 +66,26 @@ export interface SegmentVisibility {
 	session: boolean;
 }
 
+export interface LineSegments {
+	model?: boolean;
+	directory?: boolean;
+	git?: boolean;
+	session?: boolean;
+}
+
+export interface DisplayLine {
+	segments: LineSegments;
+}
+
+export interface DisplayConfig {
+	lines: DisplayLine[];
+}
+
 export interface StatuslineConfig {
 	separators: SeparatorConfig;
 	separatorProfile?: SeparatorProfile;
 	segments: SegmentVisibility;
+	display?: DisplayConfig;
 	theme:
 		| 'minimal'
 		| 'expressive'
@@ -78,6 +94,9 @@ export interface StatuslineConfig {
 		| 'curvy'
 		| 'angular'
 		| 'custom';
+	// New theme system
+	color_theme?: string; // 'dark', 'electric', etc.
+	current_theme?: any; // Will be populated with actual theme object
 }
 
 export interface SessionUsage {
