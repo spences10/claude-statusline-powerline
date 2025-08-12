@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.4
+
+### Patch Changes
+
+- 043712a: update install process
+
 ## 0.0.3
 
 ### Patch Changes
