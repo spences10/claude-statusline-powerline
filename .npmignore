@@ -26,3 +26,9 @@ npm-debug.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Development config files
+.changeset/
+.claude/
+.prettierrc
+.prettierignore
