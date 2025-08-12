@@ -16,16 +16,12 @@ console.log('🎨 Separator Theme Showcase\n');
 
 Object.entries(SEPARATOR_THEMES).forEach(([theme_name, config]) => {
 	console.log(`📍 Theme: ${theme_name.toUpperCase()}`);
-	console.log(`   Model→Directory: ${config.modelToDirectory}`);
-	console.log(
-		`   Directory→Git (clean): ${config.directoryToGit.clean}`,
-	);
-	console.log(
-		`   Directory→Git (dirty): ${config.directoryToGit.dirty}`,
-	);
-	console.log(`   Git End (clean): ${config.gitEnd.clean}`);
-	console.log(`   Git End (dirty): ${config.gitEnd.dirty}`);
-	console.log(`   No Git: ${config.noGit}\n`);
+	console.log(`   Model: ${config.model}`);
+	console.log(`   Directory (clean): ${config.directory.clean}`);
+	console.log(`   Directory (dirty): ${config.directory.dirty}`);
+	console.log(`   Directory (no git): ${config.directory.noGit}`);
+	console.log(`   Git (clean): ${config.git.clean}`);
+	console.log(`   Git (dirty): ${config.git.dirty}\n`);
 });
 
 console.log('🚀 To test a theme, set environment variable:');

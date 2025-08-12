@@ -3,29 +3,16 @@
 import { execSync } from 'child_process';
 import * as path from 'path';
 import { load_config } from './config';
-import { ClaudeStatusInput, GitInfo, SeparatorStyle } from './types';
+import { get_font_profile } from './font-profiles';
+import {
+	ClaudeStatusInput,
+	GitInfo,
+	SeparatorStyle,
+	SessionUsage,
+} from './types';
 
-// Powerline symbols - only using glyphs that work with Victor Mono
-const SEPARATORS = {
-	// Basic powerline (core compatibility)
-	left: '\uE0B2',
-	right: '\uE0B0',
-	leftThin: '\uE0B3',
-	rightThin: '\uE0B1',
-	// Powerline-extra-symbols that work in Victor Mono
-	curvy: '\uE0B4', // ] curved right
-	curvyLeft: '\uE0B6', // [ curved left
-	angly: '\uE0B8', // \ angular
-	anglyLeft: '\uE0B9', // / angular left
-	angly2: '\uE0BC', // / angular style 2
-	angly2Left: '\uE0BD', // / angular style 2 left
-} as const;
-
-// Git symbols that work with most powerline fonts
-const SYMBOLS = {
-	branch: '\uE0A0', // Git branch symbol (same as claude-powerline)
-	folder: '📁',
-} as const;
+// Get the current font profile (Victor Mono by default)
+const font_profile = get_font_profile();
 
 // ANSI color codes
 const COLORS = {
@@ -91,30 +78,32 @@ function create_styled_separator(
 	to_color: string = '',
 	style: SeparatorStyle = 'thick',
 ): string {
+	const separators = font_profile.separators;
+
 	switch (style) {
 		case 'thin':
-			return `${to_color}${from_color}${SEPARATORS.rightThin}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.basic.rightThin}${COLORS.reset}`;
 		case 'thick':
-			return `${to_color}${from_color}${SEPARATORS.right}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.basic.right}${COLORS.reset}`;
 		case 'flame':
 			// Use angly2 since flame glyphs don't work in Victor Mono
-			return `${to_color}${from_color}${SEPARATORS.angly2}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.angly2 || separators.basic.right}${COLORS.reset}`;
 		case 'wave':
 			// Using curvy separators for wave effect
-			return `${to_color}${from_color}${SEPARATORS.curvy}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.curvy || separators.basic.right}${COLORS.reset}`;
 		case 'lightning':
 			// Using angular separators for lightning effect
-			return `${to_color}${from_color}${SEPARATORS.angly}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.angly || separators.basic.right}${COLORS.reset}`;
 		case 'curvy':
-			return `${to_color}${from_color}${SEPARATORS.curvy}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.curvy || separators.basic.right}${COLORS.reset}`;
 		case 'angly':
-			return `${to_color}${from_color}${SEPARATORS.angly}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.angly || separators.basic.right}${COLORS.reset}`;
 		case 'angly2':
-			return `${to_color}${from_color}${SEPARATORS.angly2}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.extra.angly2 || separators.basic.right}${COLORS.reset}`;
 		case 'none':
 			return '';
 		default:
-			return `${to_color}${from_color}${SEPARATORS.right}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.basic.right}${COLORS.reset}`;
 	}
 }
 
@@ -131,14 +120,17 @@ function build_statusline(data: ClaudeStatusInput): string {
 		create_styled_separator(
 			COLORS.fg.blue,
 			COLORS.bg.gray,
-			config.separators.modelToDirectory,
+			config.separators.model,
 		),
 	);
 
 	// Directory segment (gray background)
 	const dir_name = path.basename(cwd);
 	segments.push(
-		create_segment(`${SYMBOLS.folder} ${dir_name}`, COLORS.bg.gray),
+		create_segment(
+			`${font_profile.symbols.folder} ${dir_name}`,
+			COLORS.bg.gray,
+		),
 	);
 
 	// Git segment (green/red background)
@@ -150,16 +142,18 @@ function build_statusline(data: ClaudeStatusInput): string {
 		const git_fg = git_info.is_dirty
 			? COLORS.fg.yellow
 			: COLORS.fg.green;
-		const status_icon = git_info.is_dirty ? '±' : '✓';
+		const status_icon = git_info.is_dirty
+			? font_profile.symbols.dirty
+			: font_profile.symbols.clean;
 
 		// Use configured separator based on git status
 		const dir_to_git_style = git_info.is_dirty
-			? config.separators.directoryToGit.dirty
-			: config.separators.directoryToGit.clean;
+			? config.separators.directory.dirty
+			: config.separators.directory.clean;
 
 		const git_end_style = git_info.is_dirty
-			? config.separators.gitEnd.dirty
-			: config.separators.gitEnd.clean;
+			? config.separators.git.dirty
+			: config.separators.git.clean;
 
 		segments.push(
 			create_styled_separator(
@@ -170,24 +164,110 @@ function build_statusline(data: ClaudeStatusInput): string {
 		);
 		segments.push(
 			create_segment(
-				`${SYMBOLS.branch} ${git_info.branch} ${status_icon}`,
+				`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
 				git_bg,
 				COLORS.black,
 			),
 		);
-		segments.push(create_styled_separator(git_fg, '', git_end_style));
+		segments.push(
+			create_styled_separator(
+				git_fg,
+				COLORS.bg.purple,
+				git_end_style,
+			),
+		);
 	} else {
 		// No git repo uses configured noGit separator
 		segments.push(
 			create_styled_separator(
 				COLORS.fg.gray,
-				'',
-				config.separators.noGit,
+				COLORS.bg.purple,
+				config.separators.directory.noGit,
 			),
 		);
 	}
 
+	// Session segment (purple background) - show usage if available
+	if (data.transcript_path) {
+		const usage = parse_session_usage(data.transcript_path);
+
+		if (usage) {
+			const totalTokens =
+				usage.totalInputTokens + usage.totalOutputTokens;
+			const costStr =
+				usage.totalCost < 0.01
+					? '<$0.01'
+					: `$${usage.totalCost.toFixed(2)}`;
+
+			segments.push(
+				create_segment(
+					`💰 ${(totalTokens / 1000).toFixed(0)}k • ${costStr}`,
+					COLORS.bg.purple,
+				),
+			);
+		} else {
+			segments.push(
+				create_segment(`💰 No usage data`, COLORS.bg.purple),
+			);
+		}
+
+		segments.push(
+			create_styled_separator(COLORS.fg.purple, '', 'thick'),
+		);
+	}
+
 	return segments.join('');
+}
+
+function parse_session_usage(
+	transcript_path: string,
+): SessionUsage | null {
+	try {
+		const fs = require('fs');
+		if (!fs.existsSync(transcript_path)) {
+			return null;
+		}
+
+		const content = fs.readFileSync(transcript_path, 'utf8');
+		const lines = content.trim().split('\n');
+
+		let total_input_tokens = 0;
+		let total_output_tokens = 0;
+		let total_cache_tokens = 0;
+
+		for (const line of lines) {
+			try {
+				const entry = JSON.parse(line);
+				if (entry.type === 'assistant' && entry.message?.usage) {
+					const usage = entry.message.usage;
+					total_input_tokens += usage.input_tokens || 0;
+					total_output_tokens += usage.output_tokens || 0;
+					total_cache_tokens +=
+						(usage.cache_creation_input_tokens || 0) +
+						(usage.cache_read_input_tokens || 0);
+				}
+			} catch (parseError) {
+				// Skip malformed lines
+				continue;
+			}
+		}
+
+		// Simple cost estimation (Claude Sonnet pricing as baseline)
+		// Input: $3/M tokens, Output: $15/M tokens, Cache: $0.30/M tokens
+		const input_cost = (total_input_tokens / 1000000) * 3;
+		const output_cost = (total_output_tokens / 1000000) * 15;
+		const cache_cost = (total_cache_tokens / 1000000) * 0.3;
+		const total_cost = input_cost + output_cost + cache_cost;
+
+		return {
+			totalInputTokens: total_input_tokens,
+			totalOutputTokens: total_output_tokens,
+			totalCacheTokens: total_cache_tokens,
+			totalCost: total_cost,
+		};
+	} catch (error) {
+		return null;
+	}
 }
 
 function main(): void {
@@ -202,6 +282,7 @@ function main(): void {
 	process.stdin.on('end', () => {
 		try {
 			const data: ClaudeStatusInput = JSON.parse(input);
+
 			const statusline = build_statusline(data);
 			console.log(statusline);
 		} catch (error) {

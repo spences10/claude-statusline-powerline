@@ -1,5 +1,7 @@
 export interface ClaudeStatusInput {
 	session_id: string;
+	transcript_path?: string;
+	cwd?: string;
 	model: {
 		id?: string;
 		display_name: string;
@@ -33,19 +35,46 @@ export type SeparatorStyle =
 	| 'none';
 
 export interface SeparatorConfig {
-	modelToDirectory: SeparatorStyle;
-	directoryToGit: {
+	model: SeparatorStyle;
+	directory: {
+		clean: SeparatorStyle;
+		dirty: SeparatorStyle;
+		noGit: SeparatorStyle;
+	};
+	git: {
 		clean: SeparatorStyle;
 		dirty: SeparatorStyle;
 	};
-	gitEnd: {
-		clean: SeparatorStyle;
-		dirty: SeparatorStyle;
+}
+
+export interface SeparatorProfile {
+	default?: SeparatorStyle;
+	overrides?: {
+		model?: SeparatorStyle;
+		directoryClean?: SeparatorStyle;
+		directoryDirty?: SeparatorStyle;
+		gitClean?: SeparatorStyle;
+		gitDirty?: SeparatorStyle;
+		directoryNoGit?: SeparatorStyle;
 	};
-	noGit: SeparatorStyle;
 }
 
 export interface StatuslineConfig {
 	separators: SeparatorConfig;
-	theme: 'minimal' | 'expressive' | 'subtle' | 'custom';
+	separatorProfile?: SeparatorProfile;
+	theme:
+		| 'minimal'
+		| 'expressive'
+		| 'subtle'
+		| 'electric'
+		| 'curvy'
+		| 'angular'
+		| 'custom';
+}
+
+export interface SessionUsage {
+	totalInputTokens: number;
+	totalOutputTokens: number;
+	totalCacheTokens: number;
+	totalCost: number;
 }

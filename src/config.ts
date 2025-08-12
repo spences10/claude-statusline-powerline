@@ -1,85 +1,121 @@
-import { SeparatorConfig, StatuslineConfig } from './types';
+import {
+	SeparatorConfig,
+	SeparatorProfile,
+	StatuslineConfig,
+} from './types';
+
+// Separator profile presets for easy customization
+export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
+	'all-curvy': {
+		default: 'curvy',
+	},
+	'all-angly': {
+		default: 'angly',
+	},
+	'mixed-dynamic': {
+		default: 'curvy',
+		overrides: {
+			directoryDirty: 'lightning',
+			gitDirty: 'flame',
+		},
+	},
+	'minimal-clean': {
+		default: 'thin',
+		overrides: {
+			directoryDirty: 'thick',
+			gitDirty: 'thick',
+		},
+	},
+	'electric-chaos': {
+		default: 'lightning',
+		overrides: {
+			model: 'flame',
+			gitClean: 'angly2',
+			gitDirty: 'lightning',
+		},
+	},
+};
 
 // Separator theme presets
 export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 	minimal: {
-		modelToDirectory: 'thin',
-		directoryToGit: {
+		model: 'thin',
+		directory: {
+			clean: 'thin',
+			dirty: 'thick',
+			noGit: 'thin',
+		},
+		git: {
 			clean: 'thin',
 			dirty: 'thick',
 		},
-		gitEnd: {
-			clean: 'thin',
-			dirty: 'thick',
-		},
-		noGit: 'thin',
 	},
 
 	expressive: {
-		modelToDirectory: 'wave',
-		directoryToGit: {
+		model: 'wave',
+		directory: {
 			clean: 'wave',
 			dirty: 'flame',
+			noGit: 'thin',
 		},
-		gitEnd: {
+		git: {
 			clean: 'thick',
 			dirty: 'lightning',
 		},
-		noGit: 'thin',
 	},
 
 	subtle: {
-		modelToDirectory: 'thick',
-		directoryToGit: {
+		model: 'thick',
+		directory: {
 			clean: 'thick',
 			dirty: 'wave',
+			noGit: 'thin',
 		},
-		gitEnd: {
+		git: {
 			clean: 'thick',
 			dirty: 'flame',
 		},
-		noGit: 'thin',
 	},
 
 	// Fun experimental preset
 	electric: {
-		modelToDirectory: 'lightning',
-		directoryToGit: {
+		model: 'lightning',
+		directory: {
 			clean: 'flame',
 			dirty: 'lightning',
+			noGit: 'flame',
 		},
-		gitEnd: {
+		git: {
 			clean: 'wave',
 			dirty: 'lightning',
 		},
-		noGit: 'flame',
 	},
 
 	// Powerline-extra-symbols themes for Victor Mono compatibility
 	curvy: {
-		modelToDirectory: 'curvy',
-		directoryToGit: {
+		model: 'curvy',
+		directory: {
 			clean: 'curvy',
 			dirty: 'angly',
+			noGit: 'curvy',
 		},
-		gitEnd: {
+		git: {
 			clean: 'curvy',
 			dirty: 'flame',
 		},
-		noGit: 'curvy',
 	},
 
 	angular: {
-		modelToDirectory: 'angly',
-		directoryToGit: {
+		model: 'angly',
+		directory: {
 			clean: 'angly',
 			dirty: 'angly2',
+			noGit: 'angly',
 		},
-		gitEnd: {
+		git: {
 			clean: 'angly',
 			dirty: 'flame',
 		},
-		noGit: 'angly',
 	},
 };
 
@@ -89,17 +125,58 @@ export const DEFAULT_CONFIG: StatuslineConfig = {
 	theme: 'expressive',
 };
 
+// Apply separator profile to override theme separators
+export function applySeparatorProfile(
+	baseConfig: SeparatorConfig,
+	profile: SeparatorProfile,
+): SeparatorConfig {
+	const defaultStyle = profile.default || 'thick';
+	const overrides = profile.overrides || {};
+
+	return {
+		model: overrides.model || defaultStyle,
+		directory: {
+			clean: overrides.directoryClean || defaultStyle,
+			dirty: overrides.directoryDirty || defaultStyle,
+			noGit: overrides.directoryNoGit || defaultStyle,
+		},
+		git: {
+			clean: overrides.gitClean || defaultStyle,
+			dirty: overrides.gitDirty || defaultStyle,
+		},
+	};
+}
+
 // Load configuration from environment or use default
 export function load_config(): StatuslineConfig {
 	const theme_from_env = process.env
 		.STATUSLINE_THEME as keyof typeof SEPARATOR_THEMES;
+	const separator_profile_from_env =
+		process.env.STATUSLINE_SEPARATOR_PROFILE;
 
+	// Get base theme
+	let config: StatuslineConfig;
 	if (theme_from_env && SEPARATOR_THEMES[theme_from_env]) {
-		return {
+		config = {
 			separators: SEPARATOR_THEMES[theme_from_env],
 			theme: theme_from_env as any,
 		};
+	} else {
+		config = { ...DEFAULT_CONFIG };
 	}
 
-	return DEFAULT_CONFIG;
+	// Apply separator profile override if specified
+	if (
+		separator_profile_from_env &&
+		SEPARATOR_PROFILES[separator_profile_from_env]
+	) {
+		const profile = SEPARATOR_PROFILES[separator_profile_from_env];
+		config.separators = applySeparatorProfile(
+			config.separators,
+			profile,
+		);
+		config.separatorProfile = profile;
+	}
+
+	return config;
 }
