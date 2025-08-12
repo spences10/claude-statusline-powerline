@@ -169,15 +169,45 @@ function load_segment_visibility(): SegmentVisibility {
 	};
 }
 
+// Try to load config from JSON file
+function load_config_from_file(): Partial<StatuslineConfig> | null {
+	const fs = require('fs');
+	const path = require('path');
+
+	// Try different config file locations
+	const config_paths = [
+		'./multiline-example.json',
+		'./statusline.config.json',
+		path.join(process.cwd(), '.statusline.json'),
+	];
+
+	for (const config_path of config_paths) {
+		try {
+			if (fs.existsSync(config_path)) {
+				const file_content = fs.readFileSync(config_path, 'utf8');
+				return JSON.parse(file_content);
+			}
+		} catch (error) {
+			console.error(
+				`Failed to load config from ${config_path}:`,
+				error,
+			);
+		}
+	}
+
+	return null;
+}
+
 // Load configuration from environment or use default
 export function load_config(): StatuslineConfig {
 	const theme_from_env = process.env.STATUSLINE_THEME;
 	const separator_profile_from_env =
 		process.env.STATUSLINE_SEPARATOR_PROFILE;
-	const color_theme_from_env = process.env.STATUSLINE_COLOR_THEME || 'dark';
-	
-	// Debug: remove after testing
-	console.error(`DEBUG CONFIG: theme_from_env=${theme_from_env}, color_theme_from_env=${color_theme_from_env}`);
+	const color_theme_from_env =
+		process.env.STATUSLINE_COLOR_THEME || 'dark';
+
+	// Try to load from JSON file first
+	const file_config = load_config_from_file();
 
 	// Get base theme
 	let config: StatuslineConfig;
@@ -195,6 +225,18 @@ export function load_config(): StatuslineConfig {
 			segments: load_segment_visibility(),
 			colorTheme: color_theme_from_env,
 			currentTheme: get_theme(color_theme_from_env),
+		};
+	}
+
+	// Merge file config if available
+	if (file_config) {
+		config = {
+			...config,
+			...file_config,
+			// Ensure theme gets updated if specified in file
+			currentTheme: get_theme(
+				file_config.colorTheme || config.colorTheme || 'dark',
+			),
 		};
 	}
 

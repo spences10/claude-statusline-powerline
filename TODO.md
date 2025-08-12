@@ -24,7 +24,8 @@ additional improvements.
       display (tokens left vs percentage warnings)
 - [x] **Transcript parsing** - Direct JSONL parsing of Claude Code's
       session transcripts for accurate cumulative usage
-- [x] **🎨 MODULAR THEME SYSTEM** - Complete architectural refactor with:
+- [x] **🎨 MODULAR THEME SYSTEM** - Complete architectural refactor
+      with:
   - [x] Segment registry for pluggable architecture
   - [x] Color theme system (Dark vs Electric themes working!)
   - [x] Separator style system with multiple font profile support
@@ -33,12 +34,18 @@ additional improvements.
 
 ### 🐛 Current Issues (High Priority)
 
-- [ ] **SEPARATOR STYLES NOT WORKING** - Environment variable regression
-  - Issue: `STATUSLINE_THEME` env var not being read (shows `undefined`)
-  - Root cause: Multiline environment variable parsing in `src/config.ts:174`
-  - Expected: Victor Mono should show thin vs thick separators at minimum
-  - Status: Color themes work perfectly, separators broken during refactor
-  - Fix needed: Environment variable reading in `load_config()` function
+- [ ] **SEPARATOR STYLES NOT WORKING** - Environment variable
+      regression
+  - Issue: `STATUSLINE_THEME` env var not being read (shows
+    `undefined`)
+  - Root cause: Multiline environment variable parsing in
+    `src/config.ts:174`
+  - Expected: Victor Mono should show thin vs thick separators at
+    minimum
+  - Status: Color themes work perfectly, separators broken during
+    refactor
+  - Fix needed: Environment variable reading in `load_config()`
+    function
 
 ### 📋 Planned Features
 
@@ -138,15 +145,22 @@ additional improvements.
 
 ### 🎨 Modular Theme System Architecture (NEW!)
 
-- ✅ **Segment Registry**: Pluggable architecture with `BaseSegment` interface
-- ✅ **Color Themes**: `DarkTheme` vs `ElectricTheme` with dramatic visual differences
-- ✅ **Separator Styles**: Support for thin/thick/curvy/angly/flame/wave/lightning
+- ✅ **Segment Registry**: Pluggable architecture with `BaseSegment`
+  interface
+- ✅ **Color Themes**: `DarkTheme` vs `ElectricTheme` with dramatic
+  visual differences
+- ✅ **Separator Styles**: Support for
+  thin/thick/curvy/angly/flame/wave/lightning
 - ✅ **Font Profiles**: powerline (basic) vs nerd-font (full icons)
-- ✅ **TypeScript Demo**: `src/demo.ts` with comprehensive testing and performance metrics
-- ✅ **Configuration System**: Environment variable + JSON config support
-- 🐛 **Current Bug**: Environment variable parsing regression in `load_config()`
+- ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive testing and performance metrics
+  and performance metrics
+- ✅ **Configuration System**: Environment variable + JSON config
+  support
+- 🐛 **Current Bug**: Environment variable parsing regression in
+  `load_config()`
 
-**Quick Fix for Next Session**: 
+**Quick Fix for Next Session**:
+
 ```typescript
 // In src/config.ts:174, fix the multiline env var parsing:
 const theme_from_env = process.env.STATUSLINE_THEME; // Remove multiline syntax
