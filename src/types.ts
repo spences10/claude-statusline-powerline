@@ -66,10 +66,26 @@ export interface SegmentVisibility {
 	session: boolean;
 }
 
+export interface LineSegments {
+	model?: boolean;
+	directory?: boolean;
+	git?: boolean;
+	session?: boolean;
+}
+
+export interface DisplayLine {
+	segments: LineSegments;
+}
+
+export interface DisplayConfig {
+	lines: DisplayLine[];
+}
+
 export interface StatuslineConfig {
 	separators: SeparatorConfig;
 	separatorProfile?: SeparatorProfile;
 	segments: SegmentVisibility;
+	display?: DisplayConfig;
 	theme:
 		| 'minimal'
 		| 'expressive'

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn } from 'child_process';
-import { ClaudeStatusInput } from './types';
+import { ClaudeStatusInput } from '../types';
 
 // Demo data
 const BASE_DATA: ClaudeStatusInput = {
@@ -325,32 +325,6 @@ class StatuslineDemo {
 			});
 			console.log('Result:', result);
 		}
-
-		// 8. Performance Test
-		this.printHeader('8. ⚡ Performance Test');
-		console.log('Running 20 configurations rapidly...');
-
-		const startTime = Date.now();
-		const promises = [];
-
-		for (let i = 0; i < 20; i++) {
-			const colorTheme = COLOR_THEMES[i % COLOR_THEMES.length];
-			const separatorTheme =
-				SEPARATOR_THEMES[i % SEPARATOR_THEMES.length];
-			promises.push(
-				this.runStatusline(BASE_DATA, { colorTheme, separatorTheme }),
-			);
-		}
-
-		const results = await Promise.all(promises);
-		const endTime = Date.now();
-
-		console.log(
-			`✅ Generated ${results.length} statuslines in ${endTime - startTime}ms`,
-		);
-		console.log(
-			`⚡ Average: ${((endTime - startTime) / results.length).toFixed(1)}ms per statusline`,
-		);
 
 		// Cleanup
 		const fs = require('fs');

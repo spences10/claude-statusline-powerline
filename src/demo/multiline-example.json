@@ -1,0 +1,20 @@
+{
+  "display": {
+    "lines": [
+      {
+        "segments": {
+          "directory": true,
+          "git": true,
+          "model": true
+        }
+      },
+      {
+        "segments": {
+          "session": true
+        }
+      }
+    ]
+  },
+  "colorTheme": "electric",
+  "theme": "expressive"
+}
