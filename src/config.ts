@@ -174,6 +174,25 @@ function load_config_from_file(): Partial<StatuslineConfig> | null {
 	const fs = require('fs');
 	const path = require('path');
 
+	// Check for explicit config file path from environment variable
+	const explicit_config_path = process.env.STATUSLINE_CONFIG;
+	if (explicit_config_path) {
+		try {
+			if (fs.existsSync(explicit_config_path)) {
+				const file_content = fs.readFileSync(
+					explicit_config_path,
+					'utf8',
+				);
+				return JSON.parse(file_content);
+			}
+		} catch (error) {
+			console.error(
+				`Failed to load config from ${explicit_config_path}:`,
+				error,
+			);
+		}
+	}
+
 	// Try different config file locations
 	const config_paths = [
 		'./multiline-example.json',

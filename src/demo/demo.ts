@@ -39,6 +39,16 @@ interface DemoConfig {
 	colorTheme?: string;
 	separatorTheme?: string;
 	separatorProfile?: string;
+	display?: {
+		lines: Array<{
+			segments: {
+				model?: boolean;
+				directory?: boolean;
+				git?: boolean;
+				session?: boolean;
+			};
+		}>;
+	};
 	segments?: {
 		model?: boolean;
 		directory?: boolean;
@@ -106,11 +116,28 @@ class StatuslineDemo {
 		options: { fontProfile?: string } = {},
 	): Promise<string> {
 		return new Promise((resolve, reject) => {
+			const fs = require('fs');
 			const env = { ...process.env };
 
-			if (config.colorTheme)
+			// Create a temporary config file if multiline display is specified
+			let configFilePath: string | undefined;
+			if (config.display) {
+				configFilePath = 'temp-multiline-config.json';
+				const configData = {
+					display: config.display,
+					colorTheme: config.colorTheme || 'electric',
+					theme: config.separatorTheme || 'expressive',
+				};
+				fs.writeFileSync(
+					configFilePath,
+					JSON.stringify(configData, null, 2),
+				);
+				env.STATUSLINE_CONFIG = configFilePath;
+			}
+
+			if (config.colorTheme && !config.display)
 				env.STATUSLINE_COLOR_THEME = config.colorTheme;
-			if (config.separatorTheme)
+			if (config.separatorTheme && !config.display)
 				env.STATUSLINE_THEME = config.separatorTheme;
 			if (config.separatorProfile)
 				env.STATUSLINE_SEPARATOR_PROFILE = config.separatorProfile;
@@ -136,6 +163,11 @@ class StatuslineDemo {
 					`DEBUG: Setting STATUSLINE_FONT_PROFILE=${options.fontProfile}`,
 				);
 			}
+			if (configFilePath) {
+				console.error(
+					`DEBUG: Using multiline config file: ${configFilePath}`,
+				);
+			}
 
 			const child = spawn('node', ['dist/statusline.js'], {
 				env,
@@ -154,6 +186,11 @@ class StatuslineDemo {
 			});
 
 			child.on('close', (code) => {
+				// Cleanup temporary config file
+				if (configFilePath && fs.existsSync(configFilePath)) {
+					fs.unlinkSync(configFilePath);
+				}
+
 				if (code === 0) {
 					resolve(output.trim());
 				} else {
@@ -193,13 +230,13 @@ class StatuslineDemo {
 		const darkResult = await this.runStatusline(BASE_DATA, {
 			colorTheme: 'dark',
 		});
-		console.log('Result:', darkResult);
+		console.log(darkResult);
 
 		this.printSubheader('⚡ Electric Theme (Purple/Cyan/Red)');
 		const electricResult = await this.runStatusline(BASE_DATA, {
 			colorTheme: 'electric',
 		});
-		console.log('Result:', electricResult);
+		console.log(electricResult);
 
 		// 2. Separator Styles (with Dark theme + Nerd Font)
 		this.printHeader('2. 🔗 Separator Styles');
@@ -216,7 +253,7 @@ class StatuslineDemo {
 				},
 				{ fontProfile: 'nerd-font' },
 			);
-			console.log('Result:', result);
+			console.log(result);
 		}
 
 		// 3. Separator Profiles (with Electric theme)
@@ -227,7 +264,7 @@ class StatuslineDemo {
 				colorTheme: 'electric',
 				separatorProfile,
 			});
-			console.log('Result:', result);
+			console.log(result);
 		}
 
 		// 4. Font Profile Comparison
@@ -279,7 +316,7 @@ class StatuslineDemo {
 		for (const combo of combinations) {
 			this.printSubheader(`🎨 ${combo.label}`);
 			const result = await this.runStatusline(BASE_DATA, combo);
-			console.log('Result:', result);
+			console.log(result);
 		}
 
 		// 6. Segment Visibility
@@ -305,11 +342,81 @@ class StatuslineDemo {
 				colorTheme: 'electric',
 				...config,
 			});
-			console.log('Result:', result);
+			console.log(result);
 		}
 
-		// 7. Different Models
-		this.printHeader('7. 🤖 Different Models');
+		// 7. Multi-line Layout Support
+		this.printHeader('7. 📏 Multi-line Layout Support');
+		this.printSubheader(
+			'Demonstrating multi-line powerline layouts to prevent segment cutoff',
+		);
+
+		// Single line (default)
+		this.printSubheader('🔸 Single Line (Default)');
+		const singleLineResult = await this.runStatusline(BASE_DATA, {
+			colorTheme: 'electric',
+			separatorTheme: 'expressive',
+		});
+		console.log(singleLineResult);
+
+		// Two line layout - First line: directory, git, model; Second line: session
+		this.printSubheader(
+			'🔸 Two Lines: [Directory, Git, Model] + [Session]',
+		);
+		const twoLineResult = await this.runStatusline(BASE_DATA, {
+			colorTheme: 'electric',
+			separatorTheme: 'expressive',
+			display: {
+				lines: [
+					{
+						segments: {
+							directory: true,
+							git: true,
+							model: true,
+						},
+					},
+					{
+						segments: {
+							session: true,
+						},
+					},
+				],
+			},
+		});
+		console.log(twoLineResult);
+
+		// Three line layout - Each segment on its own line
+		this.printSubheader(
+			'🔸 Three Lines: Directory | Git + Model | Session',
+		);
+		const threeLineResult = await this.runStatusline(BASE_DATA, {
+			colorTheme: 'dark',
+			separatorTheme: 'curvy',
+			display: {
+				lines: [
+					{
+						segments: {
+							directory: true,
+						},
+					},
+					{
+						segments: {
+							git: true,
+							model: true,
+						},
+					},
+					{
+						segments: {
+							session: true,
+						},
+					},
+				],
+			},
+		});
+		console.log(threeLineResult);
+
+		// 8. Different Models
+		this.printHeader('8. 🤖 Different Models');
 		const models = [
 			{ display_name: 'Claude Sonnet 4' },
 			{ display_name: 'Claude Opus 4' },
@@ -323,7 +430,7 @@ class StatuslineDemo {
 			const result = await this.runStatusline(data, {
 				colorTheme: 'electric',
 			});
-			console.log('Result:', result);
+			console.log(result);
 		}
 
 		// Cleanup
