@@ -30,31 +30,31 @@ export class ElectricTheme extends BaseTheme {
 
 	segments = {
 		model: {
-			background: this.colors.bg.purple,
-			foreground: this.colors.fg.white,
-			separatorColor: this.colors.fg.purple,
+			background: '\x1b[48;5;165m',  // Electric purple background
+			foreground: '\x1b[97m',        // Bright white foreground
+			separatorColor: '\x1b[38;5;165m', // Electric purple foreground
 		} as SegmentTheme,
 		directory: {
-			background: this.colors.bg.cyan,
-			foreground: this.colors.fg.black,
-			separatorColor: this.colors.fg.cyan,
+			background: '\x1b[48;5;51m',   // Electric cyan background
+			foreground: '\x1b[30m',        // Black foreground
+			separatorColor: '\x1b[38;5;51m', // Electric cyan foreground
 		} as SegmentTheme,
 		git: {
 			clean: {
-				background: this.colors.bg.green,
-				foreground: this.colors.fg.black,
-				separatorColor: this.colors.fg.green,
+				background: '\x1b[48;5;46m',   // Electric green background
+				foreground: '\x1b[30m',        // Black foreground
+				separatorColor: '\x1b[38;5;46m', // Electric green foreground
 			} as SegmentTheme,
 			dirty: {
-				background: this.colors.bg.red,
-				foreground: this.colors.fg.white,
-				separatorColor: this.colors.fg.red,
+				background: '\x1b[48;5;196m',  // Electric red background
+				foreground: '\x1b[97m',        // Bright white foreground
+				separatorColor: '\x1b[38;5;196m', // Electric red foreground
 			} as SegmentTheme,
 		},
 		session: {
-			background: this.colors.bg.blue,
-			foreground: this.colors.fg.white,
-			separatorColor: this.colors.fg.blue,
+			background: '\x1b[48;5;21m',   // Electric blue background
+			foreground: '\x1b[97m',        // Bright white foreground
+			separatorColor: '\x1b[38;5;21m', // Electric blue foreground
 		} as SegmentTheme,
 	};
 }
