@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
@@ -20,26 +19,13 @@ function ensure_claude_dir(): void {
 	}
 }
 
-function get_statusline_path(): string {
-	// Get the path to the installed package
-	try {
-		const package_root = execSync('npm root -g', {
-			encoding: 'utf8',
-		}).trim();
-		return path.join(
-			package_root,
-			'claude-statusline-powerline',
-			'dist',
-			'statusline.js',
-		);
-	} catch (error) {
-		// Fallback to local installation
-		return path.join(__dirname, 'statusline.js');
-	}
+function get_statusline_command(): string {
+	// Use the direct binary name - works regardless of package manager
+	return 'claude-statusline';
 }
 
 function update_settings(): void {
-	const statusline_path = get_statusline_path();
+	const statusline_command = get_statusline_command();
 
 	let settings = {};
 
@@ -61,7 +47,7 @@ function update_settings(): void {
 	// Update statusLine configuration
 	(settings as any).statusLine = {
 		type: 'command',
-		command: statusline_path,
+		command: statusline_command,
 	};
 
 	// Write updated settings
@@ -73,7 +59,9 @@ function update_settings(): void {
 	console.log(
 		`✅ Updated Claude settings at ${CLAUDE_SETTINGS_FILE}`,
 	);
-	console.log(`📊 Statusline configured to use: ${statusline_path}`);
+	console.log(
+		`📊 Statusline configured to use: ${statusline_command}`,
+	);
 }
 
 function main(): void {

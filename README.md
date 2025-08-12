@@ -117,32 +117,24 @@ STATUSLINE_FONT_PROFILE=nerd-font-full claude-statusline  # Full Nerd Font suppo
 
 ## Installation
 
-### Global Installation (Recommended)
+Install globally with your preferred package manager:
 
 ```bash
+# npm
 npm install -g claude-statusline-powerline
-claude-statusline-install
+
+# pnpm
+pnpm add -g claude-statusline-powerline
+
+# bun
+bun add -g claude-statusline-powerline
+
+# volta
+volta install claude-statusline-powerline
 ```
 
-### Local Development
-
-```bash
-git clone <repo-url>
-cd claude-statusline
-pnpm install
-pnpm build
-```
-
-Then configure manually in your `~/.claude/settings.json`:
-
-```json
-{
-	"statusLine": {
-		"type": "command",
-		"command": "/path/to/claude-statusline/dist/statusline.js"
-	}
-}
-```
+That's it! The statusline will be automatically configured for Claude
+Code.
 
 ## Requirements
 
