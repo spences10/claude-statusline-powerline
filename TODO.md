@@ -152,8 +152,8 @@ additional improvements.
 - ✅ **Separator Styles**: Support for
   thin/thick/curvy/angly/flame/wave/lightning
 - ✅ **Font Profiles**: powerline (basic) vs nerd-font (full icons)
-- ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive testing and performance metrics
-  and performance metrics
+- ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive
+  testing and performance metrics and performance metrics
 - ✅ **Configuration System**: Environment variable + JSON config
   support
 - 🐛 **Current Bug**: Environment variable parsing regression in
