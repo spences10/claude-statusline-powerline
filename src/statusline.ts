@@ -196,16 +196,28 @@ function build_statusline(data: ClaudeStatusInput): string {
 		const usage = parse_session_usage(data.transcript_path);
 
 		if (usage) {
-			const totalTokens =
-				usage.totalInputTokens + usage.totalOutputTokens;
-			const costStr =
-				usage.totalCost < 0.01
-					? '<$0.01'
-					: `$${usage.totalCost.toFixed(2)}`;
+			const totalTokens = usage.totalInputTokens + usage.totalOutputTokens;
+			const costStr = usage.totalCost < 0.01 ? '< $0.01' : `$${usage.totalCost.toFixed(2)}`;
+			
+			// Calculate context usage
+			const pricing = MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
+			const contextUsed = totalTokens;
+			const contextRemaining = pricing.contextWindow - contextUsed;
+			const contextPercent = Math.round((contextUsed / pricing.contextWindow) * 100);
+			
+			// Format context display
+			let contextDisplay = '';
+			if (contextPercent >= 90) {
+				contextDisplay = ` !${contextPercent}%`; // Warning at 90%
+			} else if (contextPercent >= 75) {
+				contextDisplay = ` ${contextPercent}%`; // Show percentage at 75%
+			} else {
+				contextDisplay = ` ${Math.round(contextRemaining / 1000)}k left`; // Show remaining tokens
+			}
 
 			segments.push(
 				create_segment(
-					`💰 ${(totalTokens / 1000).toFixed(0)}k • ${costStr}`,
+					`💰 ${(totalTokens / 1000).toFixed(0)}k • ${costStr}${contextDisplay}`,
 					COLORS.bg.purple,
 				),
 			);
