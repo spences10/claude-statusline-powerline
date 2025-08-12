@@ -196,28 +196,35 @@ function build_statusline(data: ClaudeStatusInput): string {
 		const usage = parse_session_usage(data.transcript_path);
 
 		if (usage) {
-			const totalTokens = usage.totalInputTokens + usage.totalOutputTokens;
-			const costStr = usage.totalCost < 0.01 ? '< $0.01' : `$${usage.totalCost.toFixed(2)}`;
-			
+			const total_tokens =
+				usage.totalInputTokens + usage.totalOutputTokens;
+			const cost_str =
+				usage.totalCost < 0.01
+					? '< $0.01'
+					: `$${usage.totalCost.toFixed(2)}`;
+
 			// Calculate context usage
-			const pricing = MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
-			const contextUsed = totalTokens;
-			const contextRemaining = pricing.contextWindow - contextUsed;
-			const contextPercent = Math.round((contextUsed / pricing.contextWindow) * 100);
-			
+			const pricing =
+				MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
+			const context_used = total_tokens;
+			const context_remaining = pricing.contextWindow - context_used;
+			const context_percent = Math.round(
+				(context_used / pricing.contextWindow) * 100,
+			);
+
 			// Format context display
-			let contextDisplay = '';
-			if (contextPercent >= 90) {
-				contextDisplay = ` !${contextPercent}%`; // Warning at 90%
-			} else if (contextPercent >= 75) {
-				contextDisplay = ` ${contextPercent}%`; // Show percentage at 75%
+			let context_display = '';
+			if (context_percent >= 90) {
+				context_display = ` !${context_percent}%`; // Warning at 90%
+			} else if (context_percent >= 75) {
+				context_display = ` ${context_percent}%`; // Show percentage at 75%
 			} else {
-				contextDisplay = ` ${Math.round(contextRemaining / 1000)}k left`; // Show remaining tokens
+				context_display = ` ${Math.round(context_remaining / 1000)}k left`; // Show remaining tokens
 			}
 
 			segments.push(
 				create_segment(
-					`💰 ${(totalTokens / 1000).toFixed(0)}k • ${costStr}${contextDisplay}`,
+					`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
 					COLORS.bg.purple,
 				),
 			);

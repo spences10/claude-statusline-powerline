@@ -16,23 +16,23 @@ export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
 	'mixed-dynamic': {
 		default: 'curvy',
 		overrides: {
-			directoryDirty: 'lightning',
-			gitDirty: 'flame',
+			directory_dirty: 'lightning',
+			git_dirty: 'flame',
 		},
 	},
 	'minimal-clean': {
 		default: 'thin',
 		overrides: {
-			directoryDirty: 'thick',
-			gitDirty: 'thick',
+			directory_dirty: 'thick',
+			git_dirty: 'thick',
 		},
 	},
 	'electric-chaos': {
 		default: 'lightning',
 		overrides: {
 			model: 'flame',
-			gitClean: 'angly2',
-			gitDirty: 'lightning',
+			git_clean: 'angly2',
+			git_dirty: 'lightning',
 		},
 	},
 };
@@ -127,23 +127,23 @@ export const DEFAULT_CONFIG: StatuslineConfig = {
 };
 
 // Apply separator profile to override theme separators
-export function applySeparatorProfile(
-	baseConfig: SeparatorConfig,
+export function apply_separator_profile(
+	base_config: SeparatorConfig,
 	profile: SeparatorProfile,
 ): SeparatorConfig {
-	const defaultStyle = profile.default || 'thick';
+	const default_style = profile.default || 'thick';
 	const overrides = profile.overrides || {};
 
 	return {
-		model: overrides.model || defaultStyle,
+		model: overrides.model || default_style,
 		directory: {
-			clean: overrides.directoryClean || defaultStyle,
-			dirty: overrides.directoryDirty || defaultStyle,
-			noGit: overrides.directoryNoGit || defaultStyle,
+			clean: overrides.directory_clean || default_style,
+			dirty: overrides.directory_dirty || default_style,
+			noGit: overrides.directory_no_git || default_style,
 		},
 		git: {
-			clean: overrides.gitClean || defaultStyle,
-			dirty: overrides.gitDirty || defaultStyle,
+			clean: overrides.git_clean || default_style,
+			dirty: overrides.git_dirty || default_style,
 		},
 	};
 }
@@ -172,7 +172,7 @@ export function load_config(): StatuslineConfig {
 		SEPARATOR_PROFILES[separator_profile_from_env]
 	) {
 		const profile = SEPARATOR_PROFILES[separator_profile_from_env];
-		config.separators = applySeparatorProfile(
+		config.separators = apply_separator_profile(
 			config.separators,
 			profile,
 		);
@@ -191,15 +191,15 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 		cacheTokens: 1.5,
 		contextWindow: 200000,
 	},
-	
-	// Claude Opus 4 (Max plan only)  
+
+	// Claude Opus 4 (Max plan only)
 	'claude-opus-4-20250514': {
 		inputTokens: 15,
 		outputTokens: 75,
 		cacheTokens: 1.5,
 		contextWindow: 200000,
 	},
-	
+
 	// Claude Sonnet 4
 	'claude-sonnet-4-20250514': {
 		inputTokens: 3,
@@ -207,7 +207,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 		cacheTokens: 0.3,
 		contextWindow: 200000,
 	},
-	
+
 	// Claude Sonnet 3.7
 	'claude-3-7-sonnet-20250219': {
 		inputTokens: 3,
@@ -215,7 +215,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 		cacheTokens: 0.3,
 		contextWindow: 200000,
 	},
-	
+
 	// Claude Haiku 3.5
 	'claude-3-5-haiku-20241022': {
 		inputTokens: 0.8,

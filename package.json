@@ -1,38 +1,57 @@
 {
-  "name": "claude-statusline-powerline",
-  "version": "0.0.1",
-  "description": "A powerline-style statusline for Claude Code with git integration",
-  "main": "dist/statusline.js",
-  "bin": {
-    "claude-statusline": "./dist/statusline.js",
-    "claude-statusline-install": "./dist/install.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "pnpm run build && node dist/test.js",
-    "prepublishOnly": "pnpm run build",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "release": "pnpm run build && changeset publish"
-  },
-  "keywords": [
-    "claude-code",
-    "statusline",
-    "powerline",
-    "git"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^24.2.1",
-    "typescript": "^5.9.2",
-    "prettier": "^3.0.0",
-    "@changesets/cli": "^2.27.0"
-  }
+	"name": "claude-statusline-powerline",
+	"version": "0.0.3",
+	"description": "Beautiful vim-style powerline statusline for Claude Code with git integration, session tracking, and cost monitoring",
+	"main": "dist/statusline.js",
+	"bin": {
+		"claude-statusline": "./dist/statusline.js",
+		"claude-statusline-install": "./dist/install.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"test": "pnpm run build && node dist/test.js",
+		"prepublishOnly": "pnpm run build",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "pnpm run build && changeset publish"
+	},
+	"keywords": [
+		"claude-code",
+		"statusline",
+		"powerline",
+		"git",
+		"cli",
+		"terminal",
+		"status-bar",
+		"developer-tools",
+		"cost-tracking",
+		"session-monitoring",
+		"typescript",
+		"ai-tools",
+		"productivity",
+		"vim-style",
+		"theming"
+	],
+	"author": "Scott Spence <spences10@gmail.com> (https://scottspence.com)",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/spences10/claude-statusline-powerline.git"
+	},
+	"bugs": {
+		"url": "https://github.com/spences10/claude-statusline-powerline/issues"
+	},
+	"homepage": "https://github.com/spences10/claude-statusline-powerline#readme",
+	"engines": {
+		"node": ">=14.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.2.1",
+		"typescript": "^5.9.2",
+		"prettier": "^3.0.0",
+		"@changesets/cli": "^2.27.0"
+	}
 }
