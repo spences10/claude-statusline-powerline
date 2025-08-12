@@ -1,3 +1,4 @@
+import { get_theme } from './themes';
 import {
 	ModelPricing,
 	SegmentVisibility,
@@ -174,6 +175,8 @@ export function load_config(): StatuslineConfig {
 		.STATUSLINE_THEME as keyof typeof SEPARATOR_THEMES;
 	const separator_profile_from_env =
 		process.env.STATUSLINE_SEPARATOR_PROFILE;
+	const color_theme_from_env =
+		process.env.STATUSLINE_COLOR_THEME || 'dark';
 
 	// Get base theme
 	let config: StatuslineConfig;
@@ -182,11 +185,15 @@ export function load_config(): StatuslineConfig {
 			separators: SEPARATOR_THEMES[theme_from_env],
 			segments: load_segment_visibility(),
 			theme: theme_from_env as any,
+			colorTheme: color_theme_from_env,
+			currentTheme: get_theme(color_theme_from_env),
 		};
 	} else {
 		config = {
 			...DEFAULT_CONFIG,
 			segments: load_segment_visibility(),
+			colorTheme: color_theme_from_env,
+			currentTheme: get_theme(color_theme_from_env),
 		};
 	}
 

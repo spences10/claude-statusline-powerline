@@ -4,15 +4,11 @@ import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_font_profile } from '../font-profiles';
 import { get_git_info } from '../utils/git';
 
-// ANSI color codes
-const COLORS = {
-	bg: {
-		gray: '\x1b[100m',
-	},
-	fg: {
-		gray: '\x1b[90m',
-	},
-	white: '\x1b[97m',
+// Fallback colors
+const FALLBACK_COLORS = {
+	bg: '\x1b[100m',
+	fg: '\x1b[97m',
+	separator: '\x1b[90m',
 };
 
 export class DirectorySegment extends BaseSegment {
@@ -40,11 +36,23 @@ export class DirectorySegment extends BaseSegment {
 			separator_style = config.separators.directory.noGit;
 		}
 		
+		const theme = config.currentTheme?.segments.directory;
+		if (!theme) {
+			// Fallback to hardcoded colors if no theme
+			return this.createSegment(
+				`${font_profile.symbols.folder} ${dir_name}`,
+				FALLBACK_COLORS.bg,
+				FALLBACK_COLORS.fg,
+				FALLBACK_COLORS.separator,
+				separator_style,
+			);
+		}
+		
 		return this.createSegment(
 			`${font_profile.symbols.folder} ${dir_name}`,
-			COLORS.bg.gray,
-			COLORS.white,
-			COLORS.fg.gray,
+			theme.background,
+			theme.foreground,
+			theme.separatorColor,
 			separator_style,
 		);
 	}
