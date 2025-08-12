@@ -1,6 +1,6 @@
 {
   "name": "claude-statusline-powerline",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A powerline-style statusline for Claude Code with git integration",
   "main": "dist/statusline.js",
   "bin": {
