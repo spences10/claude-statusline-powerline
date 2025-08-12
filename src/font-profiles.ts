@@ -22,18 +22,20 @@ export interface FontProfile {
 		basic: {
 			left: string;
 			right: string;
-			leftThin: string;
-			rightThin: string;
+			left_thin: string;
+			right_thin: string;
 		};
 		extra: {
 			curvy?: string;
-			curvyLeft?: string;
+			curvy_left?: string;
 			angly?: string;
-			anglyLeft?: string;
+			angly_left?: string;
 			angly2?: string;
-			angly2Left?: string;
+			angly2_left?: string;
 			flame?: string;
-			flameLeft?: string;
+			flame_left?: string;
+			double_chevron?: string;
+			double_chevron_left?: string;
 		};
 	};
 }
@@ -56,16 +58,18 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			basic: {
 				left: '\uE0B2',
 				right: '\uE0B0',
-				leftThin: '\uE0B3',
-				rightThin: '\uE0B1',
+				left_thin: '\uE0B3',
+				right_thin: '\uE0B1',
 			},
 			extra: {
-				curvy: '\uE0B0',
-				curvyLeft: '\uE0B2',
-				angly: '\uE0B0',
-				anglyLeft: '\uE0B2',
-				angly2: '\uE0B0',
-				angly2Left: '\uE0B2',
+				curvy: '\uE0B4',
+				curvy_left: '\uE0B6',
+				angly: '\uE0B8',
+				angly_left: '\uE0B9',
+				angly2: '\uE0BC',
+				angly2_left: '\uE0BD',
+				double_chevron: '\uE0B0\uE0B1',
+				double_chevron_left: '\uE0B2\uE0B3',
 			},
 		},
 	},
@@ -88,18 +92,18 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			basic: {
 				left: '\uE0B2',
 				right: '\uE0B0',
-				leftThin: '\uE0B3',
-				rightThin: '\uE0B1',
+				left_thin: '\uE0B3',
+				right_thin: '\uE0B1',
 			},
 			extra: {
 				curvy: '\uE0B4',
-				curvyLeft: '\uE0B6',
+				curvy_left: '\uE0B6',
 				angly: '\uE0B8',
-				anglyLeft: '\uE0B9',
+				angly_left: '\uE0B9',
 				angly2: '\uE0BC',
-				angly2Left: '\uE0BD',
+				angly2_left: '\uE0BD',
 				flame: '\uE0C0',
-				flameLeft: '\uE0C1',
+				flame_left: '\uE0C1',
 			},
 		},
 	},

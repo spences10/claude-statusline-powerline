@@ -1,3 +1,4 @@
+import { get_theme } from './themes';
 import {
 	ModelPricing,
 	SegmentVisibility,
@@ -168,12 +169,64 @@ function load_segment_visibility(): SegmentVisibility {
 	};
 }
 
+// Try to load config from JSON file
+function load_config_from_file(): Partial<StatuslineConfig> | null {
+	const fs = require('fs');
+	const path = require('path');
+
+	// Check for explicit config file path from environment variable
+	const explicit_config_path = process.env.STATUSLINE_CONFIG;
+	if (explicit_config_path) {
+		try {
+			if (fs.existsSync(explicit_config_path)) {
+				const file_content = fs.readFileSync(
+					explicit_config_path,
+					'utf8',
+				);
+				return JSON.parse(file_content);
+			}
+		} catch (error) {
+			console.error(
+				`Failed to load config from ${explicit_config_path}:`,
+				error,
+			);
+		}
+	}
+
+	// Try different config file locations
+	const config_paths = [
+		'./multiline-example.json',
+		'./statusline.config.json',
+		path.join(process.cwd(), '.statusline.json'),
+	];
+
+	for (const config_path of config_paths) {
+		try {
+			if (fs.existsSync(config_path)) {
+				const file_content = fs.readFileSync(config_path, 'utf8');
+				return JSON.parse(file_content);
+			}
+		} catch (error) {
+			console.error(
+				`Failed to load config from ${config_path}:`,
+				error,
+			);
+		}
+	}
+
+	return null;
+}
+
 // Load configuration from environment or use default
 export function load_config(): StatuslineConfig {
-	const theme_from_env = process.env
-		.STATUSLINE_THEME as keyof typeof SEPARATOR_THEMES;
+	const theme_from_env = process.env.STATUSLINE_THEME;
 	const separator_profile_from_env =
 		process.env.STATUSLINE_SEPARATOR_PROFILE;
+	const color_theme_from_env =
+		process.env.STATUSLINE_COLOR_THEME || 'dark';
+
+	// Try to load from JSON file first
+	const file_config = load_config_from_file();
 
 	// Get base theme
 	let config: StatuslineConfig;
@@ -182,11 +235,27 @@ export function load_config(): StatuslineConfig {
 			separators: SEPARATOR_THEMES[theme_from_env],
 			segments: load_segment_visibility(),
 			theme: theme_from_env as any,
+			color_theme: color_theme_from_env,
+			current_theme: get_theme(color_theme_from_env),
 		};
 	} else {
 		config = {
 			...DEFAULT_CONFIG,
 			segments: load_segment_visibility(),
+			color_theme: color_theme_from_env,
+			current_theme: get_theme(color_theme_from_env),
+		};
+	}
+
+	// Merge file config if available
+	if (file_config) {
+		config = {
+			...config,
+			...file_config,
+			// Ensure theme gets updated if specified in file
+			current_theme: get_theme(
+				file_config.color_theme || config.color_theme || 'dark',
+			),
 		};
 	}
 
