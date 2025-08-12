@@ -85,4 +85,5 @@ export interface ModelPricing {
 	inputTokens: number;
 	outputTokens: number;
 	cacheTokens: number;
+	contextWindow: number;
 }

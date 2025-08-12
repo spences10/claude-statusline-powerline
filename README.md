@@ -9,6 +9,8 @@ integration.
 - 🌿 **Git integration** - shows branch name and dirty status
 - 📁 **Directory display** - current working directory
 - 📱 **Model info** - shows which Claude model you're using
+- 💰 **Session tracking** - real-time token usage and cost monitoring
+- 📊 **Context monitoring** - smart warnings at 75% and 90% usage
 - ⚡ **Fast** - minimal overhead, updates smoothly
 - 🛠️ **TypeScript** - fully typed and maintainable
 - 🎨 **Flexible separator system** - themes + profiles for infinite
@@ -20,17 +22,23 @@ integration.
 
 ## Preview
 
-**Expressive theme (default):**
+**Expressive theme with session tracking:**
 
 ```
- Claude Sonnet 4  📁 my-project   main ✓
+ Claude Sonnet 4  📁 my-project   main ✓  💰 25k • $0.15 175k left
 ```
 
 **When you have uncommitted changes (attention-grabbing separators):**
 
 ```
- Claude Sonnet 4  📁 my-project   main ±
+ Claude Sonnet 4  📁 my-project   main ±  💰 150k • $0.90 !85%
 ```
+
+**Context usage warnings:**
+
+- `175k left` - Normal usage (< 75%)
+- `85%` - High usage warning (75-89%)
+- `!95%` - Critical usage warning (90%+)
 
 ## Separator Themes & Profiles
 
@@ -191,6 +199,10 @@ echo '{"model":{"display_name":"Test"},"workspace":{"current_dir":"/tmp"}}' | no
 1. **Model** (Blue) - Shows the Claude model name
 2. **Directory** (Gray) - Shows current directory name
 3. **Git** (Green/Yellow) - Shows branch and status (✓ clean, ± dirty)
+4. **Session** (Purple) - Token usage, cost, and context monitoring
+   - Format: `💰 {tokens}k • ${cost} {context}`
+   - Context shows: tokens remaining, percentage (75%+), or warning
+     (!90%+)
 
 ## Colors
 
@@ -198,6 +210,7 @@ echo '{"model":{"display_name":"Test"},"workspace":{"current_dir":"/tmp"}}' | no
 - ⚫ **Gray** - Directory/path information
 - 🟢 **Green** - Clean git repository
 - 🟡 **Yellow** - Dirty git repository (uncommitted changes)
+- 🟣 **Purple** - Session usage and cost tracking
 
 ## License
 

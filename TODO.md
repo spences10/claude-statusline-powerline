@@ -16,22 +16,29 @@ additional improvements.
       electric)
 - [x] Git branch and dirty status indicators
 - [x] Configurable separator styles based on git status
-
-### 🚧 In Progress
-
-- [ ] Session tracking with usage metrics
-- [ ] Cost tracking and budget monitoring
+- [x] **Session tracking with usage metrics** - Real-time token and
+      cost display with cumulative session totals
+- [x] **Cost tracking and budget monitoring** - Model-specific pricing
+      with context window warnings at 75% and 90%
+- [x] **Context window tracking** - Shows remaining tokens with smart
+      display (tokens left vs percentage warnings)
+- [x] **Transcript parsing** - Direct JSONL parsing of Claude Code's
+      session transcripts for accurate cumulative usage
 
 ### 📋 Planned Features
 
 #### Session & Usage Tracking
 
-- [ ] **Session segment** - Track current session usage
-  - [ ] Token counting (input/output/cached)
-  - [ ] Cost calculation in dollars
-  - [ ] Display types: "cost", "tokens", "both", "breakdown"
-  - [ ] Session budget warnings with percentage indicators
-  - [ ] Integration with ccusage for data retrieval
+- [x] **Session segment** - Track current session usage
+  - [x] Token counting (input/output/cached) with cumulative totals
+  - [x] Cost calculation in dollars with model-specific pricing
+  - [x] Context window tracking with smart display (75%: show %, 90%+:
+        warning !%)
+  - [x] Session duration calculation from first to last message
+  - [x] Direct transcript parsing (JSONL format, no external
+        dependencies)
+  - [x] Real-time parsing of entire session history for accurate
+        totals
 
 - [ ] **Daily usage segment** ("today")
   - [ ] Daily token and cost aggregation
@@ -116,10 +123,16 @@ additional improvements.
 
 ### Session/Cost Tracking Architecture
 
-- Use ccusage library for Claude usage data retrieval
-- Implement budget tracking with configurable thresholds
-- Add persistent storage for daily aggregation
-- Support multiple display formats with proper formatting
+- ✅ Parse Claude Code's internal transcript files directly (JSONL
+  format) with complete session history
+- ✅ Model-specific pricing configuration for accurate cost
+  calculation (input, output, and cache tokens)
+- ✅ Context window tracking with usage warnings (75%: %, 90%+: !%)
+- ✅ Real-time session duration and cumulative token tracking
+- ✅ Smart display formatting (tokens remaining vs percentage
+  warnings)
+- ✅ Handles long sessions and resumed sessions correctly
+- 🔄 Daily aggregation and budget thresholds (future enhancement)
 
 ### Git Enhancement Strategy
 
