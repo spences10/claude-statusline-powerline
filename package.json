@@ -11,6 +11,7 @@
 		"build": "tsc",
 		"dev": "tsc --watch",
 		"test": "pnpm run build && node dist/test.js",
+		"demo": "pnpm run build && node dist/demo/demo.js",
 		"prepublishOnly": "pnpm run build",
 		"postinstall": "node dist/install.js",
 		"format": "prettier --write .",

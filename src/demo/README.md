@@ -5,7 +5,7 @@ Statusline Powerline project.
 
 ## Files
 
-- `demo.ts` - Interactive demo script that showcases all theme
+- `demo.ts` - Demo script that showcases all theme
   combinations and configuration options
 - `test-transcript.jsonl` - Sample transcript file used for testing
   and demonstrations
@@ -18,9 +18,15 @@ To run the interactive demo:
 
 ```bash
 # From the project root
-cd demo
-pnpm run build  # from parent directory to build the project
-node demo.ts
+pnpm run demo
+```
+
+Or manually:
+
+```bash
+# From the project root
+pnpm run build
+node dist/demo/demo.js
 ```
 
 The demo will show various color themes, separator styles, and
