@@ -26,7 +26,7 @@ export function create_styled_separator(
 
 	switch (style) {
 		case 'thin':
-			return `${to_color}${from_color}${separators.basic.rightThin}${COLORS.reset}`;
+			return `${to_color}${from_color}${separators.basic.right_thin}${COLORS.reset}`;
 		case 'thick':
 			return `${to_color}${from_color}${separators.basic.right}${COLORS.reset}`;
 		case 'flame':

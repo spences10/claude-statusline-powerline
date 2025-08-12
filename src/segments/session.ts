@@ -1,7 +1,7 @@
-import { BaseSegment, SegmentData } from './base';
-import { ClaudeStatusInput, StatuslineConfig } from '../types';
-import { MODEL_PRICING, DEFAULT_PRICING } from '../config';
 import * as fs from 'fs';
+import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
+import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import { BaseSegment, SegmentData } from './base';
 
 // ANSI color codes
 const COLORS = {
@@ -31,7 +31,10 @@ export class SessionSegment extends BaseSegment {
 		return config.segments.session;
 	}
 
-	build(data: ClaudeStatusInput, config: StatuslineConfig): SegmentData | null {
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null {
 		if (!data.transcript_path) {
 			return null; // Hide segment if no session data
 		}
@@ -41,16 +44,21 @@ export class SessionSegment extends BaseSegment {
 			return null; // Hide segment if parsing fails
 		}
 
-		const total_tokens = usage.totalInputTokens + usage.totalOutputTokens;
-		const cost_str = usage.totalCost < 0.01
-			? '< $0.01'
-			: `$${usage.totalCost.toFixed(2)}`;
+		const total_tokens =
+			usage.totalInputTokens + usage.totalOutputTokens;
+		const cost_str =
+			usage.totalCost < 0.01
+				? '< $0.01'
+				: `$${usage.totalCost.toFixed(2)}`;
 
 		// Calculate context usage
-		const pricing = MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
+		const pricing =
+			MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
 		const context_used = total_tokens;
 		const context_remaining = pricing.contextWindow - context_used;
-		const context_percent = Math.round((context_used / pricing.contextWindow) * 100);
+		const context_percent = Math.round(
+			(context_used / pricing.contextWindow) * 100,
+		);
 
 		// Format context display
 		let context_display = '';
@@ -62,7 +70,7 @@ export class SessionSegment extends BaseSegment {
 			context_display = ` ${Math.round(context_remaining / 1000)}k left`;
 		}
 
-		const theme = config.currentTheme?.segments.session;
+		const theme = config.current_theme?.segments.session;
 		if (!theme) {
 			// Fallback colors
 			return this.createSegment(
@@ -77,11 +85,13 @@ export class SessionSegment extends BaseSegment {
 			`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
 			theme.background,
 			theme.foreground,
-			theme.separatorColor,
+			theme.separator_color,
 		);
 	}
 
-	private parseSessionUsage(transcript_path: string): SessionUsage | null {
+	private parseSessionUsage(
+		transcript_path: string,
+	): SessionUsage | null {
 		try {
 			if (!fs.existsSync(transcript_path)) {
 				return null;
@@ -135,16 +145,20 @@ export class SessionSegment extends BaseSegment {
 			const pricing = MODEL_PRICING[model_used] || DEFAULT_PRICING;
 
 			// Calculate cost using model-specific pricing
-			const input_cost = (total_input_tokens / 1000000) * pricing.inputTokens;
-			const output_cost = (total_output_tokens / 1000000) * pricing.outputTokens;
-			const cache_cost = (total_cache_tokens / 1000000) * pricing.cacheTokens;
+			const input_cost =
+				(total_input_tokens / 1000000) * pricing.inputTokens;
+			const output_cost =
+				(total_output_tokens / 1000000) * pricing.outputTokens;
+			const cache_cost =
+				(total_cache_tokens / 1000000) * pricing.cacheTokens;
 			const total_cost = input_cost + output_cost + cache_cost;
 
 			// Calculate session duration in minutes
 			let session_duration = 0;
 			if (first_timestamp && last_timestamp) {
 				session_duration = Math.round(
-					(last_timestamp.getTime() - first_timestamp.getTime()) / (1000 * 60),
+					(last_timestamp.getTime() - first_timestamp.getTime()) /
+						(1000 * 60),
 				);
 			}
 

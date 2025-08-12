@@ -17,8 +17,8 @@ const BASE_DATA: ClaudeStatusInput = {
 };
 
 interface DemoConfig {
-	colorTheme?: string;
-	separatorTheme?: string;
+	color_theme?: string;
+	separator_theme?: string;
 	display?: {
 		lines: Array<{
 			segments: {
@@ -72,19 +72,19 @@ class MultilineDemo {
 			const env = { ...process.env };
 
 			// Create a temporary config file if multiline display is specified
-			let configFilePath: string | undefined;
+			let config_file_path: string | undefined;
 			if (config.display) {
-				configFilePath = 'temp-multiline-config.json';
+				config_file_path = 'temp-multiline-config.json';
 				const configData = {
 					display: config.display,
-					colorTheme: config.colorTheme || 'electric',
-					theme: config.separatorTheme || 'expressive',
+					color_theme: config.color_theme || 'electric',
+					theme: config.separator_theme || 'expressive',
 				};
 				fs.writeFileSync(
-					configFilePath,
+					config_file_path,
 					JSON.stringify(configData, null, 2),
 				);
-				env.STATUSLINE_CONFIG = configFilePath;
+				env.STATUSLINE_CONFIG = config_file_path;
 				console.error(
 					`DEBUG: Created config file:`,
 					JSON.stringify(configData, null, 2),
@@ -109,8 +109,8 @@ class MultilineDemo {
 
 			child.on('close', (code) => {
 				// Cleanup temporary config file
-				if (configFilePath && fs.existsSync(configFilePath)) {
-					fs.unlinkSync(configFilePath);
+				if (config_file_path && fs.existsSync(config_file_path)) {
+					fs.unlinkSync(config_file_path);
 				}
 
 				if (code === 0) {
@@ -134,8 +134,8 @@ class MultilineDemo {
 		// Single line (default)
 		console.log('\n--- 🔸 Single Line (Default) ---');
 		const singleLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'electric',
-			separatorTheme: 'expressive',
+			color_theme: 'electric',
+			separator_theme: 'expressive',
 		});
 		console.log(singleLineResult);
 
@@ -144,8 +144,8 @@ class MultilineDemo {
 			'\n--- 🔸 Two Lines: [Directory, Git, Model] + [Session] ---',
 		);
 		const twoLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'electric',
-			separatorTheme: 'expressive',
+			color_theme: 'electric',
+			separator_theme: 'expressive',
 			display: {
 				lines: [
 					{
@@ -170,8 +170,8 @@ class MultilineDemo {
 			'\n--- 🔸 Three Lines: Directory | Git + Model | Session ---',
 		);
 		const threeLineResult = await this.runStatusline(BASE_DATA, {
-			colorTheme: 'dark',
-			separatorTheme: 'curvy',
+			color_theme: 'dark',
+			separator_theme: 'curvy',
 			display: {
 				lines: [
 					{
