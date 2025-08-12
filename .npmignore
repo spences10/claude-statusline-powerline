@@ -1,0 +1,34 @@
+# Source files
+src/
+*.ts
+!*.d.ts
+
+# Development files
+TODO.md
+pnpm-lock.yaml
+tsconfig.json
+.git/
+.gitignore
+
+# Test files
+dist/test.*
+dist/theme-test.*
+
+# Source maps (optional - remove if you want to include them)
+*.js.map
+*.d.ts.map
+
+# Node modules and logs
+node_modules/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Development config files
+.changeset/
+.claude/
+.prettierrc
+.prettierignore
