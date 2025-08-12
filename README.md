@@ -20,29 +20,14 @@ integration.
 - 🔧 **Highly configurable** - mix and match themes with separator
   profiles
 
-## Preview
-
-**Expressive theme with session tracking:**
-
-```
- Claude Sonnet 4  📁 my-project   main ✓  💰 25k • $0.15 175k left
-```
-
-**When you have uncommitted changes (attention-grabbing separators):**
-
-```
- Claude Sonnet 4  📁 my-project   main ±  💰 150k • $0.90 !85%
-```
-
-**Context usage warnings:**
-
-- `175k left` - Normal usage (< 75%)
-- `85%` - High usage warning (75-89%)
-- `!95%` - Critical usage warning (90%+)
-
 ## Separator Themes & Profiles
 
-### 🎨 Built-in Themes:
+### 🎨 Color Themes:
+
+- **`dark`** - Default professional dark theme
+- **`electric`** - High-contrast electric theme with vibrant colors
+
+### 🔧 Separator Themes:
 
 - **`minimal`** - Subtle thin separators, clean and professional
 - **`expressive`** - Full range of dynamic effects (default)
@@ -79,20 +64,27 @@ Override any theme's separators with these profiles:
 ### Environment Variables
 
 ```bash
-# Set theme via environment variable
-export STATUSLINE_THEME=electric
+# Set color theme
+export STATUSLINE_COLOR_THEME=dark  # or electric
+
+# Set separator theme
+export STATUSLINE_THEME=expressive  # or minimal, subtle, electric, curvy, angular
 
 # Override separators with a profile
 export STATUSLINE_SEPARATOR_PROFILE=all-curvy
 
 # Font profile (for compatibility)
-export STATUSLINE_FONT_PROFILE=victor-mono  # or nerd-font-full, minimal
+export STATUSLINE_FONT_PROFILE=powerline  # or nerd-font
 ```
 
 ### Testing Themes & Profiles
 
 ```bash
-# Test different themes
+# Test color themes
+STATUSLINE_COLOR_THEME=electric claude-statusline
+STATUSLINE_COLOR_THEME=dark claude-statusline
+
+# Test separator themes
 STATUSLINE_THEME=minimal claude-statusline
 STATUSLINE_THEME=electric claude-statusline
 
@@ -101,19 +93,18 @@ STATUSLINE_SEPARATOR_PROFILE=all-curvy claude-statusline
 STATUSLINE_SEPARATOR_PROFILE=electric-chaos STATUSLINE_THEME=minimal claude-statusline
 
 # Font profile examples
-STATUSLINE_FONT_PROFILE=minimal claude-statusline    # ASCII-safe
-STATUSLINE_FONT_PROFILE=nerd-font-full claude-statusline  # Full Nerd Font support
+STATUSLINE_FONT_PROFILE=powerline claude-statusline    # Basic powerline support
+STATUSLINE_FONT_PROFILE=nerd-font claude-statusline  # Full Nerd Font support
 ```
 
 ### 🎯 Pro Tips:
 
-- **Combine themes + profiles**:
-  `STATUSLINE_THEME=minimal STATUSLINE_SEPARATOR_PROFILE=all-curvy`
-- **Victor Mono users**: The default font profile works great!
-- **Full Nerd Font users**: Set
-  `STATUSLINE_FONT_PROFILE=nerd-font-full` for more icons
-- **Universal compatibility**: Use `STATUSLINE_FONT_PROFILE=minimal`
-  for ASCII-only
+- **Combine color themes + separator themes + profiles**:
+  `STATUSLINE_COLOR_THEME=electric STATUSLINE_THEME=minimal STATUSLINE_SEPARATOR_PROFILE=all-curvy`
+- **Full Nerd Font users**: Set `STATUSLINE_FONT_PROFILE=nerd-font`
+  for more icons
+- **Basic compatibility**: Use `STATUSLINE_FONT_PROFILE=powerline` for
+  standard powerline fonts
 
 ## Installation
 
@@ -138,7 +129,7 @@ Code.
 
 ## Requirements
 
-- Node.js >= 14.0.0
+- Node.js >= 20.0.0
 - A terminal with powerline font support (recommended: Nerd Fonts)
 - Git (for git integration features)
 
@@ -170,22 +161,6 @@ Claude Code sends session information via stdin as JSON:
 The statusline script processes this and outputs a colored
 powerline-style status.
 
-## Development
-
-```bash
-# Build TypeScript
-pnpm build
-
-# Watch mode
-pnpm dev
-
-# Test locally
-pnpm test
-
-# Test with custom input
-echo '{"model":{"display_name":"Test"},"workspace":{"current_dir":"/tmp"}}' | node dist/statusline.js
-```
-
 ## Segments
 
 1. **Model** (Blue) - Shows the Claude model name
@@ -193,8 +168,8 @@ echo '{"model":{"display_name":"Test"},"workspace":{"current_dir":"/tmp"}}' | no
 3. **Git** (Green/Yellow) - Shows branch and status (✓ clean, ± dirty)
 4. **Session** (Purple) - Token usage, cost, and context monitoring
    - Format: `💰 {tokens}k • ${cost} {context}`
-   - Context shows: tokens remaining, percentage (75%+), or warning
-     (!90%+)
+   - Context shows: remaining tokens (< 75%), percentage (75-89%), or
+     warning (!90%+)
 
 ## Colors
 
