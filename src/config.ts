@@ -1,5 +1,6 @@
 import {
 	ModelPricing,
+	SegmentVisibility,
 	SeparatorConfig,
 	SeparatorProfile,
 	StatuslineConfig,
@@ -120,9 +121,18 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 	},
 };
 
+// Default segment visibility
+export const DEFAULT_SEGMENTS: SegmentVisibility = {
+	model: true,
+	directory: true,
+	git: true,
+	session: true,
+};
+
 // Default configuration
 export const DEFAULT_CONFIG: StatuslineConfig = {
 	separators: SEPARATOR_THEMES.expressive,
+	segments: DEFAULT_SEGMENTS,
 	theme: 'expressive',
 };
 
@@ -148,6 +158,16 @@ export function apply_separator_profile(
 	};
 }
 
+// Load segment visibility from environment
+function load_segment_visibility(): SegmentVisibility {
+	return {
+		model: process.env.STATUSLINE_SHOW_MODEL !== 'false',
+		directory: process.env.STATUSLINE_SHOW_DIRECTORY !== 'false',
+		git: process.env.STATUSLINE_SHOW_GIT !== 'false',
+		session: process.env.STATUSLINE_SHOW_SESSION !== 'false',
+	};
+}
+
 // Load configuration from environment or use default
 export function load_config(): StatuslineConfig {
 	const theme_from_env = process.env
@@ -160,10 +180,14 @@ export function load_config(): StatuslineConfig {
 	if (theme_from_env && SEPARATOR_THEMES[theme_from_env]) {
 		config = {
 			separators: SEPARATOR_THEMES[theme_from_env],
+			segments: load_segment_visibility(),
 			theme: theme_from_env as any,
 		};
 	} else {
-		config = { ...DEFAULT_CONFIG };
+		config = {
+			...DEFAULT_CONFIG,
+			segments: load_segment_visibility(),
+		};
 	}
 
 	// Apply separator profile override if specified
