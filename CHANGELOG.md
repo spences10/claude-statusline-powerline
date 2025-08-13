@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.8
+
+### Patch Changes
+
+- b582abd: night owl theme double chevron added
+
 ## 0.0.7
 
 ### Patch Changes
