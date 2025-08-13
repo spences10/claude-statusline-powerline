@@ -33,7 +33,7 @@ export class GitSegment extends BaseSegment {
 	): SegmentData | null {
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const git_info = get_git_info(cwd);
-		const font_profile = get_font_profile();
+		const font_profile = get_font_profile(config.font_profile);
 
 		if (git_info) {
 			const status_icon = git_info.is_dirty
@@ -89,7 +89,7 @@ export class GitSegment extends BaseSegment {
 					COLORS.bg.gray,
 					COLORS.white,
 					COLORS.fg.gray,
-					config.separators.directory.noGit,
+					config.separators.directory.no_git,
 					style_override,
 				);
 			}
@@ -99,7 +99,7 @@ export class GitSegment extends BaseSegment {
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
-				config.separators.directory.noGit,
+				config.separators.directory.no_git,
 				style_override,
 			);
 		}

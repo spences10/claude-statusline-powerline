@@ -64,6 +64,7 @@ function build_line_segments(
 					current.separator_from_color,
 					next.bg_color,
 					separator_style as any,
+					config.font_profile,
 				),
 			);
 		} else {
@@ -74,6 +75,7 @@ function build_line_segments(
 					current.separator_from_color,
 					'',
 					separator_style as any,
+					config.font_profile,
 				),
 			);
 		}
@@ -142,6 +144,7 @@ export function build_statusline(data: ClaudeStatusInput): string {
 					current.separator_from_color,
 					next.bg_color,
 					separator_style as any,
+					config.font_profile,
 				),
 			);
 		} else {
@@ -152,6 +155,7 @@ export function build_statusline(data: ClaudeStatusInput): string {
 					current.separator_from_color,
 					'',
 					separator_style as any,
+					config.font_profile,
 				),
 			);
 		}

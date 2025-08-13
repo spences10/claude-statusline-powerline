@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { spawn } from 'child_process';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { ClaudeStatusInput } from '../types';
 
 // Demo data
@@ -37,8 +39,9 @@ const SEPARATOR_PROFILES = [
 
 interface DemoConfig {
 	color_theme?: string;
-	separator_theme?: string;
+	theme?: string;
 	separator_profile?: string;
+	font_profile?: string;
 	display?: {
 		lines: Array<{
 			segments: {
@@ -49,448 +52,490 @@ interface DemoConfig {
 			};
 		}>;
 	};
-	segments?: {
-		model?: boolean;
-		directory?: boolean;
-		git?: boolean;
-		session?: boolean;
+	segment_config?: {
+		segments: Array<{
+			type: string;
+			enabled: boolean;
+			order: number;
+			style?: any;
+		}>;
 	};
 }
 
-class StatuslineDemo {
-	private createDemoTranscript(): void {
-		const fs = require('fs');
-		const transcript = [
+interface DemoOptions {
+	color_theme: string;
+	font_profile: string;
+}
+
+// Temporary config file path
+const TEMP_CONFIG_PATH = path.join(
+	__dirname,
+	'.temp-demo-config.json',
+);
+
+function write_temp_config(config: DemoConfig): string {
+	const absolute_config_path = path.resolve(TEMP_CONFIG_PATH);
+	fs.writeFileSync(
+		absolute_config_path,
+		JSON.stringify(config, null, 2),
+	);
+	return absolute_config_path;
+}
+
+function cleanup_temp_config(): void {
+	const absolute_config_path = path.resolve(TEMP_CONFIG_PATH);
+	if (fs.existsSync(absolute_config_path)) {
+		fs.unlinkSync(absolute_config_path);
+	}
+}
+
+function run_statusline_with_config(
+	data: ClaudeStatusInput,
+	config: DemoConfig,
+	options: Partial<DemoOptions> = {},
+): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const merged_config: DemoConfig = {
+			color_theme: options.color_theme || 'dark',
+			font_profile: options.font_profile || 'powerline',
+			...config,
+		};
+
+		const config_file = write_temp_config(merged_config);
+
+		const child = spawn(
+			'node',
+			[path.join(__dirname, '../statusline.js')],
 			{
-				type: 'user',
-				timestamp: '2025-01-15T10:00:00Z',
-				message: { role: 'user', content: 'Hello!' },
-			},
-			{
-				type: 'assistant',
-				timestamp: '2025-01-15T10:00:05Z',
-				message: {
-					role: 'assistant',
-					content: 'Hi there!',
-					model: 'claude-sonnet-4-20250514',
-					usage: {
-						input_tokens: 1200,
-						output_tokens: 350,
-						cache_creation_input_tokens: 0,
-						cache_read_input_tokens: 500,
-					},
+				stdio: ['pipe', 'pipe', 'pipe'],
+				cwd: process.cwd(), // Run from project root
+				env: {
+					...process.env,
+					STATUSLINE_CONFIG: config_file,
 				},
 			},
-			{
-				type: 'user',
-				timestamp: '2025-01-15T10:01:00Z',
-				message: { role: 'user', content: 'Can you help me code?' },
-			},
-			{
-				type: 'assistant',
-				timestamp: '2025-01-15T10:01:10Z',
-				message: {
-					role: 'assistant',
-					content:
-						"Absolutely! I'd be happy to help you with coding.",
-					model: 'claude-sonnet-4-20250514',
-					usage: {
-						input_tokens: 1500,
-						output_tokens: 420,
-						cache_creation_input_tokens: 200,
-						cache_read_input_tokens: 300,
-					},
-				},
-			},
-		];
-
-		fs.writeFileSync(
-			'demo-transcript.jsonl',
-			transcript.map((line) => JSON.stringify(line)).join('\n'),
-		);
-	}
-
-	private async runStatusline(
-		data: ClaudeStatusInput,
-		config: DemoConfig = {},
-		options: { font_profile?: string } = {},
-	): Promise<string> {
-		return new Promise((resolve, reject) => {
-			const fs = require('fs');
-			const env = { ...process.env };
-
-			// Create a temporary config file if multiline display is specified
-			let config_file_path: string | undefined;
-			if (config.display) {
-				config_file_path = 'temp-multiline-config.json';
-				const configData = {
-					display: config.display,
-					color_theme: config.color_theme || 'electric',
-					theme: config.separator_theme || 'expressive',
-				};
-				fs.writeFileSync(
-					config_file_path,
-					JSON.stringify(configData, null, 2),
-				);
-				env.STATUSLINE_CONFIG = config_file_path;
-			}
-
-			if (config.color_theme && !config.display)
-				env.STATUSLINE_COLOR_THEME = config.color_theme;
-			if (config.separator_theme && !config.display)
-				env.STATUSLINE_THEME = config.separator_theme;
-			if (config.separator_profile)
-				env.STATUSLINE_SEPARATOR_PROFILE = config.separator_profile;
-			if (options.font_profile)
-				env.STATUSLINE_FONT_PROFILE = options.font_profile;
-			if (config.segments?.model === false)
-				env.STATUSLINE_SHOW_MODEL = 'false';
-			if (config.segments?.directory === false)
-				env.STATUSLINE_SHOW_DIRECTORY = 'false';
-			if (config.segments?.git === false)
-				env.STATUSLINE_SHOW_GIT = 'false';
-			if (config.segments?.session === false)
-				env.STATUSLINE_SHOW_SESSION = 'false';
-
-			// Debug: log environment variables being passed
-			if (config.separator_theme) {
-				console.error(
-					`DEBUG: Setting STATUSLINE_THEME=${config.separator_theme}`,
-				);
-			}
-			if (options.font_profile) {
-				console.error(
-					`DEBUG: Setting STATUSLINE_FONT_PROFILE=${options.font_profile}`,
-				);
-			}
-			if (config_file_path) {
-				console.error(
-					`DEBUG: Using multiline config file: ${config_file_path}`,
-				);
-			}
-
-			const child = spawn('node', ['dist/statusline.js'], {
-				env,
-				stdio: ['pipe', 'pipe', 'pipe'],
-			});
-
-			let output = '';
-			let error = '';
-
-			child.stdout.on('data', (data) => {
-				output += data.toString();
-			});
-
-			child.stderr.on('data', (data) => {
-				error += data.toString();
-			});
-
-			child.on('close', (code) => {
-				// Cleanup temporary config file
-				if (config_file_path && fs.existsSync(config_file_path)) {
-					fs.unlinkSync(config_file_path);
-				}
-
-				if (code === 0) {
-					resolve(output.trim());
-				} else {
-					reject(new Error(`Exit code ${code}: ${error}`));
-				}
-			});
-
-			child.stdin.write(JSON.stringify(data));
-			child.stdin.end();
-		});
-	}
-
-	private async runStatuslineWithConfig(
-		data: ClaudeStatusInput,
-		config_path: string,
-	): Promise<string> {
-		return new Promise((resolve, reject) => {
-			const env = { ...process.env };
-			env.STATUSLINE_CONFIG = config_path;
-
-			const child = spawn('node', ['dist/statusline.js'], {
-				env,
-				stdio: ['pipe', 'pipe', 'pipe'],
-			});
-
-			let output = '';
-			let error = '';
-
-			child.stdout.on('data', (data) => {
-				output += data.toString();
-			});
-
-			child.stderr.on('data', (data) => {
-				error += data.toString();
-			});
-
-			child.on('close', (code) => {
-				if (code === 0) {
-					resolve(output.trim());
-				} else {
-					reject(new Error(`Exit code ${code}: ${error}`));
-				}
-			});
-
-			child.stdin.write(JSON.stringify(data));
-			child.stdin.end();
-		});
-	}
-
-	private printHeader(title: string): void {
-		console.log(`\n\x1b[36m${'='.repeat(50)}\x1b[0m`);
-		console.log(`\x1b[1m\x1b[36m${title}\x1b[0m`);
-		console.log(`\x1b[36m${'='.repeat(50)}\x1b[0m`);
-	}
-
-	private printSubheader(title: string): void {
-		console.log(`\n\x1b[33m--- ${title} ---\x1b[0m`);
-	}
-
-	async run(): Promise<void> {
-		this.createDemoTranscript();
-
-		console.log(
-			'\x1b[1m\x1b[35m🎨 Claude Statusline Powerline Demo\x1b[0m',
-		);
-		console.log(
-			'This demo showcases various configuration options for the statusline.',
 		);
 
-		// 1. Color Theme Showcase
-		this.printHeader('1. 🎨 Color Themes');
+		child.stdin.write(JSON.stringify(data));
+		child.stdin.end();
 
-		this.printSubheader('🌑 Dark Theme (Classic Blue/Gray/Yellow)');
-		const darkResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'dark',
+		let output = '';
+		child.stdout.on('data', (chunk) => {
+			output += chunk.toString();
 		});
-		console.log(darkResult);
 
-		this.printSubheader('⚡ Electric Theme (Purple/Cyan/Red)');
-		const electricResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'electric',
+		child.stderr.on('data', (chunk) => {
+			console.error('Error:', chunk.toString());
 		});
-		console.log(electricResult);
 
-		// 2. Separator Styles (with Dark theme + Nerd Font)
-		this.printHeader('2. 🔗 Separator Styles');
-		this.printSubheader(
-			'Using nerd-font profile to show separator differences',
-		);
-		for (const separatorTheme of SEPARATOR_THEMES) {
-			this.printSubheader(`Style: ${separatorTheme}`);
-			const result = await this.runStatusline(
+		child.on('close', (code) => {
+			cleanup_temp_config();
+			if (code === 0) {
+				resolve(output.trim());
+			} else {
+				reject(new Error(`Process exited with code ${code}`));
+			}
+		});
+	});
+}
+
+async function demo_color_themes() {
+	console.log('==================================================');
+	console.log('1. 🎨 Color Themes');
+	console.log('==================================================\n');
+
+	for (const color_theme of COLOR_THEMES) {
+		const theme_name =
+			color_theme === 'dark'
+				? '🌑 Dark Theme (Classic Blue/Gray/Yellow)'
+				: '⚡ Electric Theme (Purple/Cyan/Red)';
+
+		console.log(`--- ${theme_name} ---`);
+
+		const config: DemoConfig = {
+			color_theme,
+			theme: 'expressive',
+		};
+
+		try {
+			const output = await run_statusline_with_config(
 				BASE_DATA,
-				{
-					color_theme: 'dark',
-					separator_theme: separatorTheme,
-				},
-				{ font_profile: 'nerd-font' },
+				config,
 			);
-			console.log(result);
+			console.log(output);
+		} catch (error) {
+			console.error(`Error with ${color_theme} theme:`, error);
 		}
+		console.log('');
+	}
+}
 
-		// 3. Separator Profiles (with Electric theme)
-		this.printHeader('3. ⚡ Separator Profiles');
-		for (const separatorProfile of SEPARATOR_PROFILES) {
-			this.printSubheader(`Profile: ${separatorProfile}`);
-			const result = await this.runStatusline(BASE_DATA, {
-				color_theme: 'electric',
-				separator_profile: separatorProfile,
-			});
-			console.log(result);
+async function demo_separator_styles() {
+	console.log('==================================================');
+	console.log('2. 🔗 Separator Styles');
+	console.log('==================================================\n');
+
+	console.log(
+		'--- Using nerd-font profile to show separator differences ---\n',
+	);
+
+	for (const theme of SEPARATOR_THEMES) {
+		console.log(`--- Style: ${theme} ---`);
+
+		const config: DemoConfig = {
+			color_theme: 'dark',
+			theme,
+			font_profile: 'nerd-font',
+		};
+
+		try {
+			const output = await run_statusline_with_config(
+				BASE_DATA,
+				config,
+			);
+			console.log(output);
+		} catch (error) {
+			console.error(`Error with ${theme} theme:`, error);
 		}
+		console.log('');
+	}
+}
 
-		// 4. Font Profile Comparison
-		this.printHeader('4. 🔤 Font Profile Comparison');
-		this.printSubheader(
-			'Powerline vs Nerd Font profiles with new separator variations',
-		);
+async function demo_separator_profiles() {
+	console.log('==================================================');
+	console.log('3. ⚡ Separator Profiles');
+	console.log('==================================================\n');
 
-		for (const font_profile of FONT_PROFILES) {
-			this.printSubheader(`📝 ${font_profile} profile`);
-			for (const separatorTheme of ['curvy', 'angular', 'electric']) {
-				const result = await this.runStatusline(
+	for (const profile of SEPARATOR_PROFILES) {
+		console.log(`--- Profile: ${profile} ---`);
+
+		const config: DemoConfig = {
+			color_theme: 'dark',
+			theme: 'expressive',
+			separator_profile: profile,
+		};
+
+		try {
+			const output = await run_statusline_with_config(
+				BASE_DATA,
+				config,
+			);
+			console.log(output);
+		} catch (error) {
+			console.error(`Error with ${profile} profile:`, error);
+		}
+		console.log('');
+	}
+}
+
+async function demo_font_profiles() {
+	console.log('==================================================');
+	console.log('4. 🔤 Font Profile Comparison');
+	console.log('==================================================\n');
+
+	console.log(
+		'--- Powerline vs Nerd Font profiles with new separator variations ---\n',
+	);
+
+	for (const font_profile of FONT_PROFILES) {
+		console.log(`--- 📝 ${font_profile} profile ---`);
+
+		for (const theme of ['curvy', 'angular', 'electric']) {
+			const config: DemoConfig = {
+				color_theme: 'dark',
+				theme,
+				font_profile,
+			};
+
+			try {
+				const output = await run_statusline_with_config(
 					BASE_DATA,
-					{
-						color_theme: 'electric',
-						separator_theme: separatorTheme,
-					},
-					{ font_profile },
+					config,
 				);
-				console.log(`  ${separatorTheme}:`, result);
+				console.log(`  ${theme}: ${output}`);
+			} catch (error) {
+				console.error(`Error with ${theme}/${font_profile}:`, error);
 			}
 		}
-
-		// 5. Theme + Style Combinations
-		this.printHeader('5. 🎭 Theme + Style Combinations');
-		const combinations = [
-			{
-				color_theme: 'dark',
-				separator_theme: 'minimal',
-				label: 'Dark + Minimal',
-			},
-			{
-				color_theme: 'dark',
-				separator_theme: 'electric',
-				label: 'Dark + Electric Separators',
-			},
-			{
-				color_theme: 'electric',
-				separator_theme: 'expressive',
-				label: 'Electric + Expressive',
-			},
-			{
-				color_theme: 'electric',
-				separator_theme: 'curvy',
-				label: 'Electric + Curvy',
-			},
-		];
-
-		for (const combo of combinations) {
-			this.printSubheader(`🎨 ${combo.label}`);
-			const result = await this.runStatusline(BASE_DATA, combo);
-			console.log(result);
-		}
-
-		// 6. Multi-line Layout Support
-		this.printHeader('6. 📏 Multi-line Layout Support');
-		this.printSubheader(
-			'Demonstrating multi-line powerline layouts to prevent segment cutoff',
-		);
-
-		// Single line (default)
-		this.printSubheader('🔸 Single Line (Default)');
-		const singleLineResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'electric',
-			separator_theme: 'expressive',
-		});
-		console.log(singleLineResult);
-
-		// Two line layout - First line: directory, git, model; Second line: session
-		this.printSubheader(
-			'🔸 Two Lines: [Directory, Git, Model] + [Session]',
-		);
-		const twoLineResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'electric',
-			separator_theme: 'expressive',
-			display: {
-				lines: [
-					{
-						segments: {
-							directory: true,
-							git: true,
-							model: true,
-						},
-					},
-					{
-						segments: {
-							session: true,
-						},
-					},
-				],
-			},
-		});
-		console.log(twoLineResult);
-
-		// Three line layout - Each segment on its own line
-		this.printSubheader(
-			'🔸 Three Lines: Directory | Git + Model | Session',
-		);
-		const threeLineResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'dark',
-			separator_theme: 'curvy',
-			display: {
-				lines: [
-					{
-						segments: {
-							directory: true,
-						},
-					},
-					{
-						segments: {
-							git: true,
-							model: true,
-						},
-					},
-					{
-						segments: {
-							session: true,
-						},
-					},
-				],
-			},
-		});
-		console.log(threeLineResult);
-
-		// 7. Flexible Segment Configuration
-		this.printHeader('7. 🔧 Flexible Segment Configuration');
-		this.printSubheader(
-			'NEW: JSON-based segment ordering and per-segment styling',
-		);
-
-		// Custom segment ordering
-		this.printSubheader(
-			'🔄 Custom Segment Ordering (Git → Model → Directory)',
-		);
-		const customOrderResult = await this.runStatuslineWithConfig(
-			BASE_DATA,
-			'src/demo/example-segment-config.json',
-		);
-		console.log(customOrderResult);
-
-		// Radical reordering with custom styling
-		this.printSubheader(
-			'🎨 Radical Reordering + Custom Colors (Session → Directory, No Model)',
-		);
-		const radicalResult = await this.runStatuslineWithConfig(
-			BASE_DATA,
-			'src/demo/custom-order-config.json',
-		);
-		console.log(radicalResult);
-
-		// Show that old env vars still work
-		this.printSubheader(
-			'🔄 Environment Variables Still Work (Backward Compatible)',
-		);
-		const envResult = await this.runStatusline(BASE_DATA, {
-			color_theme: 'electric',
-			separator_theme: 'minimal',
-			segments: { model: false, git: false },
-		});
-		console.log(envResult);
-
-		// Cleanup
-		const fs = require('fs');
-		if (fs.existsSync('demo-transcript.jsonl')) {
-			fs.unlinkSync('demo-transcript.jsonl');
-		}
-
-		this.printHeader('🎉 Demo Complete!');
-		console.log(
-			'\x1b[32mAll examples have been demonstrated.\x1b[0m',
-		);
-		console.log(
-			'\x1b[36mYou can now experiment with your own configurations!\x1b[0m',
-		);
 		console.log('');
-		console.log('\x1b[33mAvailable environment variables:\x1b[0m');
-		console.log('  STATUSLINE_COLOR_THEME: dark, electric');
+	}
+}
+
+async function demo_theme_combinations() {
+	console.log('==================================================');
+	console.log('5. 🎭 Theme + Style Combinations');
+	console.log('==================================================\n');
+
+	const combinations = [
+		{ color: 'dark', style: 'minimal', desc: '🎨 Dark + Minimal' },
+		{
+			color: 'dark',
+			style: 'electric',
+			desc: '🎨 Dark + Electric Separators',
+		},
+		{
+			color: 'electric',
+			style: 'expressive',
+			desc: '🎨 Electric + Expressive',
+		},
+		{
+			color: 'electric',
+			style: 'curvy',
+			desc: '🎨 Electric + Curvy',
+		},
+	];
+
+	for (const combo of combinations) {
+		console.log(`--- ${combo.desc} ---`);
+
+		const config: DemoConfig = {
+			color_theme: combo.color,
+			theme: combo.style,
+		};
+
+		try {
+			const output = await run_statusline_with_config(
+				BASE_DATA,
+				config,
+			);
+			console.log(output);
+		} catch (error) {
+			console.error(`Error with combination:`, error);
+		}
+		console.log('');
+	}
+}
+
+async function demo_multiline_layouts() {
+	console.log('==================================================');
+	console.log('6. 📏 Multi-line Layout Support');
+	console.log('==================================================\n');
+
+	console.log(
+		'--- Demonstrating multi-line powerline layouts to prevent segment cutoff ---\n',
+	);
+
+	// Single line (default)
+	console.log('--- 🔸 Single Line (Default) ---');
+	const single_config: DemoConfig = {
+		color_theme: 'dark',
+		theme: 'expressive',
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			single_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with single line:', error);
+	}
+	console.log('');
+
+	// Two lines
+	console.log(
+		'--- 🔸 Two Lines: [Directory, Git, Model] + [Session] ---',
+	);
+	const two_line_config: DemoConfig = {
+		color_theme: 'dark',
+		theme: 'expressive',
+		display: {
+			lines: [
+				{
+					segments: {
+						directory: true,
+						git: true,
+						model: true,
+					},
+				},
+				{
+					segments: {
+						session: true,
+					},
+				},
+			],
+		},
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			two_line_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with two line:', error);
+	}
+	console.log('');
+
+	// Three lines
+	console.log(
+		'--- 🔸 Three Lines: Directory | Git + Model | Session ---',
+	);
+	const three_line_config: DemoConfig = {
+		color_theme: 'dark',
+		theme: 'curvy',
+		display: {
+			lines: [
+				{
+					segments: {
+						directory: true,
+					},
+				},
+				{
+					segments: {
+						git: true,
+						model: true,
+					},
+				},
+				{
+					segments: {
+						session: true,
+					},
+				},
+			],
+		},
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			three_line_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with three line:', error);
+	}
+	console.log('');
+}
+
+async function demo_segment_configuration() {
+	console.log('==================================================');
+	console.log('7. 🔧 Flexible Segment Configuration');
+	console.log('==================================================\n');
+
+	console.log(
+		'--- JSON-based segment ordering and per-segment styling ---\n',
+	);
+
+	// Custom ordering
+	console.log(
+		'--- 🔄 Custom Segment Ordering (Git → Model → Directory) ---',
+	);
+	const custom_order_config: DemoConfig = {
+		color_theme: 'dark',
+		theme: 'expressive',
+		segment_config: {
+			segments: [
+				{ type: 'git', enabled: true, order: 1 },
+				{ type: 'model', enabled: true, order: 2 },
+				{ type: 'directory', enabled: true, order: 3 },
+				{ type: 'session', enabled: true, order: 4 },
+			],
+		},
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			custom_order_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with custom order:', error);
+	}
+	console.log('');
+
+	// Radical reordering
+	console.log(
+		'--- 🎨 Radical Reordering + Custom Colors (Session → Directory, No Model) ---',
+	);
+	const radical_config: DemoConfig = {
+		color_theme: 'electric',
+		theme: 'minimal',
+		segment_config: {
+			segments: [
+				{ type: 'session', enabled: true, order: 1 },
+				{ type: 'directory', enabled: true, order: 2 },
+				{ type: 'git', enabled: false, order: 3 },
+				{ type: 'model', enabled: false, order: 4 },
+			],
+		},
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			radical_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with radical config:', error);
+	}
+	console.log('');
+
+	// Environment variables still work (backward compatibility)
+	console.log('--- 🔄 JSON Configuration (Backward Compatible) ---');
+	const backward_config: DemoConfig = {
+		color_theme: 'dark',
+		theme: 'minimal',
+	};
+	try {
+		const output = await run_statusline_with_config(
+			BASE_DATA,
+			backward_config,
+		);
+		console.log(output);
+	} catch (error) {
+		console.error('Error with backward compatible config:', error);
+	}
+	console.log('');
+}
+
+async function main() {
+	console.log('🎨 Claude Statusline Powerline Demo');
+	console.log(
+		'This demo showcases various configuration options for the statusline.\n',
+	);
+
+	try {
+		await demo_color_themes();
+		await demo_separator_styles();
+		await demo_separator_profiles();
+		await demo_font_profiles();
+		await demo_theme_combinations();
+		await demo_multiline_layouts();
+		await demo_segment_configuration();
+
+		console.log('==================================================');
+		console.log('🎉 Demo Complete!');
+		console.log('==================================================');
+		console.log('All examples have been demonstrated.');
 		console.log(
-			'  STATUSLINE_THEME: minimal, expressive, subtle, electric, curvy, angular',
+			'You can now experiment with your own configurations!\n',
+		);
+
+		console.log('JSON Configuration:');
+		console.log(
+			'  Create ~/.claude/claude-statusline-powerline.json',
 		);
 		console.log(
-			'  STATUSLINE_SEPARATOR_PROFILE: all-curvy, all-angly, mixed-dynamic, minimal-clean, electric-chaos',
+			'  Or use project-specific .claude-statusline-powerline.json\n',
 		);
-		console.log('  STATUSLINE_FONT_PROFILE: powerline, nerd-font');
-		console.log('  STATUSLINE_SHOW_MODEL: true/false');
-		console.log('  STATUSLINE_SHOW_DIRECTORY: true/false');
-		console.log('  STATUSLINE_SHOW_GIT: true/false');
-		console.log('  STATUSLINE_SHOW_SESSION: true/false');
-		console.log('\x1b[32m\\nNew features:\x1b[0m');
+
+		console.log('Available configuration options:');
+		console.log('  color_theme: "dark" | "electric"');
+		console.log(
+			'  theme: "minimal" | "expressive" | "subtle" | "electric" | "curvy" | "angular"',
+		);
+		console.log(
+			'  separator_profile: "all-curvy" | "all-angly" | "mixed-dynamic" | "minimal-clean" | "electric-chaos"',
+		);
+		console.log('  font_profile: "powerline" | "nerd-font"');
+		console.log(
+			'  Plus segment configuration, multiline layouts, and custom styling\n',
+		);
+
+		console.log('New features:');
+		console.log(
+			'  • JSON-based configuration (no more environment variables!)',
+		);
 		console.log('  • Flexible segment configuration with JSON files');
 		console.log('  • Custom segment ordering (any order you want)');
 		console.log('  • Per-segment styling (colors and separators)');
@@ -500,19 +545,25 @@ class StatuslineDemo {
 		console.log(
 			'  • Powerline-extra-symbols support (curvy, angly, angly2)',
 		);
-		console.log('  • Victor Mono font compatibility improvements');
-		console.log('');
-		console.log('\x1b[33mJSON Configuration Files:\x1b[0m');
-		console.log('  Set STATUSLINE_CONFIG=/path/to/config.json');
+		console.log('  • Victor Mono font compatibility improvements\n');
+
+		console.log('JSON Configuration Files:');
 		console.log(
-			'  Or use: ./statusline.config.json, ./.statusline.json',
+			'  Primary: ~/.claude/claude-statusline-powerline.json',
+		);
+		console.log(
+			'  Project-specific: ./.claude-statusline-powerline.json',
 		);
 		console.log('  Examples available in src/demo/ directory');
+	} catch (error) {
+		console.error('Demo failed:', error);
+		process.exit(1);
+	} finally {
+		// Ensure cleanup
+		cleanup_temp_config();
 	}
 }
 
-// Run the demo
 if (require.main === module) {
-	const demo = new StatuslineDemo();
-	demo.run().catch(console.error);
+	main().catch(console.error);
 }

@@ -25,7 +25,7 @@ export class DirectorySegment extends BaseSegment {
 	): SegmentData | null {
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const dir_name = path.basename(cwd) || '~';
-		const font_profile = get_font_profile();
+		const font_profile = get_font_profile(config.font_profile);
 
 		// Determine separator style based on git status and next segment
 		const git_info = get_git_info(cwd);
@@ -36,12 +36,12 @@ export class DirectorySegment extends BaseSegment {
 				? config.separators.directory.dirty
 				: config.separators.directory.clean;
 		} else {
-			separator_style = config.separators.directory.noGit;
+			separator_style = config.separators.directory.no_git;
 		}
 
 		const theme = config.current_theme?.segments.directory;
 		const style_override = this.getSegmentConfig(config);
-		
+
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
