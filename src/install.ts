@@ -9,6 +9,10 @@ const CLAUDE_SETTINGS_FILE = path.join(
 	CLAUDE_SETTINGS_DIR,
 	'settings.json',
 );
+const STATUSLINE_CONFIG_FILE = path.join(
+	CLAUDE_SETTINGS_DIR,
+	'claude-statusline-powerline.json',
+);
 
 function ensure_claude_dir(): void {
 	if (!fs.existsSync(CLAUDE_SETTINGS_DIR)) {
@@ -21,7 +25,49 @@ function ensure_claude_dir(): void {
 
 function get_statusline_command(): string {
 	// Use the direct binary name - works regardless of package manager
-	return 'claude-statusline';
+	return 'claude-statusline-powerline';
+}
+
+function create_default_config(): void {
+	// Create default statusline config if it doesn't exist
+	if (!fs.existsSync(STATUSLINE_CONFIG_FILE)) {
+		const default_config = {
+			color_theme: 'dark',
+			segment_config: {
+				segments: [
+					{
+						type: 'model',
+						enabled: true,
+						order: 1,
+					},
+					{
+						type: 'directory',
+						enabled: true,
+						order: 2,
+					},
+					{
+						type: 'git',
+						enabled: true,
+						order: 3,
+					},
+					{
+						type: 'session',
+						enabled: true,
+						order: 4,
+					},
+				],
+			},
+		};
+
+		fs.writeFileSync(
+			STATUSLINE_CONFIG_FILE,
+			JSON.stringify(default_config, null, 2),
+		);
+
+		console.log(
+			`✅ Created default config at ${STATUSLINE_CONFIG_FILE}`,
+		);
+	}
 }
 
 function update_settings(): void {
@@ -69,6 +115,7 @@ function main(): void {
 
 	try {
 		ensure_claude_dir();
+		create_default_config();
 		update_settings();
 
 		console.log('\n🎉 Installation complete!');
@@ -77,6 +124,9 @@ function main(): void {
 			'   📱 Model name  📁 Directory  🌿 Git branch & status',
 		);
 		console.log('\n🔄 Restart Claude Code to see the changes.');
+		console.log(
+			`🎨 Edit ${STATUSLINE_CONFIG_FILE} to customize your statusline`,
+		);
 	} catch (error) {
 		console.error('❌ Installation failed:', error);
 		process.exit(1);
