@@ -160,6 +160,74 @@ You can reorder segments by changing the `order` property:
 }
 ```
 
+### Custom Icons
+
+Customize the icons used in each segment with the `icons` property in
+segment styles:
+
+```json
+{
+	"segment_config": {
+		"segments": [
+			{
+				"type": "model",
+				"enabled": true,
+				"order": 1,
+				"style": {
+					"icons": {
+						"ai": "🤖"
+					}
+				}
+			},
+			{
+				"type": "directory",
+				"enabled": true,
+				"order": 2,
+				"style": {
+					"icons": {
+						"folder": "🗂️"
+					}
+				}
+			},
+			{
+				"type": "git",
+				"enabled": true,
+				"order": 3,
+				"style": {
+					"icons": {
+						"branch": "🌿",
+						"clean": "✅",
+						"dirty": "⚠️"
+					}
+				}
+			},
+			{
+				"type": "session",
+				"enabled": true,
+				"order": 4,
+				"style": {
+					"icons": {
+						"cost": "💲"
+					}
+				}
+			}
+		]
+	}
+}
+```
+
+**Available Icons:**
+
+- `ai` - AI/Model segment icon
+- `folder` - Directory/folder icon
+- `branch` - Git branch icon
+- `clean` - Clean git status icon
+- `dirty` - Dirty git status icon
+- `cost` - Session cost/usage icon
+
+You can use any Unicode character, emoji, or Nerd Font icon code
+(e.g., `\uF07B` for folder).
+
 ### Multi-line Layout Support
 
 For complex statuslines, use multi-line layouts:

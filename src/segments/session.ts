@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
+import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { BaseSegment, SegmentData } from './base';
 
@@ -72,11 +73,19 @@ export class SessionSegment extends BaseSegment {
 
 		const theme = config.current_theme?.segments.session;
 		const style_override = this.getSegmentConfig(config);
+		const font_profile = get_font_profile(config.font_profile);
+
+		// Get cost icon with potential user override
+		const cost_icon = get_symbol(
+			font_profile,
+			'cost',
+			style_override?.icons,
+		);
 
 		if (!theme) {
 			// Fallback colors
 			return this.createSegment(
-				`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
+				`${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
 				COLORS.bg.purple,
 				COLORS.white,
 				COLORS.fg.purple,
@@ -86,7 +95,7 @@ export class SessionSegment extends BaseSegment {
 		}
 
 		return this.createSegment(
-			`💰 ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
+			`${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
 			theme.background,
 			theme.foreground,
 			theme.separator_color,

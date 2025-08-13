@@ -1,3 +1,4 @@
+import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { BaseSegment, SegmentData } from './base';
 
@@ -21,11 +22,19 @@ export class ModelSegment extends BaseSegment {
 
 		const theme = config.current_theme?.segments.model;
 		const style_override = this.getSegmentConfig(config);
+		const font_profile = get_font_profile(config.font_profile);
+
+		// Get AI icon with potential user override
+		const ai_icon = get_symbol(
+			font_profile,
+			'ai',
+			style_override?.icons,
+		);
 
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
-				` ${display_model}`,
+				`${ai_icon} ${display_model}`,
 				'\x1b[44m',
 				'\x1b[97m',
 				'\x1b[34m',
@@ -35,7 +44,7 @@ export class ModelSegment extends BaseSegment {
 		}
 
 		return this.createSegment(
-			` ${display_model}`,
+			`${ai_icon} ${display_model}`,
 			theme.background,
 			theme.foreground,
 			theme.separator_color,
