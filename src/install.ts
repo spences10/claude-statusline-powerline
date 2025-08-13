@@ -32,7 +32,8 @@ function create_default_config(): void {
 	// Create default statusline config if it doesn't exist
 	if (!fs.existsSync(STATUSLINE_CONFIG_FILE)) {
 		const default_config = {
-			$schema: './node_modules/claude-statusline-powerline/statusline.schema.json',
+			$schema:
+				'https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json',
 			color_theme: 'dark',
 			segment_config: {
 				segments: [
