@@ -97,6 +97,8 @@ export interface StatuslineConfig {
 	// New theme system
 	color_theme?: string; // 'dark', 'electric', etc.
 	current_theme?: any; // Will be populated with actual theme object
+	// New flexible segment configuration
+	segment_config?: SegmentsConfiguration;
 }
 
 export interface SessionUsage {
@@ -113,4 +115,24 @@ export interface ModelPricing {
 	outputTokens: number;
 	cacheTokens: number;
 	contextWindow: number;
+}
+
+export interface SegmentStyleConfig {
+	bg_color?: string;
+	fg_color?: string;
+	separator?: {
+		style?: SeparatorStyle;
+		color?: string;
+	};
+}
+
+export interface SegmentConfig {
+	type: 'model' | 'directory' | 'git' | 'session';
+	enabled: boolean;
+	order: number;
+	style?: SegmentStyleConfig;
+}
+
+export interface SegmentsConfiguration {
+	segments: SegmentConfig[];
 }

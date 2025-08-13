@@ -203,6 +203,43 @@ class StatuslineDemo {
 		});
 	}
 
+	private async runStatuslineWithConfig(
+		data: ClaudeStatusInput,
+		config_path: string,
+	): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const env = { ...process.env };
+			env.STATUSLINE_CONFIG = config_path;
+
+			const child = spawn('node', ['dist/statusline.js'], {
+				env,
+				stdio: ['pipe', 'pipe', 'pipe'],
+			});
+
+			let output = '';
+			let error = '';
+
+			child.stdout.on('data', (data) => {
+				output += data.toString();
+			});
+
+			child.stderr.on('data', (data) => {
+				error += data.toString();
+			});
+
+			child.on('close', (code) => {
+				if (code === 0) {
+					resolve(output.trim());
+				} else {
+					reject(new Error(`Exit code ${code}: ${error}`));
+				}
+			});
+
+			child.stdin.write(JSON.stringify(data));
+			child.stdin.end();
+		});
+	}
+
 	private printHeader(title: string): void {
 		console.log(`\n\x1b[36m${'='.repeat(50)}\x1b[0m`);
 		console.log(`\x1b[1m\x1b[36m${title}\x1b[0m`);
@@ -319,34 +356,8 @@ class StatuslineDemo {
 			console.log(result);
 		}
 
-		// 6. Segment Visibility
-		this.printHeader('6. 👁️ Segment Visibility');
-
-		const segmentConfigs = [
-			{ segments: {}, label: 'All segments (default)' },
-			{ segments: { session: false }, label: 'Hide session segment' },
-			{ segments: { git: false }, label: 'Hide git segment' },
-			{
-				segments: { model: false, session: false },
-				label: 'Only directory + git',
-			},
-			{
-				segments: { git: false, session: false },
-				label: 'Only model + directory',
-			},
-		];
-
-		for (const config of segmentConfigs) {
-			this.printSubheader(`📋 ${config.label}`);
-			const result = await this.runStatusline(BASE_DATA, {
-				color_theme: 'electric',
-				...config,
-			});
-			console.log(result);
-		}
-
-		// 7. Multi-line Layout Support
-		this.printHeader('7. 📏 Multi-line Layout Support');
+		// 6. Multi-line Layout Support
+		this.printHeader('6. 📏 Multi-line Layout Support');
 		this.printSubheader(
 			'Demonstrating multi-line powerline layouts to prevent segment cutoff',
 		);
@@ -415,23 +426,42 @@ class StatuslineDemo {
 		});
 		console.log(threeLineResult);
 
-		// 8. Different Models
-		this.printHeader('8. 🤖 Different Models');
-		const models = [
-			{ display_name: 'Claude Sonnet 4' },
-			{ display_name: 'Claude Opus 4' },
-			{ display_name: 'Claude Haiku 3.5' },
-			{ display_name: 'Very Long Model Name That Gets Truncated' },
-		];
+		// 7. Flexible Segment Configuration
+		this.printHeader('7. 🔧 Flexible Segment Configuration');
+		this.printSubheader(
+			'NEW: JSON-based segment ordering and per-segment styling',
+		);
 
-		for (const model of models) {
-			this.printSubheader(`🤖 ${model.display_name}`);
-			const data = { ...BASE_DATA, model };
-			const result = await this.runStatusline(data, {
-				color_theme: 'electric',
-			});
-			console.log(result);
-		}
+		// Custom segment ordering
+		this.printSubheader(
+			'🔄 Custom Segment Ordering (Git → Model → Directory)',
+		);
+		const customOrderResult = await this.runStatuslineWithConfig(
+			BASE_DATA,
+			'src/demo/example-segment-config.json',
+		);
+		console.log(customOrderResult);
+
+		// Radical reordering with custom styling
+		this.printSubheader(
+			'🎨 Radical Reordering + Custom Colors (Session → Directory, No Model)',
+		);
+		const radicalResult = await this.runStatuslineWithConfig(
+			BASE_DATA,
+			'src/demo/custom-order-config.json',
+		);
+		console.log(radicalResult);
+
+		// Show that old env vars still work
+		this.printSubheader(
+			'🔄 Environment Variables Still Work (Backward Compatible)',
+		);
+		const envResult = await this.runStatusline(BASE_DATA, {
+			color_theme: 'electric',
+			separator_theme: 'minimal',
+			segments: { model: false, git: false },
+		});
+		console.log(envResult);
 
 		// Cleanup
 		const fs = require('fs');
@@ -461,6 +491,9 @@ class StatuslineDemo {
 		console.log('  STATUSLINE_SHOW_GIT: true/false');
 		console.log('  STATUSLINE_SHOW_SESSION: true/false');
 		console.log('\x1b[32m\\nNew features:\x1b[0m');
+		console.log('  • Flexible segment configuration with JSON files');
+		console.log('  • Custom segment ordering (any order you want)');
+		console.log('  • Per-segment styling (colors and separators)');
 		console.log(
 			'  • Double chevron separators (doubleChevron style)',
 		);
@@ -468,6 +501,13 @@ class StatuslineDemo {
 			'  • Powerline-extra-symbols support (curvy, angly, angly2)',
 		);
 		console.log('  • Victor Mono font compatibility improvements');
+		console.log('');
+		console.log('\x1b[33mJSON Configuration Files:\x1b[0m');
+		console.log('  Set STATUSLINE_CONFIG=/path/to/config.json');
+		console.log(
+			'  Or use: ./statusline.config.json, ./.statusline.json',
+		);
+		console.log('  Examples available in src/demo/ directory');
 	}
 }
 

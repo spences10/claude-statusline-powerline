@@ -1,0 +1,59 @@
+{
+  "color_theme": "dark",
+  "segment_config": {
+    "segments": [
+      {
+        "type": "git",
+        "enabled": true,
+        "order": 1,
+        "style": {
+          "bg_color": "#059669",
+          "fg_color": "#ffffff",
+          "separator": {
+            "style": "lightning",
+            "color": "#059669"
+          }
+        }
+      },
+      {
+        "type": "model",
+        "enabled": true,
+        "order": 2,
+        "style": {
+          "bg_color": "#1e40af",
+          "fg_color": "#ffffff",
+          "separator": {
+            "style": "curvy",
+            "color": "#1e40af"
+          }
+        }
+      },
+      {
+        "type": "directory",
+        "enabled": true,
+        "order": 3,
+        "style": {
+          "bg_color": "#6b7280",
+          "fg_color": "#ffffff",
+          "separator": {
+            "style": "flame",
+            "color": "#6b7280"
+          }
+        }
+      },
+      {
+        "type": "session",
+        "enabled": true,
+        "order": 4,
+        "style": {
+          "bg_color": "#7c3aed",
+          "fg_color": "#ffffff",
+          "separator": {
+            "style": "thick",
+            "color": "#7c3aed"
+          }
+        }
+      }
+    ]
+  }
+}
