@@ -9,13 +9,13 @@ importers:
   .:
     devDependencies:
       '@changesets/cli':
-        specifier: ^2.27.0
+        specifier: ^2.29.5
         version: 2.29.5
       '@types/node':
         specifier: ^24.2.1
         version: 24.2.1
       prettier:
-        specifier: ^3.0.0
+        specifier: ^3.6.2
         version: 3.6.2
       typescript:
         specifier: ^5.9.2
