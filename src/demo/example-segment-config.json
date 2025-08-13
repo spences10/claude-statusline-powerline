@@ -1,4 +1,5 @@
 {
+  "$schema": "../../statusline.schema.json",
   "color_theme": "dark",
   "segment_config": {
     "segments": [

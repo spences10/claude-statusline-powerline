@@ -94,6 +94,14 @@ pnpm run release      # Build and publish
   to show
 - Fallback to single-line if no multiline config found
 
+### JSON Schema Support
+
+- `statusline.schema.json` provides IntelliSense for config files
+- Add `"$schema": "./statusline.schema.json"` to config files for
+  autocomplete
+- Validates all config properties and provides hover documentation
+- Supports both legacy and new segment-based configuration patterns
+
 ### Cost Tracking
 
 - Model pricing in `src/config.ts` with per-million token rates
