@@ -127,6 +127,9 @@ export interface SegmentStyleConfig {
 		style?: SeparatorStyle;
 		color?: string;
 	};
+	icons?: {
+		[key: string]: string;
+	};
 }
 
 export interface SegmentConfig {

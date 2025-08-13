@@ -2,21 +2,15 @@ export interface FontProfile {
 	name: string;
 	description: string;
 	symbols: {
-		// Git symbols
 		branch: string;
 		dirty: string;
 		clean: string;
-
-		// Directory symbols
 		folder: string;
-
-		// AI/Model symbols
 		ai: string;
-
-		// Status symbols
 		warning: string;
 		error: string;
 		info: string;
+		cost: string;
 	};
 	separators: {
 		basic: {
@@ -53,6 +47,7 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			warning: '\u2699',
 			error: '\u2717',
 			info: '\u2022',
+			cost: '💰',
 		},
 		separators: {
 			basic: {
@@ -83,10 +78,11 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			dirty: '\u00B1',
 			clean: '\u2713',
 			folder: '\uF07B',
-			ai: '\uE0A0',
+			ai: '\uF544', // Nerd Font robot icon
 			warning: '\uF071',
 			error: '\uF00D',
 			info: '\uF05A',
+			cost: '\uF0D6',
 		},
 		separators: {
 			basic: {
@@ -113,4 +109,16 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 export function get_font_profile(profile_name?: string): FontProfile {
 	const name = profile_name || 'powerline';
 	return FONT_PROFILES[name] || FONT_PROFILES['powerline'];
+}
+
+export function get_symbol(
+	font_profile: FontProfile,
+	symbol_name: keyof FontProfile['symbols'],
+	icon_overrides?: { [key: string]: string },
+): string {
+	if (icon_overrides && icon_overrides[symbol_name]) {
+		return icon_overrides[symbol_name];
+	}
+
+	return font_profile.symbols[symbol_name];
 }

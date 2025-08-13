@@ -117,6 +117,50 @@ function generate_schema(): void {
 				'#059669',
 			];
 		}
+
+		if (style_config.properties?.icons) {
+			style_config.properties.icons.description =
+				'Custom icons for segment symbols';
+			style_config.properties.icons.additionalProperties = {
+				type: 'string',
+				description: 'Additional custom icon mappings',
+			};
+
+			if (!style_config.properties.icons.properties) {
+				style_config.properties.icons.properties = {};
+			}
+
+			style_config.properties.icons.properties.folder = {
+				type: 'string',
+				description: 'Directory/folder icon',
+				examples: ['📁', '🗂️', '📂', '\\uF07B'],
+			};
+			style_config.properties.icons.properties.branch = {
+				type: 'string',
+				description: 'Git branch icon',
+				examples: ['\\uE0A0', '🌿', '🌳', '\\uF126'],
+			};
+			style_config.properties.icons.properties.clean = {
+				type: 'string',
+				description: 'Clean git status icon',
+				examples: ['✓', '✅', '\\u2713', '\\uF00C'],
+			};
+			style_config.properties.icons.properties.dirty = {
+				type: 'string',
+				description: 'Dirty git status icon',
+				examples: ['±', '⚠️', '\\u00B1', '\\uF071'],
+			};
+			style_config.properties.icons.properties.ai = {
+				type: 'string',
+				description: 'AI/Model icon',
+				examples: ['⚡', '🤖', '🧠', '\\uE007'],
+			};
+			style_config.properties.icons.properties.cost = {
+				type: 'string',
+				description: 'Session cost/usage icon',
+				examples: ['💰', '💲', '🪙', '\\uF0D6'],
+			};
+		}
 	}
 
 	// Add descriptions to definitions

@@ -1,4 +1,4 @@
-import { get_font_profile } from '../font-profiles';
+import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_git_info } from '../utils/git';
 import { BaseSegment, SegmentData } from './base';
@@ -36,9 +36,17 @@ export class GitSegment extends BaseSegment {
 		const font_profile = get_font_profile(config.font_profile);
 
 		if (git_info) {
+			const style_override = this.getSegmentConfig(config);
+
+			// Get icons with potential user overrides
+			const branch_icon = get_symbol(
+				font_profile,
+				'branch',
+				style_override?.icons,
+			);
 			const status_icon = git_info.is_dirty
-				? font_profile.symbols.dirty
-				: font_profile.symbols.clean;
+				? get_symbol(font_profile, 'dirty', style_override?.icons)
+				: get_symbol(font_profile, 'clean', style_override?.icons);
 
 			const separator_style = git_info.is_dirty
 				? config.separators.git.dirty
@@ -48,8 +56,6 @@ export class GitSegment extends BaseSegment {
 			const theme = git_info.is_dirty
 				? config.current_theme?.segments.git.dirty
 				: config.current_theme?.segments.git.clean;
-
-			const style_override = this.getSegmentConfig(config);
 
 			if (!theme) {
 				// Fallback colors
@@ -61,7 +67,7 @@ export class GitSegment extends BaseSegment {
 					: COLORS.fg.green;
 
 				return this.createSegment(
-					`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
+					`${branch_icon} ${git_info.branch} ${status_icon}`,
 					fallback_bg,
 					COLORS.black,
 					fallback_separator,
@@ -71,7 +77,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${font_profile.symbols.branch} ${git_info.branch} ${status_icon}`,
+				`${branch_icon} ${git_info.branch} ${status_icon}`,
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
@@ -83,9 +89,16 @@ export class GitSegment extends BaseSegment {
 			const theme = config.current_theme?.segments.directory;
 			const style_override = this.getSegmentConfig(config);
 
+			// Get folder icon with potential user override
+			const folder_icon = get_symbol(
+				font_profile,
+				'folder',
+				style_override?.icons,
+			);
+
 			if (!theme) {
 				return this.createSegment(
-					`${font_profile.symbols.folder} no git`,
+					`${folder_icon} no git`,
 					COLORS.bg.gray,
 					COLORS.white,
 					COLORS.fg.gray,
@@ -95,7 +108,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${font_profile.symbols.folder} no git`,
+				`${folder_icon} no git`,
 				theme.background,
 				theme.foreground,
 				theme.separator_color,

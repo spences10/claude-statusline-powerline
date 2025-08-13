@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { get_font_profile } from '../font-profiles';
+import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { get_git_info } from '../utils/git';
 import { BaseSegment, SegmentData } from './base';
@@ -42,10 +42,17 @@ export class DirectorySegment extends BaseSegment {
 		const theme = config.current_theme?.segments.directory;
 		const style_override = this.getSegmentConfig(config);
 
+		// Get folder icon with potential user override
+		const folder_icon = get_symbol(
+			font_profile,
+			'folder',
+			style_override?.icons,
+		);
+
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
-				`${font_profile.symbols.folder} ${dir_name}`,
+				`${folder_icon} ${dir_name}`,
 				FALLBACK_COLORS.bg,
 				FALLBACK_COLORS.fg,
 				FALLBACK_COLORS.separator,
@@ -55,7 +62,7 @@ export class DirectorySegment extends BaseSegment {
 		}
 
 		return this.createSegment(
-			`${font_profile.symbols.folder} ${dir_name}`,
+			`${folder_icon} ${dir_name}`,
 			theme.background,
 			theme.foreground,
 			theme.separator_color,
