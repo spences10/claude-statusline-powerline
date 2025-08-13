@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.9
+
+### Patch Changes
+
+- update schema
+
 ## 0.0.8
 
 ### Patch Changes
