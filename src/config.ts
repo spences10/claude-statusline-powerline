@@ -1,6 +1,7 @@
 import { get_theme } from './themes';
 import {
 	ModelPricing,
+	SegmentsConfiguration,
 	SegmentVisibility,
 	SeparatorConfig,
 	SeparatorProfile,
@@ -130,11 +131,38 @@ export const DEFAULT_SEGMENTS: SegmentVisibility = {
 	session: true,
 };
 
+// Default segments configuration with ordering and basic styling
+export const DEFAULT_SEGMENTS_CONFIG: SegmentsConfiguration = {
+	segments: [
+		{
+			type: 'model',
+			enabled: true,
+			order: 1,
+		},
+		{
+			type: 'directory',
+			enabled: true,
+			order: 2,
+		},
+		{
+			type: 'git',
+			enabled: true,
+			order: 3,
+		},
+		{
+			type: 'session',
+			enabled: true,
+			order: 4,
+		},
+	],
+};
+
 // Default configuration
 export const DEFAULT_CONFIG: StatuslineConfig = {
 	separators: SEPARATOR_THEMES.expressive,
 	segments: DEFAULT_SEGMENTS,
 	theme: 'expressive',
+	segment_config: DEFAULT_SEGMENTS_CONFIG,
 };
 
 // Apply separator profile to override theme separators
@@ -256,6 +284,9 @@ export function load_config(): StatuslineConfig {
 			current_theme: get_theme(
 				file_config.color_theme || config.color_theme || 'dark',
 			),
+			// Merge segment configurations if provided
+			segment_config:
+				file_config.segment_config || config.segment_config,
 		};
 	}
 

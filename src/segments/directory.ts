@@ -40,6 +40,8 @@ export class DirectorySegment extends BaseSegment {
 		}
 
 		const theme = config.current_theme?.segments.directory;
+		const style_override = this.getSegmentConfig(config);
+		
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
 			return this.createSegment(
@@ -48,6 +50,7 @@ export class DirectorySegment extends BaseSegment {
 				FALLBACK_COLORS.fg,
 				FALLBACK_COLORS.separator,
 				separator_style,
+				style_override,
 			);
 		}
 
@@ -57,6 +60,7 @@ export class DirectorySegment extends BaseSegment {
 			theme.foreground,
 			theme.separator_color,
 			separator_style,
+			style_override,
 		);
 	}
 }
