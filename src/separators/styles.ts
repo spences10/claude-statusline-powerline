@@ -9,6 +9,7 @@ export type SeparatorStyle =
 	| 'curvy'
 	| 'angly'
 	| 'angly2'
+	| 'double_chevron'
 	| 'none';
 
 // ANSI color codes
@@ -56,6 +57,10 @@ export function create_styled_separator(
 		case 'angly2':
 			return `${to_color}${from_color}${
 				separators.extra.angly2 || separators.basic.right
+			}${COLORS.reset}`;
+		case 'double_chevron':
+			return `${to_color}${from_color}${
+				separators.extra.double_chevron || separators.basic.right
 			}${COLORS.reset}`;
 		case 'none':
 			return '';
