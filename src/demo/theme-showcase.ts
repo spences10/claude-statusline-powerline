@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { SEPARATOR_THEMES } from '../config';
 import { SeparatorConfig } from '../types';
 
