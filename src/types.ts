@@ -32,6 +32,7 @@ export type SeparatorStyle =
 	| 'curvy'
 	| 'angly'
 	| 'angly2'
+	| 'double_chevron'
 	| 'none';
 
 export interface SeparatorConfig {
