@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.6
+
+### Patch Changes
+
+- 42a2c9f: add json schema validation for settings config
+
 ## 0.0.5
 
 ### Patch Changes
