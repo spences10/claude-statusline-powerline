@@ -1,6 +1,6 @@
 {
 	"name": "claude-statusline-powerline",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"description": "Beautiful vim-style powerline statusline for Claude Code with git integration, session tracking, and cost monitoring",
 	"main": "dist/statusline.js",
 	"bin": {
