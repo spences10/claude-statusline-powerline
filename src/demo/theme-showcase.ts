@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { SEPARATOR_THEMES } from './config';
-import { SeparatorConfig } from './types';
+import { SEPARATOR_THEMES } from '../config';
+import { SeparatorConfig } from '../types';
 
 console.log('🎨 Separator Theme Showcase\n');
 
