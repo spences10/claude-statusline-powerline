@@ -20,6 +20,7 @@ export class ModelSegment extends BaseSegment {
 			model.length > 15 ? `${model.slice(0, 12)}...` : model;
 
 		const theme = config.current_theme?.segments.model;
+		const style_override = this.getSegmentConfig(config);
 
 		if (!theme) {
 			// Fallback to hardcoded colors if no theme
@@ -29,6 +30,7 @@ export class ModelSegment extends BaseSegment {
 				'\x1b[97m',
 				'\x1b[34m',
 				config.separators.model,
+				style_override,
 			);
 		}
 
@@ -38,6 +40,7 @@ export class ModelSegment extends BaseSegment {
 			theme.foreground,
 			theme.separator_color,
 			config.separators.model,
+			style_override,
 		);
 	}
 }

@@ -61,50 +61,146 @@ Override any theme's separators with these profiles:
 
 ## Configuration
 
-### Environment Variables
+### JSON Configuration
 
-```bash
-# Set color theme
-export STATUSLINE_COLOR_THEME=dark  # or electric
+Claude Statusline Powerline uses JSON configuration files for easy
+customization:
 
-# Set separator theme
-export STATUSLINE_THEME=expressive  # or minimal, subtle, electric, curvy, angular
+**Primary config location:**
+`~/.claude/claude-statusline-powerline.json`
 
-# Override separators with a profile
-export STATUSLINE_SEPARATOR_PROFILE=all-curvy
+**Project-specific override:** `./.claude-statusline-powerline.json`
 
-# Font profile (for compatibility)
-export STATUSLINE_FONT_PROFILE=powerline  # or nerd-font
+### Example Configuration
+
+```json
+{
+	"color_theme": "dark",
+	"theme": "expressive",
+	"font_profile": "nerd-font",
+	"separator_profile": "all-curvy",
+	"segment_config": {
+		"segments": [
+			{
+				"type": "model",
+				"enabled": true,
+				"order": 1
+			},
+			{
+				"type": "directory",
+				"enabled": true,
+				"order": 2
+			},
+			{
+				"type": "git",
+				"enabled": true,
+				"order": 3
+			},
+			{
+				"type": "session",
+				"enabled": true,
+				"order": 4
+			}
+		]
+	}
+}
 ```
 
-### Testing Themes & Profiles
+### Configuration Options
+
+**Color Themes:**
+
+- `"dark"` - Classic blue/gray/yellow theme
+- `"electric"` - Purple/cyan/red theme
+
+**Separator Themes:**
+
+- `"minimal"` - Clean and simple separators
+- `"expressive"` - Bold, dynamic separators
+- `"subtle"` - Refined, understated style
+- `"electric"` - High-energy, lightning-style separators
+- `"curvy"` - Smooth, curved separators (Victor Mono compatible)
+- `"angular"` - Sharp, angular separators (Victor Mono compatible)
+
+**Font Profiles:**
+
+- `"powerline"` - Basic powerline font support
+- `"nerd-font"` - Full Nerd Font support with more icons
+
+**Separator Profiles:**
+
+- `"all-curvy"` - All curved separators
+- `"all-angly"` - All angular separators
+- `"mixed-dynamic"` - Curved with dynamic dirty state indicators
+- `"minimal-clean"` - Thin separators with thick for dirty states
+- `"electric-chaos"` - High-energy mix of lightning and flame
+  separators
+
+### Testing Configurations
+
+Use the built-in tools to test different themes:
 
 ```bash
-# Test color themes
-STATUSLINE_COLOR_THEME=electric claude-statusline
-STATUSLINE_COLOR_THEME=dark claude-statusline
+# View all available themes and separators
+pnpm run build && node dist/theme-test.js
 
-# Test separator themes
-STATUSLINE_THEME=minimal claude-statusline
-STATUSLINE_THEME=electric claude-statusline
+# Run the interactive demo
+pnpm run demo
+```
 
-# Test separator profiles (can combine with any theme!)
-STATUSLINE_SEPARATOR_PROFILE=all-curvy claude-statusline
-STATUSLINE_SEPARATOR_PROFILE=electric-chaos STATUSLINE_THEME=minimal claude-statusline
+### Custom Segment Ordering
 
-# Font profile examples
-STATUSLINE_FONT_PROFILE=powerline claude-statusline    # Basic powerline support
-STATUSLINE_FONT_PROFILE=nerd-font claude-statusline  # Full Nerd Font support
+You can reorder segments by changing the `order` property:
+
+```json
+{
+	"segment_config": {
+		"segments": [
+			{ "type": "git", "enabled": true, "order": 1 },
+			{ "type": "model", "enabled": true, "order": 2 },
+			{ "type": "directory", "enabled": true, "order": 3 },
+			{ "type": "session", "enabled": false, "order": 4 }
+		]
+	}
+}
+```
+
+### Multi-line Layout Support
+
+For complex statuslines, use multi-line layouts:
+
+```json
+{
+	"display": {
+		"lines": [
+			{
+				"segments": {
+					"model": true,
+					"directory": true
+				}
+			},
+			{
+				"segments": {
+					"git": true,
+					"session": true
+				}
+			}
+		]
+	}
+}
 ```
 
 ### 🎯 Pro Tips:
 
-- **Combine color themes + separator themes + profiles**:
-  `STATUSLINE_COLOR_THEME=electric STATUSLINE_THEME=minimal STATUSLINE_SEPARATOR_PROFILE=all-curvy`
-- **Full Nerd Font users**: Set `STATUSLINE_FONT_PROFILE=nerd-font`
-  for more icons
-- **Basic compatibility**: Use `STATUSLINE_FONT_PROFILE=powerline` for
+- **Combine themes**: Mix color themes, separator themes, and profiles
+  for unique looks
+- **Full Nerd Font users**: Set `"font_profile": "nerd-font"` for more
+  icons
+- **Basic compatibility**: Use `"font_profile": "powerline"` for
   standard powerline fonts
+- **Project-specific configs**: Create
+  `.claude-statusline-powerline.json` in project roots for custom
+  per-project styling
 
 ## Installation
 

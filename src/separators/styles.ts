@@ -20,8 +20,9 @@ export function create_styled_separator(
 	from_color: string,
 	to_color = '',
 	style: SeparatorStyle = 'thick',
+	font_profile_name?: string,
 ): string {
-	const font_profile = get_font_profile();
+	const font_profile = get_font_profile(font_profile_name);
 	const separators = font_profile.separators;
 
 	switch (style) {

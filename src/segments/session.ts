@@ -71,6 +71,8 @@ export class SessionSegment extends BaseSegment {
 		}
 
 		const theme = config.current_theme?.segments.session;
+		const style_override = this.getSegmentConfig(config);
+
 		if (!theme) {
 			// Fallback colors
 			return this.createSegment(
@@ -78,6 +80,8 @@ export class SessionSegment extends BaseSegment {
 				COLORS.bg.purple,
 				COLORS.white,
 				COLORS.fg.purple,
+				undefined,
+				style_override,
 			);
 		}
 
@@ -86,6 +90,8 @@ export class SessionSegment extends BaseSegment {
 			theme.background,
 			theme.foreground,
 			theme.separator_color,
+			undefined,
+			style_override,
 		);
 	}
 

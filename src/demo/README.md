@@ -5,8 +5,8 @@ Statusline Powerline project.
 
 ## Files
 
-- `demo.ts` - Demo script that showcases all theme
-  combinations and configuration options
+- `demo.ts` - Demo script that showcases all theme combinations and
+  configuration options
 - `test-transcript.jsonl` - Sample transcript file used for testing
   and demonstrations
 - `multiline-example.json` - Example configuration showing multiline

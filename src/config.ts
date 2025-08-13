@@ -1,6 +1,11 @@
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+
 import { get_theme } from './themes';
 import {
 	ModelPricing,
+	SegmentsConfiguration,
 	SegmentVisibility,
 	SeparatorConfig,
 	SeparatorProfile,
@@ -46,7 +51,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'thin',
 			dirty: 'thick',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thin',
@@ -59,7 +64,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'wave',
 			dirty: 'flame',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thick',
@@ -72,7 +77,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'thick',
 			dirty: 'wave',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thick',
@@ -86,7 +91,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'flame',
 			dirty: 'lightning',
-			noGit: 'flame',
+			no_git: 'flame',
 		},
 		git: {
 			clean: 'wave',
@@ -100,7 +105,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'curvy',
 			dirty: 'angly',
-			noGit: 'curvy',
+			no_git: 'curvy',
 		},
 		git: {
 			clean: 'curvy',
@@ -113,7 +118,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'angly',
 			dirty: 'angly2',
-			noGit: 'angly',
+			no_git: 'angly',
 		},
 		git: {
 			clean: 'angly',
@@ -130,11 +135,38 @@ export const DEFAULT_SEGMENTS: SegmentVisibility = {
 	session: true,
 };
 
+// Default segments configuration with ordering and basic styling
+export const DEFAULT_SEGMENTS_CONFIG: SegmentsConfiguration = {
+	segments: [
+		{
+			type: 'model',
+			enabled: true,
+			order: 1,
+		},
+		{
+			type: 'directory',
+			enabled: true,
+			order: 2,
+		},
+		{
+			type: 'git',
+			enabled: true,
+			order: 3,
+		},
+		{
+			type: 'session',
+			enabled: true,
+			order: 4,
+		},
+	],
+};
+
 // Default configuration
 export const DEFAULT_CONFIG: StatuslineConfig = {
 	separators: SEPARATOR_THEMES.expressive,
 	segments: DEFAULT_SEGMENTS,
 	theme: 'expressive',
+	segment_config: DEFAULT_SEGMENTS_CONFIG,
 };
 
 // Apply separator profile to override theme separators
@@ -150,7 +182,7 @@ export function apply_separator_profile(
 		directory: {
 			clean: overrides.directory_clean || default_style,
 			dirty: overrides.directory_dirty || default_style,
-			noGit: overrides.directory_no_git || default_style,
+			no_git: overrides.directory_no_git || default_style,
 		},
 		git: {
 			clean: overrides.git_clean || default_style,
@@ -159,46 +191,25 @@ export function apply_separator_profile(
 	};
 }
 
-// Load segment visibility from environment
-function load_segment_visibility(): SegmentVisibility {
-	return {
-		model: process.env.STATUSLINE_SHOW_MODEL !== 'false',
-		directory: process.env.STATUSLINE_SHOW_DIRECTORY !== 'false',
-		git: process.env.STATUSLINE_SHOW_GIT !== 'false',
-		session: process.env.STATUSLINE_SHOW_SESSION !== 'false',
-	};
+// Default segment visibility
+function get_default_segment_visibility(): SegmentVisibility {
+	return DEFAULT_SEGMENTS;
 }
 
-// Try to load config from JSON file
+// Load config from JSON file
 function load_config_from_file(): Partial<StatuslineConfig> | null {
-	const fs = require('fs');
-	const path = require('path');
-
-	// Check for explicit config file path from environment variable
-	const explicit_config_path = process.env.STATUSLINE_CONFIG;
-	if (explicit_config_path) {
-		try {
-			if (fs.existsSync(explicit_config_path)) {
-				const file_content = fs.readFileSync(
-					explicit_config_path,
-					'utf8',
-				);
-				return JSON.parse(file_content);
-			}
-		} catch (error) {
-			console.error(
-				`Failed to load config from ${explicit_config_path}:`,
-				error,
-			);
-		}
-	}
-
-	// Try different config file locations
 	const config_paths = [
-		'./multiline-example.json',
-		'./statusline.config.json',
-		path.join(process.cwd(), '.statusline.json'),
-	];
+		// Environment variable override (for demos and testing)
+		process.env.STATUSLINE_CONFIG,
+		// Primary config location
+		path.join(
+			os.homedir(),
+			'.claude',
+			'claude-statusline-powerline.json',
+		),
+		// Project-specific override
+		path.join(process.cwd(), '.claude-statusline-powerline.json'),
+	].filter(Boolean) as string[]; // Remove any undefined values
 
 	for (const config_path of config_paths) {
 		try {
@@ -217,35 +228,66 @@ function load_config_from_file(): Partial<StatuslineConfig> | null {
 	return null;
 }
 
-// Load configuration from environment or use default
-export function load_config(): StatuslineConfig {
-	const theme_from_env = process.env.STATUSLINE_THEME;
-	const separator_profile_from_env =
-		process.env.STATUSLINE_SEPARATOR_PROFILE;
-	const color_theme_from_env =
-		process.env.STATUSLINE_COLOR_THEME || 'dark';
+// Get the primary config file path
+export function get_config_path(): string {
+	return path.join(
+		os.homedir(),
+		'.claude',
+		'claude-statusline-powerline.json',
+	);
+}
 
-	// Try to load from JSON file first
+// Create default config template
+export const DEFAULT_CONFIG_TEMPLATE = {
+	color_theme: 'dark',
+	font_profile: 'powerline',
+	segment_config: {
+		segments: [
+			{
+				type: 'model',
+				enabled: true,
+				order: 1,
+				style: {
+					bg_color: '#1e40af',
+					fg_color: '#ffffff',
+					separator: {
+						style: 'thick',
+						color: '#1e40af',
+					},
+				},
+			},
+			{
+				type: 'directory',
+				enabled: true,
+				order: 2,
+			},
+			{
+				type: 'git',
+				enabled: true,
+				order: 3,
+			},
+			{
+				type: 'session',
+				enabled: true,
+				order: 4,
+			},
+		],
+	},
+};
+
+// Load configuration from JSON file or use defaults
+export function load_config(): StatuslineConfig {
+	// Load from JSON file
 	const file_config = load_config_from_file();
 
-	// Get base theme
-	let config: StatuslineConfig;
-	if (theme_from_env && SEPARATOR_THEMES[theme_from_env]) {
-		config = {
-			separators: SEPARATOR_THEMES[theme_from_env],
-			segments: load_segment_visibility(),
-			theme: theme_from_env as any,
-			color_theme: color_theme_from_env,
-			current_theme: get_theme(color_theme_from_env),
-		};
-	} else {
-		config = {
-			...DEFAULT_CONFIG,
-			segments: load_segment_visibility(),
-			color_theme: color_theme_from_env,
-			current_theme: get_theme(color_theme_from_env),
-		};
-	}
+	// Start with default configuration
+	let config: StatuslineConfig = {
+		...DEFAULT_CONFIG,
+		segments: get_default_segment_visibility(),
+		color_theme: 'dark',
+		font_profile: 'powerline',
+		current_theme: get_theme('dark'),
+	};
 
 	// Merge file config if available
 	if (file_config) {
@@ -256,20 +298,10 @@ export function load_config(): StatuslineConfig {
 			current_theme: get_theme(
 				file_config.color_theme || config.color_theme || 'dark',
 			),
+			// Merge segment configurations if provided
+			segment_config:
+				file_config.segment_config || config.segment_config,
 		};
-	}
-
-	// Apply separator profile override if specified
-	if (
-		separator_profile_from_env &&
-		SEPARATOR_PROFILES[separator_profile_from_env]
-	) {
-		const profile = SEPARATOR_PROFILES[separator_profile_from_env];
-		config.separators = apply_separator_profile(
-			config.separators,
-			profile,
-		);
-		config.separatorProfile = profile;
 	}
 
 	return config;
