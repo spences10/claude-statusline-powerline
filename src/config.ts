@@ -51,7 +51,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'thin',
 			dirty: 'thick',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thin',
@@ -64,7 +64,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'wave',
 			dirty: 'flame',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thick',
@@ -77,7 +77,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'thick',
 			dirty: 'wave',
-			noGit: 'thin',
+			no_git: 'thin',
 		},
 		git: {
 			clean: 'thick',
@@ -91,7 +91,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'flame',
 			dirty: 'lightning',
-			noGit: 'flame',
+			no_git: 'flame',
 		},
 		git: {
 			clean: 'wave',
@@ -105,7 +105,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'curvy',
 			dirty: 'angly',
-			noGit: 'curvy',
+			no_git: 'curvy',
 		},
 		git: {
 			clean: 'curvy',
@@ -118,7 +118,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 		directory: {
 			clean: 'angly',
 			dirty: 'angly2',
-			noGit: 'angly',
+			no_git: 'angly',
 		},
 		git: {
 			clean: 'angly',
@@ -182,7 +182,7 @@ export function apply_separator_profile(
 		directory: {
 			clean: overrides.directory_clean || default_style,
 			dirty: overrides.directory_dirty || default_style,
-			noGit: overrides.directory_no_git || default_style,
+			no_git: overrides.directory_no_git || default_style,
 		},
 		git: {
 			clean: overrides.git_clean || default_style,
@@ -199,6 +199,8 @@ function get_default_segment_visibility(): SegmentVisibility {
 // Load config from JSON file
 function load_config_from_file(): Partial<StatuslineConfig> | null {
 	const config_paths = [
+		// Environment variable override (for demos and testing)
+		process.env.STATUSLINE_CONFIG,
 		// Primary config location
 		path.join(
 			os.homedir(),
@@ -207,7 +209,7 @@ function load_config_from_file(): Partial<StatuslineConfig> | null {
 		),
 		// Project-specific override
 		path.join(process.cwd(), '.claude-statusline-powerline.json'),
-	];
+	].filter(Boolean) as string[]; // Remove any undefined values
 
 	for (const config_path of config_paths) {
 		try {
@@ -238,6 +240,7 @@ export function get_config_path(): string {
 // Create default config template
 export const DEFAULT_CONFIG_TEMPLATE = {
 	color_theme: 'dark',
+	font_profile: 'powerline',
 	segment_config: {
 		segments: [
 			{
@@ -282,6 +285,7 @@ export function load_config(): StatuslineConfig {
 		...DEFAULT_CONFIG,
 		segments: get_default_segment_visibility(),
 		color_theme: 'dark',
+		font_profile: 'powerline',
 		current_theme: get_theme('dark'),
 	};
 

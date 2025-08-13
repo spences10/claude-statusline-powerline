@@ -109,9 +109,8 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 	},
 };
 
-// Get font profile from environment or default to powerline
-export function get_font_profile(): FontProfile {
-	const profile_name =
-		process.env.STATUSLINE_FONT_PROFILE || 'powerline';
-	return FONT_PROFILES[profile_name] || FONT_PROFILES['powerline'];
+// Get font profile from config or default to powerline
+export function get_font_profile(profile_name?: string): FontProfile {
+	const name = profile_name || 'powerline';
+	return FONT_PROFILES[name] || FONT_PROFILES['powerline'];
 }

@@ -39,7 +39,7 @@ export interface SeparatorConfig {
 	directory: {
 		clean: SeparatorStyle;
 		dirty: SeparatorStyle;
-		noGit: SeparatorStyle;
+		no_git: SeparatorStyle;
 	};
 	git: {
 		clean: SeparatorStyle;
@@ -97,6 +97,8 @@ export interface StatuslineConfig {
 	// New theme system
 	color_theme?: string; // 'dark', 'electric', etc.
 	current_theme?: any; // Will be populated with actual theme object
+	// Font profile
+	font_profile?: string; // 'powerline', 'nerd-font'
 	// New flexible segment configuration
 	segment_config?: SegmentsConfiguration;
 }
