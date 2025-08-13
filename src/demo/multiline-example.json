@@ -1,4 +1,5 @@
 {
+  "$schema": "../../statusline.schema.json",
   "display": {
     "lines": [
       {

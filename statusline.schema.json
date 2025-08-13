@@ -1,0 +1,343 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
+  "title": "Claude Statusline Powerline Configuration",
+  "description": "Configuration schema for Claude Code statusline with powerline symbols, git integration, and session tracking",
+  "definitions": {
+    "DisplayConfig": {
+      "properties": {
+        "lines": {
+          "items": {
+            "$ref": "#/definitions/DisplayLine"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "lines"
+      ],
+      "type": "object"
+    },
+    "DisplayLine": {
+      "properties": {
+        "segments": {
+          "$ref": "#/definitions/LineSegments"
+        }
+      },
+      "required": [
+        "segments"
+      ],
+      "type": "object"
+    },
+    "LineSegments": {
+      "properties": {
+        "directory": {
+          "type": "boolean"
+        },
+        "git": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "boolean"
+        },
+        "session": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "SegmentConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "number"
+        },
+        "style": {
+          "$ref": "#/definitions/SegmentStyleConfig"
+        },
+        "type": {
+          "enum": [
+            "directory",
+            "git",
+            "model",
+            "session"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "enabled",
+        "order",
+        "type"
+      ],
+      "type": "object"
+    },
+    "SegmentStyleConfig": {
+      "properties": {
+        "bg_color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Background color in hex format (e.g., #1e40af)",
+          "examples": [
+            "#1e40af",
+            "#059669",
+            "#dc2626"
+          ]
+        },
+        "fg_color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Foreground (text) color in hex format (e.g., #ffffff)",
+          "examples": [
+            "#ffffff",
+            "#000000"
+          ]
+        },
+        "separator": {
+          "properties": {
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "description": "Separator color in hex format",
+              "examples": [
+                "#1e40af",
+                "#059669"
+              ]
+            },
+            "style": {
+              "$ref": "#/definitions/SeparatorStyle"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "SegmentVisibility": {
+      "properties": {
+        "directory": {
+          "type": "boolean"
+        },
+        "git": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "boolean"
+        },
+        "session": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "directory",
+        "git",
+        "model",
+        "session"
+      ],
+      "type": "object"
+    },
+    "SegmentsConfiguration": {
+      "properties": {
+        "segments": {
+          "items": {
+            "$ref": "#/definitions/SegmentConfig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "segments"
+      ],
+      "type": "object"
+    },
+    "SeparatorConfig": {
+      "properties": {
+        "directory": {
+          "properties": {
+            "clean": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "dirty": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "no_git": {
+              "$ref": "#/definitions/SeparatorStyle"
+            }
+          },
+          "required": [
+            "clean",
+            "dirty",
+            "no_git"
+          ],
+          "type": "object"
+        },
+        "git": {
+          "properties": {
+            "clean": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "dirty": {
+              "$ref": "#/definitions/SeparatorStyle"
+            }
+          },
+          "required": [
+            "clean",
+            "dirty"
+          ],
+          "type": "object"
+        },
+        "model": {
+          "$ref": "#/definitions/SeparatorStyle"
+        }
+      },
+      "required": [
+        "directory",
+        "git",
+        "model"
+      ],
+      "type": "object"
+    },
+    "SeparatorProfile": {
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "overrides": {
+          "properties": {
+            "directory_clean": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "directory_dirty": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "directory_no_git": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "git_clean": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "git_dirty": {
+              "$ref": "#/definitions/SeparatorStyle"
+            },
+            "model": {
+              "$ref": "#/definitions/SeparatorStyle"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "SeparatorStyle": {
+      "enum": [
+        "angly",
+        "angly2",
+        "curvy",
+        "flame",
+        "lightning",
+        "none",
+        "thick",
+        "thin",
+        "wave"
+      ],
+      "type": "string",
+      "description": "Visual style of powerline separators between segments"
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for IntelliSense support"
+    },
+    "color_theme": {
+      "type": "string",
+      "description": "Color theme for segment backgrounds and text",
+      "enum": [
+        "dark",
+        "electric"
+      ],
+      "default": "dark"
+    },
+    "current_theme": {
+      "description": "Internal property populated with actual theme object - not for user configuration"
+    },
+    "display": {
+      "$ref": "#/definitions/DisplayConfig",
+      "description": "Configure multiline layout and which segments appear on each line"
+    },
+    "font_profile": {
+      "type": "string",
+      "description": "Font compatibility profile determining available separator symbols",
+      "enum": [
+        "powerline",
+        "nerd-font"
+      ],
+      "default": "powerline"
+    },
+    "segment_config": {
+      "$ref": "#/definitions/SegmentsConfiguration",
+      "description": "Advanced segment configuration with custom ordering, styling, and granular control"
+    },
+    "segments": {
+      "$ref": "#/definitions/SegmentVisibility",
+      "description": "Control which segments are visible in the statusline"
+    },
+    "separatorProfile": {
+      "$ref": "#/definitions/SeparatorProfile",
+      "description": "Override separator styles with predefined profiles like 'all-curvy', 'mixed-dynamic', etc."
+    },
+    "separators": {
+      "$ref": "#/definitions/SeparatorConfig",
+      "description": "Configure separator styles for different segments and states"
+    },
+    "theme": {
+      "enum": [
+        "minimal",
+        "expressive",
+        "subtle",
+        "electric",
+        "curvy",
+        "angular"
+      ],
+      "type": "string",
+      "description": "Separator theme preset determining visual style",
+      "default": "minimal"
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "examples": [
+    {
+      "color_theme": "dark",
+      "theme": "minimal",
+      "segments": {
+        "model": true,
+        "directory": true,
+        "git": true,
+        "session": true
+      }
+    },
+    {
+      "display": {
+        "lines": [
+          {
+            "segments": {
+              "directory": true,
+              "git": true,
+              "model": true
+            }
+          },
+          {
+            "segments": {
+              "session": true
+            }
+          }
+        ]
+      },
+      "color_theme": "electric",
+      "theme": "expressive"
+    }
+  ]
+}

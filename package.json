@@ -8,7 +8,8 @@
 		"claude-statusline-install": "./dist/install.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "npm run schema && tsc",
+		"schema": "npx ts-node src/utils/generate-schema.ts",
 		"dev": "tsc --watch",
 		"test": "pnpm run build && node dist/test.js",
 		"demo": "pnpm run build && node dist/demo/demo.js",
@@ -50,10 +51,32 @@
 	"engines": {
 		"node": ">=14.0.0"
 	},
+	"files": [
+		"dist/statusline.js",
+		"dist/statusline.d.ts",
+		"dist/install.js",
+		"dist/install.d.ts",
+		"dist/config.js",
+		"dist/config.d.ts",
+		"dist/core/",
+		"dist/segments/",
+		"dist/separators/",
+		"dist/themes/",
+		"dist/utils/git.js",
+		"dist/utils/git.d.ts",
+		"dist/types.d.ts",
+		"dist/font-profiles.js",
+		"dist/font-profiles.d.ts",
+		"statusline.schema.json",
+		"README.md",
+		"CHANGELOG.md"
+	],
 	"devDependencies": {
+		"@changesets/cli": "^2.29.5",
 		"@types/node": "^24.2.1",
-		"typescript": "^5.9.2",
 		"prettier": "^3.6.2",
-		"@changesets/cli": "^2.29.5"
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.2",
+		"typescript-json-schema": "^0.65.1"
 	}
 }
