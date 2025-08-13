@@ -34,18 +34,11 @@ additional improvements.
 
 ### 🐛 Current Issues (High Priority)
 
-- [ ] **SEPARATOR STYLES NOT WORKING** - Environment variable
-      regression
-  - Issue: `STATUSLINE_THEME` env var not being read (shows
-    `undefined`)
-  - Root cause: Multiline environment variable parsing in
-    `src/config.ts:174`
-  - Expected: Victor Mono should show thin vs thick separators at
-    minimum
-  - Status: Color themes work perfectly, separators broken during
-    refactor
-  - Fix needed: Environment variable reading in `load_config()`
-    function
+- [x] **SEPARATOR STYLES WORKING** - Migrated to JSON configuration
+  - ✅ Complete migration from environment variables to JSON config
+  - ✅ All separator themes work via JSON configuration
+  - ✅ Victor Mono shows thin vs thick separators correctly
+  - ✅ Color themes and separators fully functional
 
 ### 📋 Planned Features
 
@@ -154,17 +147,7 @@ additional improvements.
 - ✅ **Font Profiles**: powerline (basic) vs nerd-font (full icons)
 - ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive
   testing and performance metrics and performance metrics
-- ✅ **Configuration System**: Environment variable + JSON config
-  support
-- 🐛 **Current Bug**: Environment variable parsing regression in
-  `load_config()`
-
-**Quick Fix for Next Session**:
-
-```typescript
-// In src/config.ts:174, fix the multiline env var parsing:
-const theme_from_env = process.env.STATUSLINE_THEME; // Remove multiline syntax
-```
+- ✅ **Configuration System**: JSON config support (environment variables removed)
 
 ### Session/Cost Tracking Architecture
 
@@ -195,10 +178,9 @@ const theme_from_env = process.env.STATUSLINE_THEME; // Remove multiline syntax
 
 ### Configuration Philosophy
 
-- Environment variable overrides
 - JSON config file support
 - Sensible defaults with easy customization
-- Backward compatibility preservation
+- Multiple config file locations for flexibility
 
 ## 🎨 Visual Design Goals
 

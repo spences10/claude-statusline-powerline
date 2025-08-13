@@ -256,7 +256,8 @@
       "description": "Color theme for segment backgrounds and text",
       "enum": [
         "dark",
-        "electric"
+        "electric",
+        "night-owl"
       ],
       "default": "dark"
     },
