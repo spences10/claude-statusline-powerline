@@ -4,15 +4,17 @@ src/
 !*.d.ts
 
 # Development files
+CLAUDE.md
 TODO.md
 pnpm-lock.yaml
 tsconfig.json
 .git/
 .gitignore
+renovate.json
 
-# Test files
-dist/test.*
-dist/theme-test.*
+# Test files and demos
+dist/tests/
+dist/demo/
 
 # Source maps (optional - remove if you want to include them)
 *.js.map
