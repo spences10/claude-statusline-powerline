@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.7
+
+### Patch Changes
+
+- e54cb06: set correct schema location
+
 ## 0.0.6
 
 ### Patch Changes
