@@ -1,2 +1,0 @@
-{"type":"user","timestamp":"2025-01-15T10:00:00Z","message":{"role":"user","content":"Hello!"}}
-{"type":"assistant","timestamp":"2025-01-15T10:00:05Z","message":{"role":"assistant","content":"Hi there!","model":"claude-sonnet-4-20250514","usage":{"input_tokens":1200,"output_tokens":350,"cache_creation_input_tokens":0,"cache_read_input_tokens":500}}}

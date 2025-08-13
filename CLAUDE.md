@@ -65,8 +65,7 @@ pnpm run release      # Build and publish
 
 ### Configuration System
 
-- **Config**: `src/config.ts` - Handles environment variables, JSON
-  file loading, theme application
+- **Config**: `src/config.ts` - Handles JSON file loading, theme application
 - **Themes**: `src/themes/` - Color themes (dark, electric) with
   segment-specific colors
 - **Separators**: Multiple styles (thick, thin, curvy, flame,
@@ -74,17 +73,20 @@ pnpm run release      # Build and publish
 - **Profiles**: Override separator styles across themes (all-curvy,
   electric-chaos, etc.)
 
-### Environment Variables
+### JSON Configuration
 
-- `STATUSLINE_COLOR_THEME` - Color theme (dark, electric)
-- `STATUSLINE_THEME` - Separator theme (minimal, expressive, subtle,
-  electric, curvy, angular)
-- `STATUSLINE_SEPARATOR_PROFILE` - Override separators (all-curvy,
-  mixed-dynamic, etc.)
-- `STATUSLINE_FONT_PROFILE` - Font compatibility (powerline,
-  nerd-font)
-- `STATUSLINE_SHOW_*` - Toggle individual segments (MODEL, DIRECTORY,
-  GIT, SESSION)
+Configuration is handled via JSON files:
+- `~/.claude/claude-statusline-powerline.json` (global)
+- `./.claude-statusline-powerline.json` (project-specific)
+- `./statusline.config.json` (alternative name)
+- `./.statusline.json` (alternative name)
+
+**Configuration options:**
+- `color_theme` - Color theme ("dark", "electric", "night-owl")
+- `theme` - Separator theme ("minimal", "expressive", "subtle", "electric", "curvy", "angular")
+- `separator_profile` - Override separators ("all-curvy", "mixed-dynamic", etc.)
+- `font_profile` - Font compatibility ("powerline", "nerd-font")
+- `segments` - Toggle individual segments and set display order
 
 ### Multiline Support
 
