@@ -1,9 +1,10 @@
 # Claude Statusline Powerline
 
 A beautiful powerline-style statusline for Claude Code with git
-integration.
+integration, session tracking, and settings config IntelliSense
+support.
 
-## Features
+## ✨ Features
 
 - 🎨 **Powerline styling** with beautiful separators and colors
 - 🌿 **Git integration** - shows branch name and dirty status
@@ -11,14 +12,11 @@ integration.
 - 📱 **Model info** - shows which Claude model you're using
 - 💰 **Session tracking** - real-time token usage and cost monitoring
 - 📊 **Context monitoring** - smart warnings at 75% and 90% usage
+- 🧠 **Full IntelliSense** - autocomplete, validation, and hover docs
+  in config files
 - ⚡ **Fast** - minimal overhead, updates smoothly
 - 🛠️ **TypeScript** - fully typed and maintainable
-- 🎨 **Flexible separator system** - themes + profiles for infinite
-  combinations
-- 🔤 **Font compatibility** - Victor Mono, Nerd Fonts
-- 🎯 **Context-aware** - different effects for clean vs dirty repos
-- 🔧 **Highly configurable** - mix and match themes with separator
-  profiles
+- 🔧 **Zero-maintenance schema** - auto-generated from source code
 
 ## Separator Themes & Profiles
 
@@ -59,22 +57,31 @@ Override any theme's separators with these profiles:
 - `lightning` - High-energy lightning effect ⚡
 - `none` - No separator
 
-## Configuration
+## 🔧 Configuration
 
-### JSON Configuration
+### JSON Configuration with Full IntelliSense
 
-Claude Statusline Powerline uses JSON configuration files for easy
-customization:
+Claude Statusline Powerline uses JSON configuration files with **full
+IntelliSense support**:
 
 **Primary config location:**
-`~/.claude/claude-statusline-powerline.json`
-
+`~/.claude/claude-statusline-powerline.json`  
 **Project-specific override:** `./.claude-statusline-powerline.json`
+
+### ⚡ IntelliSense Features
+
+- **🎯 Autocomplete** - All available options as you type
+- **✅ Real-time validation** - Catch typos and invalid values
+  instantly
+- **📖 Hover documentation** - Descriptions for every property
+- **🎨 Color validation** - Hex color patterns with examples
+- **🔄 Auto-sync** - Schema updates automatically with new releases
 
 ### Example Configuration
 
 ```json
 {
+	"$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
 	"color_theme": "dark",
 	"theme": "expressive",
 	"font_profile": "nerd-font",
@@ -136,18 +143,6 @@ customization:
 - `"electric-chaos"` - High-energy mix of lightning and flame
   separators
 
-### Testing Configurations
-
-Use the built-in tools to test different themes:
-
-```bash
-# View all available themes and separators
-pnpm run build && node dist/theme-test.js
-
-# Run the interactive demo
-pnpm run demo
-```
-
 ### Custom Segment Ordering
 
 You can reorder segments by changing the `order` property:
@@ -190,19 +185,7 @@ For complex statuslines, use multi-line layouts:
 }
 ```
 
-### 🎯 Pro Tips:
-
-- **Combine themes**: Mix color themes, separator themes, and profiles
-  for unique looks
-- **Full Nerd Font users**: Set `"font_profile": "nerd-font"` for more
-  icons
-- **Basic compatibility**: Use `"font_profile": "powerline"` for
-  standard powerline fonts
-- **Project-specific configs**: Create
-  `.claude-statusline-powerline.json` in project roots for custom
-  per-project styling
-
-## Installation
+## 📦 Installation
 
 Install globally with your preferred package manager:
 
@@ -220,14 +203,8 @@ bun add -g claude-statusline-powerline
 volta install claude-statusline-powerline
 ```
 
-That's it! The statusline will be automatically configured for Claude
-Code.
-
-## Requirements
-
-- Node.js >= 20.0.0
-- A terminal with powerline font support (recommended: Nerd Fonts)
-- Git (for git integration features)
+The statusline will be automatically configured for Claude Code with a
+default config file that includes full IntelliSense support!
 
 ## Font Setup
 
