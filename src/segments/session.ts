@@ -56,9 +56,9 @@ export class SessionSegment extends BaseSegment {
 		const pricing =
 			MODEL_PRICING[usage.modelUsed || ''] || DEFAULT_PRICING;
 		const context_used = total_tokens;
-		const context_remaining = pricing.contextWindow - context_used;
+		const context_remaining = pricing.context_window - context_used;
 		const context_percent = Math.round(
-			(context_used / pricing.contextWindow) * 100,
+			(context_used / pricing.context_window) * 100,
 		);
 
 		// Format context display
@@ -161,11 +161,11 @@ export class SessionSegment extends BaseSegment {
 
 			// Calculate cost using model-specific pricing
 			const input_cost =
-				(total_input_tokens / 1000000) * pricing.inputTokens;
+				(total_input_tokens / 1000000) * pricing.input_tokens;
 			const output_cost =
-				(total_output_tokens / 1000000) * pricing.outputTokens;
+				(total_output_tokens / 1000000) * pricing.output_tokens;
 			const cache_cost =
-				(total_cache_tokens / 1000000) * pricing.cacheTokens;
+				(total_cache_tokens / 1000000) * pricing.cache_tokens;
 			const total_cost = input_cost + output_cost + cache_cost;
 
 			// Calculate session duration in minutes

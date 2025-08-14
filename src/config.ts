@@ -328,49 +328,64 @@ export function load_config(): StatuslineConfig {
 export const MODEL_PRICING: Record<string, ModelPricing> = {
 	// Claude Opus 4.1 (Max plan only)
 	'claude-opus-4-1-20250805': {
-		inputTokens: 15,
-		outputTokens: 75,
-		cacheTokens: 1.5,
-		contextWindow: 200000,
+		name: 'Claude Opus 4.1',
+		input_tokens: 15,
+		output_tokens: 75,
+		cache_tokens: 1.5,
+		context_window: 200000,
 	},
 
 	// Claude Opus 4 (Max plan only)
 	'claude-opus-4-20250514': {
-		inputTokens: 15,
-		outputTokens: 75,
-		cacheTokens: 1.5,
-		contextWindow: 200000,
+		name: 'Claude Opus 4',
+		input_tokens: 15,
+		output_tokens: 75,
+		cache_tokens: 1.5,
+		context_window: 200000,
 	},
 
-	// Claude Sonnet 4
+	// Claude Sonnet 4 - 1M context support with tiered pricing
 	'claude-sonnet-4-20250514': {
-		inputTokens: 3,
-		outputTokens: 15,
-		cacheTokens: 0.3,
-		contextWindow: 200000,
+		name: 'Claude Sonnet 4',
+		input_tokens: 3, // ≤200K tokens, 6 for >200K
+		output_tokens: 15, // ≤200K tokens, 22.5 for >200K
+		cache_tokens: 0.3,
+		context_window: 1000000, // 1M tokens
+	},
+
+	// Claude Sonnet 4 (simplified alias)
+	'claude-sonnet-4': {
+		name: 'Claude Sonnet 4',
+		input_tokens: 3, // ≤200K tokens, 6 for >200K
+		output_tokens: 15, // ≤200K tokens, 22.5 for >200K
+		cache_tokens: 0.3,
+		context_window: 1000000, // 1M tokens
 	},
 
 	// Claude Sonnet 3.7
 	'claude-3-7-sonnet-20250219': {
-		inputTokens: 3,
-		outputTokens: 15,
-		cacheTokens: 0.3,
-		contextWindow: 200000,
+		name: 'Claude Sonnet 3.7',
+		input_tokens: 3,
+		output_tokens: 15,
+		cache_tokens: 0.3,
+		context_window: 200000,
 	},
 
 	// Claude Haiku 3.5
 	'claude-3-5-haiku-20241022': {
-		inputTokens: 0.8,
-		outputTokens: 4,
-		cacheTokens: 0.08,
-		contextWindow: 200000,
+		name: 'Claude Haiku 3.5',
+		input_tokens: 0.8,
+		output_tokens: 4,
+		cache_tokens: 0.08,
+		context_window: 200000,
 	},
 };
 
 // Default pricing for unknown models (Sonnet rates)
 export const DEFAULT_PRICING: ModelPricing = {
-	inputTokens: 3,
-	outputTokens: 15,
-	cacheTokens: 0.3,
-	contextWindow: 200000,
+	name: 'Unknown 🤷',
+	input_tokens: 3,
+	output_tokens: 15,
+	cache_tokens: 0.3,
+	context_window: 200000,
 };
