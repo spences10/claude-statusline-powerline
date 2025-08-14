@@ -16,13 +16,10 @@ support.
 - 🌿 **Git integration** - shows branch name and dirty status
 - 📁 **Directory display** - current working directory
 - 📱 **Model info** - shows which Claude model you're using
-- 💰 **Session tracking** - real-time token usage and cost monitoring
+- 💰 **Session tracking** - real-time token usage and cost estimation
 - 📊 **Context monitoring** - smart warnings at 75% and 90% usage
-- 🧠 **Full IntelliSense** - autocomplete, validation, and hover docs
-  in config files
-- ⚡ **Fast** - minimal overhead, updates smoothly
-- 🛠️ **TypeScript** - fully typed and maintainable
-- 🔧 **Zero-maintenance schema** - auto-generated from source code
+- 🧠 **Settings IntelliSense** - autocomplete, validation, and hover
+  docs in settings files
 
 ## Separator Themes & Profiles
 
@@ -40,7 +37,7 @@ support.
 - **`curvy`** - Smooth curved separators throughout
 - **`angular`** - Sharp angular separators for a modern look
 
-### 🔧 Separator Profiles (NEW!)
+### 🔧 Separator Profiles
 
 Override any theme's separators with these profiles:
 
@@ -65,10 +62,10 @@ Override any theme's separators with these profiles:
 
 ## 🔧 Configuration
 
-### JSON Configuration with Full IntelliSense
+### JSON Configuration with IntelliSense
 
-Claude Statusline Powerline uses JSON configuration files with **full
-IntelliSense support**:
+Claude Statusline Powerline uses JSON configuration files with
+**IntelliSense support**:
 
 **Primary config location:**
 `~/.claude/claude-statusline-powerline.json`  
@@ -77,11 +74,8 @@ IntelliSense support**:
 ### ⚡ IntelliSense Features
 
 - **🎯 Autocomplete** - All available options as you type
-- **✅ Real-time validation** - Catch typos and invalid values
-  instantly
 - **📖 Hover documentation** - Descriptions for every property
 - **🎨 Color validation** - Hex color patterns with examples
-- **🔄 Auto-sync** - Schema updates automatically with new releases
 
 ### Example Configuration
 
@@ -278,7 +272,7 @@ volta install claude-statusline-powerline
 ```
 
 The statusline will be automatically configured for Claude Code with a
-default config file that includes full IntelliSense support!
+default config file!
 
 ## Font Setup
 
@@ -286,8 +280,7 @@ For the best experience, use a powerline-compatible font:
 
 **Recommended fonts:**
 
-- **Victor Mono** (excellent powerline support)
-- **JetBrains Mono Nerd Font**
+- **Victor Mono** (built and tested with this)
 - Any [Nerd Font](https://www.nerdfonts.com/)
 
 The statusline uses these symbols: `(powerline separators) and` (git
@@ -328,9 +321,14 @@ powerline-style status.
 
 ## Credits
 
-This project was inspired by [claude-powerline](https://github.com/Owloops/claude-powerline) by [@Owloops](https://github.com/Owloops) - thanks for the initial concept and inspiration!
+This project was inspired by
+[claude-powerline](https://github.com/Owloops/claude-powerline) by
+[@Owloops](https://github.com/Owloops) - thanks for the initial
+concept and inspiration!
 
-Built for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) by [Anthropic](https://www.anthropic.com/).
+Built for
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) by
+[Anthropic](https://www.anthropic.com/).
 
 ## License
 
