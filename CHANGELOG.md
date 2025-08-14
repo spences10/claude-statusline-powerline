@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.12
+
+### Patch Changes
+
+- 5bd4ca5: project level config
+
 ## 0.0.11
 
 ### Patch Changes
