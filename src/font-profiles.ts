@@ -39,7 +39,7 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 		name: 'Powerline Compatible',
 		description: 'Basic powerline fonts with core symbol support',
 		symbols: {
-			branch: '\uE0A0',
+			branch: ' \uE0A0', // intentional space for alignment
 			dirty: '\u00B1',
 			clean: '\u2713',
 			folder: '📁',
