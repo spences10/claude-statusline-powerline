@@ -1,5 +1,11 @@
 # Claude Statusline Powerline
 
+[![npm version](https://badge.fury.io/js/claude-statusline-powerline.svg)](https://badge.fury.io/js/claude-statusline-powerline)
+[![npm downloads](https://img.shields.io/npm/dm/claude-statusline-powerline.svg)](https://www.npmjs.com/package/claude-statusline-powerline)
+[![install size](https://packagephobia.com/badge?p=claude-statusline-powerline)](https://packagephobia.com/result?p=claude-statusline-powerline)
+[![license](https://img.shields.io/npm/l/claude-statusline-powerline.svg)](https://github.com/spences10/claude-statusline-powerline/blob/main/LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
 A beautiful powerline-style statusline for Claude Code with git
 integration, session tracking, and settings config IntelliSense
 support.
@@ -319,6 +325,12 @@ powerline-style status.
 - 🟢 **Green** - Clean git repository
 - 🟡 **Yellow** - Dirty git repository (uncommitted changes)
 - 🟣 **Purple** - Session usage and cost tracking
+
+## Credits
+
+This project was inspired by [claude-powerline](https://github.com/Owloops/claude-powerline) by [@Owloops](https://github.com/Owloops) - thanks for the initial concept and inspiration!
+
+Built for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) by [Anthropic](https://www.anthropic.com/).
 
 ## License
 
