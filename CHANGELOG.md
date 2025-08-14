@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.13
+
+### Patch Changes
+
+- 9e2a5cf: add segment truncation and git commit details
+
 ## 0.0.12
 
 ### Patch Changes
