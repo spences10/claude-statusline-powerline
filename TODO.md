@@ -54,6 +54,10 @@ additional improvements.
         dependencies)
   - [x] Real-time parsing of entire session history for accurate
         totals
+  - [ ] **Cache hit rate tracking** - Show cache efficiency with
+        `cache_read_input_tokens` vs `cache_creation_input_tokens`
+        ratio for performance insights (e.g., "85% cached" or cache
+        hit icon)
 
 - [ ] **Daily usage segment** ("today")
   - [ ] Daily token and cost aggregation
@@ -70,6 +74,9 @@ additional improvements.
   - [ ] Add: `⇕` diverged, `?` untracked files count
   - [ ] Add: `+` staged changes, `-` deletions
   - [ ] Git SHA display (short hash, configurable)
+  - [ ] **Git commit ahead/behind from transcript data** - Use `⇡` up
+        arrow / `⇣` down arrow with commit numbers from Claude Code
+        session transcript data
 
 #### AI Model Enhancement
 
@@ -147,7 +154,8 @@ additional improvements.
 - ✅ **Font Profiles**: powerline (basic) vs nerd-font (full icons)
 - ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive
   testing and performance metrics and performance metrics
-- ✅ **Configuration System**: JSON config support (environment variables removed)
+- ✅ **Configuration System**: JSON config support (environment
+  variables removed)
 
 ### Session/Cost Tracking Architecture
 
