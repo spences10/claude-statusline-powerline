@@ -82,6 +82,13 @@ export interface DisplayConfig {
 	lines: DisplayLine[];
 }
 
+export interface TruncationConfig {
+	model_length?: number;
+	directory_length?: number;
+	git_length?: number;
+	session_length?: number;
+}
+
 export interface StatuslineConfig {
 	separators: SeparatorConfig;
 	separatorProfile?: SeparatorProfile;
@@ -95,13 +102,14 @@ export interface StatuslineConfig {
 		| 'curvy'
 		| 'angular'
 		| 'custom';
-	// New theme system
 	color_theme?: string; // 'dark', 'electric', etc.
 	current_theme?: any; // Will be populated with actual theme object
 	// Font profile
 	font_profile?: string; // 'powerline', 'nerd-font'
 	// New flexible segment configuration
 	segment_config?: SegmentsConfiguration;
+	// Truncation configuration
+	truncation?: TruncationConfig;
 }
 
 export interface SessionUsage {
@@ -131,6 +139,7 @@ export interface SegmentStyleConfig {
 	icons?: {
 		[key: string]: string;
 	};
+	truncation_length?: number;
 }
 
 export interface SegmentConfig {
