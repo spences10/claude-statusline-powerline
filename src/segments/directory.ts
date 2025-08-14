@@ -26,10 +26,17 @@ export class DirectorySegment extends BaseSegment {
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const full_dir_name = path.basename(cwd) || '~';
 
+		const style_override = this.getSegmentConfig(config);
+
+		const max_length =
+			style_override?.truncation_length ||
+			config.truncation?.directory_length ||
+			25;
+
 		// Truncate long directory names
 		const dir_name =
-			full_dir_name.length > 25
-				? `${full_dir_name.slice(0, 22)}...`
+			full_dir_name.length > max_length
+				? `${full_dir_name.slice(0, max_length - 3)}...`
 				: full_dir_name;
 		const font_profile = get_font_profile(config.font_profile);
 
@@ -46,7 +53,6 @@ export class DirectorySegment extends BaseSegment {
 		}
 
 		const theme = config.current_theme?.segments.directory;
-		const style_override = this.getSegmentConfig(config);
 
 		// Get folder icon with potential user override
 		const folder_icon = get_symbol(

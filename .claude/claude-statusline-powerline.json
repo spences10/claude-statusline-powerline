@@ -40,6 +40,7 @@
         "enabled": true,
         "order": 2,
         "style": {
+          "truncation_length": 30,
           "separator": {
             "style": "double_chevron"
           },
@@ -53,6 +54,7 @@
         "enabled": true,
         "order": 3,
         "style": {
+          "truncation_length": 30,
           "separator": {
             "style": "curvy"
           }
