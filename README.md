@@ -69,7 +69,8 @@ Claude Statusline Powerline uses JSON configuration files with
 
 **Primary config location:**
 `~/.claude/claude-statusline-powerline.json`  
-**Project-specific override:** `./.claude-statusline-powerline.json`
+**Project-specific override:**
+`./.claude/claude-statusline-powerline.json`
 
 ### ⚡ IntelliSense Features
 
