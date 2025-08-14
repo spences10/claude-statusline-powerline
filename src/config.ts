@@ -198,34 +198,50 @@ function get_default_segment_visibility(): SegmentVisibility {
 
 // Load config from JSON file
 function load_config_from_file(): Partial<StatuslineConfig> | null {
-	const config_paths = [
-		// Environment variable override (for demos and testing)
-		process.env.STATUSLINE_CONFIG,
-		// Primary config location
-		path.join(
-			os.homedir(),
-			'.claude',
-			'claude-statusline-powerline.json',
-		),
-		// Project-specific override
-		path.join(process.cwd(), '.claude-statusline-powerline.json'),
-	].filter(Boolean) as string[]; // Remove any undefined values
+	const config_sources = [
+		{
+			name: 'environment',
+			path: process.env.STATUSLINE_CONFIG,
+		},
+		{
+			name: 'global',
+			path: path.join(
+				os.homedir(),
+				'.claude',
+				'claude-statusline-powerline.json',
+			),
+		},
+		{
+			name: 'project',
+			path: path.join(
+				process.cwd(),
+				'.claude-statusline-powerline.json',
+			),
+		},
+	].filter((source) => source.path) as {
+		name: string;
+		path: string;
+	}[];
 
-	for (const config_path of config_paths) {
+	let merged_config: Partial<StatuslineConfig> = {};
+
+	// Load configs in order, with later ones overriding earlier ones
+	for (const source of config_sources) {
 		try {
-			if (fs.existsSync(config_path)) {
-				const file_content = fs.readFileSync(config_path, 'utf8');
-				return JSON.parse(file_content);
+			if (fs.existsSync(source.path)) {
+				const file_content = fs.readFileSync(source.path, 'utf8');
+				const parsed_config = JSON.parse(file_content);
+				merged_config = { ...merged_config, ...parsed_config };
 			}
 		} catch (error) {
 			console.error(
-				`Failed to load config from ${config_path}:`,
+				`Failed to load config from ${source.path}:`,
 				error,
 			);
 		}
 	}
 
-	return null;
+	return Object.keys(merged_config).length > 0 ? merged_config : null;
 }
 
 // Get the primary config file path
