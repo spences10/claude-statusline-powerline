@@ -3,6 +3,205 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { ClaudeStatusInput, SeparatorConfig } from '../types';
 
+// Separator style configurations
+const SEPARATOR_STYLES: Record<string, SeparatorConfig> = {
+	minimal: {
+		model: 'none',
+		directory: 'none',
+		git: {
+			clean: 'none',
+			dirty: 'none',
+			ahead: 'none',
+			behind: 'none',
+			conflicts: 'none',
+			staged: 'none',
+			untracked: 'none',
+		},
+		session: 'none',
+	},
+	expressive: {
+		model: 'wave',
+		directory: 'thick',
+		git: {
+			clean: 'thick',
+			dirty: 'lightning',
+			ahead: 'flame',
+			behind: 'wave',
+			conflicts: 'lightning',
+			staged: 'thick',
+			untracked: 'thin',
+		},
+		session: 'wave',
+	},
+	curvy: {
+		model: 'curvy',
+		directory: 'curvy',
+		git: {
+			clean: 'curvy',
+			dirty: 'curvy',
+			ahead: 'curvy',
+			behind: 'curvy',
+			conflicts: 'curvy',
+			staged: 'curvy',
+			untracked: 'curvy',
+		},
+		session: 'curvy',
+	},
+	angular: {
+		model: 'angly',
+		directory: 'angly',
+		git: {
+			clean: 'angly',
+			dirty: 'angly',
+			ahead: 'angly',
+			behind: 'angly',
+			conflicts: 'angly',
+			staged: 'angly',
+			untracked: 'angly',
+		},
+		session: 'angly',
+	},
+	double_chevron: {
+		model: 'double_chevron',
+		directory: 'double_chevron',
+		git: {
+			clean: 'double_chevron',
+			dirty: 'double_chevron',
+			ahead: 'double_chevron',
+			behind: 'double_chevron',
+			conflicts: 'double_chevron',
+			staged: 'double_chevron',
+			untracked: 'double_chevron',
+		},
+		session: 'double_chevron',
+	},
+};
+
+// Layout configurations
+const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
+	single: {
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	'two-line': {
+		display: {
+			lines: [
+				{ segments: { directory: true, git: true } },
+				{ segments: { model: true, session: true } },
+			],
+		},
+	},
+	minimal: {
+		segments: {
+			model: true,
+			directory: false,
+			git: false,
+			session: false,
+		},
+	},
+	'git-focus': {
+		segments: {
+			model: false,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	workspace: {
+		display: {
+			lines: [
+				{
+					segments: { directory: true, git: true, session: true },
+				},
+			],
+		},
+	},
+};
+
+function get_layout_config(layout: string): Partial<DemoConfig> {
+	return LAYOUT_CONFIGS[layout] || LAYOUT_CONFIGS.single;
+}
+
+function create_demo_config(
+	combo: { color: string; style: string; layout: string },
+	fontProfile: 'powerline' | 'nerd-font',
+): DemoConfig {
+	const config: DemoConfig = {
+		color_theme: combo.color,
+		theme: combo.style,
+		font_profile: fontProfile,
+	};
+
+	// Add separator configuration
+	if (SEPARATOR_STYLES[combo.style]) {
+		config.separators = SEPARATOR_STYLES[combo.style];
+	}
+
+	// Add layout configuration
+	const layout_config = get_layout_config(combo.layout);
+	Object.assign(config, layout_config);
+
+	return config;
+}
+
+async function run_demo(
+	fontProfile: 'powerline' | 'nerd-font',
+	title: string,
+	icon: string,
+): Promise<void> {
+	console.log('==================================================');
+	console.log(`${icon} ${title}`);
+	console.log('==================================================\n');
+
+	for (const [index, combo] of ALL_COMBINATIONS.entries()) {
+		console.log(`--- ${combo.desc} ---`);
+
+		// Cycle through different usage scenarios for variety in session costs
+		const scenarios = Object.keys(USAGE_SCENARIOS) as Array<
+			keyof typeof USAGE_SCENARIOS
+		>;
+		const scenario = scenarios[index % scenarios.length];
+		const usage = USAGE_SCENARIOS[scenario];
+
+		// Create temporary mock transcript file
+		const temp_transcript_path = path.join(
+			__dirname,
+			`.temp-demo-transcript-${Date.now()}.jsonl`,
+		);
+		fs.writeFileSync(
+			temp_transcript_path,
+			create_mock_transcript(usage),
+		);
+
+		const demo_data = {
+			...BASE_DATA,
+			transcript_path: temp_transcript_path,
+		};
+
+		const config = create_demo_config(combo, fontProfile);
+
+		try {
+			const output = await run_statusline_with_config(
+				demo_data,
+				config,
+			);
+			console.log(output);
+		} catch (error) {
+			console.error(`Error:`, error);
+		} finally {
+			// Clean up temporary transcript file
+			if (fs.existsSync(temp_transcript_path)) {
+				fs.unlinkSync(temp_transcript_path);
+			}
+		}
+		console.log('');
+	}
+}
+
 // Mock session usage scenarios
 const USAGE_SCENARIOS = {
 	light: {
@@ -295,375 +494,11 @@ const ALL_COMBINATIONS = [
 }>;
 
 async function demo_powerline() {
-	console.log('==================================================');
-	console.log('🎨 Powerline Font Demo');
-	console.log('==================================================\n');
-
-	for (const [index, combo] of ALL_COMBINATIONS.entries()) {
-		console.log(`--- ${combo.desc} ---`);
-
-		// Cycle through different usage scenarios for variety in session costs
-		const scenarios = Object.keys(USAGE_SCENARIOS) as Array<
-			keyof typeof USAGE_SCENARIOS
-		>;
-		const scenario = scenarios[index % scenarios.length];
-		const usage = USAGE_SCENARIOS[scenario];
-
-		// Create temporary mock transcript file
-		const temp_transcript_path = path.join(
-			__dirname,
-			`.temp-demo-transcript-${Date.now()}.jsonl`,
-		);
-		fs.writeFileSync(
-			temp_transcript_path,
-			create_mock_transcript(usage),
-		);
-
-		const demo_data = {
-			...BASE_DATA,
-			transcript_path: temp_transcript_path,
-		};
-
-		const config: DemoConfig = {
-			color_theme: combo.color,
-			theme: combo.style,
-			font_profile: 'powerline',
-		};
-
-		// Manual separator configurations based on style
-		if (combo.style === 'minimal') {
-			config.separators = {
-				model: 'none',
-				directory: 'none',
-				git: {
-					clean: 'none',
-					dirty: 'none',
-					ahead: 'none',
-					behind: 'none',
-					conflicts: 'none',
-					staged: 'none',
-					untracked: 'none',
-				},
-				session: 'none',
-			};
-		} else if (combo.style === 'expressive') {
-			// Mix of separators with git status changes
-			config.separators = {
-				model: 'wave',
-				directory: 'thick',
-				git: {
-					clean: 'thick',
-					dirty: 'lightning',
-					ahead: 'flame',
-					behind: 'wave',
-					conflicts: 'lightning',
-					staged: 'thick',
-					untracked: 'thin',
-				},
-				session: 'wave',
-			};
-		} else if (combo.style === 'curvy') {
-			// All separators should be curvy
-			config.separators = {
-				model: 'curvy',
-				directory: 'curvy',
-				git: {
-					clean: 'curvy',
-					dirty: 'curvy',
-					ahead: 'curvy',
-					behind: 'curvy',
-					conflicts: 'curvy',
-					staged: 'curvy',
-					untracked: 'curvy',
-				},
-				session: 'curvy',
-			};
-		} else if (combo.style === 'angular') {
-			// All separators should be angular
-			config.separators = {
-				model: 'angly',
-				directory: 'angly',
-				git: {
-					clean: 'angly',
-					dirty: 'angly',
-					ahead: 'angly',
-					behind: 'angly',
-					conflicts: 'angly',
-					staged: 'angly',
-					untracked: 'angly',
-				},
-				session: 'angly',
-			};
-		} else if (combo.style === 'double_chevron') {
-			// Bonus double chevron theme
-			config.separators = {
-				model: 'double_chevron',
-				directory: 'double_chevron',
-				git: {
-					clean: 'double_chevron',
-					dirty: 'double_chevron',
-					ahead: 'double_chevron',
-					behind: 'double_chevron',
-					conflicts: 'double_chevron',
-					staged: 'double_chevron',
-					untracked: 'double_chevron',
-				},
-				session: 'double_chevron',
-			};
-		}
-
-		// Add layout-specific configurations
-		switch (combo.layout) {
-			case 'single':
-				// Default single-line layout with all segments
-				config.segments = {
-					model: true,
-					directory: true,
-					git: true,
-					session: true,
-				};
-				break;
-
-			case 'two-line':
-				config.display = {
-					lines: [
-						{ segments: { directory: true, git: true } },
-						{ segments: { model: true, session: true } },
-					],
-				};
-				break;
-
-			case 'minimal':
-				config.segments = {
-					model: true,
-					directory: false,
-					git: false,
-					session: false,
-				};
-				break;
-
-			case 'git-focus':
-				config.segments = {
-					model: false,
-					directory: true,
-					git: true,
-					session: true,
-				};
-				break;
-
-			case 'workspace':
-				config.display = {
-					lines: [
-						{
-							segments: { directory: true, git: true, session: true },
-						},
-					],
-				};
-				break;
-		}
-
-		try {
-			const output = await run_statusline_with_config(
-				demo_data,
-				config,
-			);
-			console.log(output);
-		} catch (error) {
-			console.error(`Error:`, error);
-		} finally {
-			// Clean up temporary transcript file
-			if (fs.existsSync(temp_transcript_path)) {
-				fs.unlinkSync(temp_transcript_path);
-			}
-		}
-		console.log('');
-	}
+	return run_demo('powerline', 'Powerline Font Demo', '🎨');
 }
 
 async function demo_nerd_font() {
-	console.log('==================================================');
-	console.log('⚡ Nerd Font Demo');
-	console.log('==================================================\n');
-
-	for (const [index, combo] of ALL_COMBINATIONS.entries()) {
-		console.log(`--- ${combo.desc} ---`);
-
-		// Cycle through different usage scenarios for variety in session costs
-		const scenarios = Object.keys(USAGE_SCENARIOS) as Array<
-			keyof typeof USAGE_SCENARIOS
-		>;
-		const scenario = scenarios[index % scenarios.length];
-		const usage = USAGE_SCENARIOS[scenario];
-
-		// Create temporary mock transcript file
-		const temp_transcript_path = path.join(
-			__dirname,
-			`.temp-demo-transcript-${Date.now()}.jsonl`,
-		);
-		fs.writeFileSync(
-			temp_transcript_path,
-			create_mock_transcript(usage),
-		);
-
-		const demo_data = {
-			...BASE_DATA,
-			transcript_path: temp_transcript_path,
-		};
-
-		const config: DemoConfig = {
-			color_theme: combo.color,
-			theme: combo.style,
-			font_profile: 'nerd-font',
-		};
-
-		// Manual separator configurations based on style
-		if (combo.style === 'minimal') {
-			config.separators = {
-				model: 'none',
-				directory: 'none',
-				git: {
-					clean: 'none',
-					dirty: 'none',
-					ahead: 'none',
-					behind: 'none',
-					conflicts: 'none',
-					staged: 'none',
-					untracked: 'none',
-				},
-				session: 'none',
-			};
-		} else if (combo.style === 'expressive') {
-			// Mix of separators with git status changes
-			config.separators = {
-				model: 'wave',
-				directory: 'thick',
-				git: {
-					clean: 'thick',
-					dirty: 'lightning',
-					ahead: 'flame',
-					behind: 'wave',
-					conflicts: 'lightning',
-					staged: 'thick',
-					untracked: 'thin',
-				},
-				session: 'wave',
-			};
-		} else if (combo.style === 'curvy') {
-			// All separators should be curvy
-			config.separators = {
-				model: 'curvy',
-				directory: 'curvy',
-				git: {
-					clean: 'curvy',
-					dirty: 'curvy',
-					ahead: 'curvy',
-					behind: 'curvy',
-					conflicts: 'curvy',
-					staged: 'curvy',
-					untracked: 'curvy',
-				},
-				session: 'curvy',
-			};
-		} else if (combo.style === 'angular') {
-			// All separators should be angular
-			config.separators = {
-				model: 'angly',
-				directory: 'angly',
-				git: {
-					clean: 'angly',
-					dirty: 'angly',
-					ahead: 'angly',
-					behind: 'angly',
-					conflicts: 'angly',
-					staged: 'angly',
-					untracked: 'angly',
-				},
-				session: 'angly',
-			};
-		} else if (combo.style === 'double_chevron') {
-			// Bonus double chevron theme
-			config.separators = {
-				model: 'double_chevron',
-				directory: 'double_chevron',
-				git: {
-					clean: 'double_chevron',
-					dirty: 'double_chevron',
-					ahead: 'double_chevron',
-					behind: 'double_chevron',
-					conflicts: 'double_chevron',
-					staged: 'double_chevron',
-					untracked: 'double_chevron',
-				},
-				session: 'double_chevron',
-			};
-		}
-
-		// Add layout-specific configurations
-		switch (combo.layout) {
-			case 'single':
-				// Default single-line layout with all segments
-				config.segments = {
-					model: true,
-					directory: true,
-					git: true,
-					session: true,
-				};
-				break;
-
-			case 'two-line':
-				config.display = {
-					lines: [
-						{ segments: { directory: true, git: true } },
-						{ segments: { model: true, session: true } },
-					],
-				};
-				break;
-
-			case 'minimal':
-				config.segments = {
-					model: true,
-					directory: false,
-					git: false,
-					session: false,
-				};
-				break;
-
-			case 'git-focus':
-				config.segments = {
-					model: false,
-					directory: true,
-					git: true,
-					session: true,
-				};
-				break;
-
-			case 'workspace':
-				config.display = {
-					lines: [
-						{
-							segments: { directory: true, git: true, session: true },
-						},
-					],
-				};
-				break;
-		}
-
-		try {
-			const output = await run_statusline_with_config(
-				demo_data,
-				config,
-			);
-			console.log(output);
-		} catch (error) {
-			console.error(`Error:`, error);
-		} finally {
-			// Clean up temporary transcript file
-			if (fs.existsSync(temp_transcript_path)) {
-				fs.unlinkSync(temp_transcript_path);
-			}
-		}
-		console.log('');
-	}
+	return run_demo('nerd-font', 'Nerd Font Demo', '⚡');
 }
 
 async function main() {
