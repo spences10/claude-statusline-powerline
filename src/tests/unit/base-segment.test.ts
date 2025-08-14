@@ -9,25 +9,28 @@ class TestSegment extends BaseSegment {
 		return true;
 	}
 
-	build(data: ClaudeStatusInput, config: StatuslineConfig): SegmentData | null {
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null {
 		return this.createSegment(
 			'test content',
 			'#ff0000',
 			'#ffffff',
 			'#ff0000',
-			'thick'
+			'thick',
 		);
 	}
 }
 
 function run_base_segment_tests() {
 	console.log('🧪 Running BaseSegment tests...\n');
-	
+
 	const segment = new TestSegment();
 	const mock_data: ClaudeStatusInput = {
 		session_id: 'test-session',
 		model: { display_name: 'Claude Sonnet 4' },
-		workspace: { current_dir: '/test' }
+		workspace: { current_dir: '/test' },
 	};
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
@@ -35,15 +38,24 @@ function run_base_segment_tests() {
 		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
-			directory: { clean: 'thick', dirty: 'thick', no_git: 'thick' },
-			git: { clean: 'thick', dirty: 'thick' }
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'thick',
+				ahead: 'thick',
+				behind: 'thick',
+				conflicts: 'thick',
+				staged: 'thick',
+				untracked: 'thick',
+			},
+			session: 'thick',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
-			session: true
-		}
+			session: true,
+		},
 	};
 
 	// Test 1: Basic segment creation
@@ -53,9 +65,12 @@ function run_base_segment_tests() {
 		console.log('❌ FAIL: Segment should return data');
 		return false;
 	}
-	
+
 	if (result.content !== 'test content') {
-		console.log('❌ FAIL: Expected "test content", got:', result.content);
+		console.log(
+			'❌ FAIL: Expected "test content", got:',
+			result.content,
+		);
 		return false;
 	}
 	console.log('✅ PASS: Basic segment creation works');
@@ -63,12 +78,16 @@ function run_base_segment_tests() {
 	// Test 2: Hex color conversion
 	console.log('\nTest 2: Hex color conversion');
 	if (!result.bg_color.startsWith('\x1b[48;5;')) {
-		console.log('❌ FAIL: Background color should be converted to ANSI');
+		console.log(
+			'❌ FAIL: Background color should be converted to ANSI',
+		);
 		return false;
 	}
-	
+
 	if (!result.fg_color.startsWith('\x1b[38;5;')) {
-		console.log('❌ FAIL: Foreground color should be converted to ANSI');
+		console.log(
+			'❌ FAIL: Foreground color should be converted to ANSI',
+		);
 		return false;
 	}
 	console.log('✅ PASS: Hex colors converted to ANSI');
@@ -79,9 +98,12 @@ function run_base_segment_tests() {
 		console.log('❌ FAIL: Expected name "test", got:', segment.name);
 		return false;
 	}
-	
+
 	if (segment.priority !== 10) {
-		console.log('❌ FAIL: Expected priority 10, got:', segment.priority);
+		console.log(
+			'❌ FAIL: Expected priority 10, got:',
+			segment.priority,
+		);
 		return false;
 	}
 	console.log('✅ PASS: Segment properties correct');

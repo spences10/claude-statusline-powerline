@@ -187,7 +187,7 @@ export class GitSegment extends BaseSegment {
 					COLORS.bg.gray,
 					COLORS.white,
 					COLORS.fg.gray,
-					config.separators.directory.no_git,
+					config.separators.git.clean,
 					style_override,
 				);
 			}
@@ -197,7 +197,7 @@ export class GitSegment extends BaseSegment {
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
-				config.separators.directory.no_git,
+				config.separators.git.clean,
 				style_override,
 			);
 		}

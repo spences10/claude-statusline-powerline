@@ -11,7 +11,7 @@ function run_config_tests() {
 		console.log('❌ FAIL: Config should load');
 		return false;
 	}
-	
+
 	if (!config.color_theme || !config.theme || !config.font_profile) {
 		console.log('❌ FAIL: Config missing required properties');
 		return false;
@@ -25,7 +25,7 @@ function run_config_tests() {
 		console.log('❌ FAIL: No separator themes found');
 		return false;
 	}
-	
+
 	const required_themes = ['minimal', 'expressive'];
 	for (const theme of required_themes) {
 		if (!SEPARATOR_THEMES[theme]) {
@@ -42,7 +42,7 @@ function run_config_tests() {
 		console.log('❌ FAIL: No color themes found');
 		return false;
 	}
-	
+
 	const required_color_themes = ['dark', 'electric'];
 	for (const theme of required_color_themes) {
 		if (!THEMES[theme]) {
@@ -54,17 +54,23 @@ function run_config_tests() {
 
 	// Test 4: Theme structure validation
 	console.log('\nTest 4: Theme structure validation');
-	for (const [theme_name, theme] of Object.entries(SEPARATOR_THEMES)) {
+	for (const [theme_name, theme] of Object.entries(
+		SEPARATOR_THEMES,
+	)) {
 		if (!theme.model || !theme.directory || !theme.git) {
-			console.log(`❌ FAIL: Theme ${theme_name} missing required segments`);
+			console.log(
+				`❌ FAIL: Theme ${theme_name} missing required segments`,
+			);
 			return false;
 		}
-		
-		if (!theme.directory.clean || !theme.directory.dirty) {
-			console.log(`❌ FAIL: Theme ${theme_name} missing directory states`);
+
+		if (!theme.directory) {
+			console.log(
+				`❌ FAIL: Theme ${theme_name} missing directory separator`,
+			);
 			return false;
 		}
-		
+
 		if (!theme.git.clean || !theme.git.dirty) {
 			console.log(`❌ FAIL: Theme ${theme_name} missing git states`);
 			return false;

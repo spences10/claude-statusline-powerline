@@ -1,7 +1,6 @@
 import * as path from 'path';
 import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
-import { get_git_info } from '../utils/git';
 import { BaseSegment, SegmentData } from './base';
 
 // Fallback colors
@@ -40,17 +39,7 @@ export class DirectorySegment extends BaseSegment {
 				: full_dir_name;
 		const font_profile = get_font_profile(config.font_profile);
 
-		// Determine separator style based on git status and next segment
-		const git_info = get_git_info(cwd);
-		let separator_style: string;
-
-		if (config.segments.git) {
-			separator_style = git_info?.is_dirty
-				? config.separators.directory.dirty
-				: config.separators.directory.clean;
-		} else {
-			separator_style = config.separators.directory.no_git;
-		}
+		const separator_style = config.separators.directory;
 
 		const theme = config.current_theme?.segments.directory;
 

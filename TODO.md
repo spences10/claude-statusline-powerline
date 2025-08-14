@@ -40,6 +40,18 @@ additional improvements.
   - ✅ Victor Mono shows thin vs thick separators correctly
   - ✅ Color themes and separators fully functional
 
+- [ ] **SEPARATOR_THEMES Configuration** - Review and refactor
+      predefined separator themes
+  - Demo currently uses manual separator configurations instead of
+    SEPARATOR_THEMES
+  - Current implementation: minimal=none,
+    expressive=mix/git-status-changes, curvy=all-curvy,
+    angular=all-angular, double_chevron=bonus-theme
+  - Need to decide whether to keep SEPARATOR_THEMES or use a different
+    approach
+  - Consider removing SEPARATOR_THEMES entirely if manual
+    configuration is preferred
+
 ### 📋 Planned Features
 
 #### Session & Usage Tracking
