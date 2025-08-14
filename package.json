@@ -1,7 +1,7 @@
 {
 	"name": "claude-statusline-powerline",
 	"version": "0.0.11",
-	"description": "Beautiful vim-style powerline statusline for Claude Code with git integration, session tracking, and cost monitoring",
+	"description": "Beautiful powerline-style statusline for Claude Code with git integration, session tracking, and cost monitoring",
 	"main": "dist/statusline.js",
 	"bin": {
 		"claude-statusline-powerline": "./dist/statusline.js",
@@ -40,7 +40,6 @@
 		"typescript",
 		"ai-tools",
 		"productivity",
-		"vim-style",
 		"theming"
 	],
 	"author": "Scott Spence <spences10@gmail.com> (https://scottspence.com)",
