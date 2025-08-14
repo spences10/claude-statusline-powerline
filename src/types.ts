@@ -114,10 +114,11 @@ export interface SessionUsage {
 }
 
 export interface ModelPricing {
-	inputTokens: number;
-	outputTokens: number;
-	cacheTokens: number;
-	contextWindow: number;
+	name?: string;
+	input_tokens: number;
+	output_tokens: number;
+	cache_tokens: number;
+	context_window: number;
 }
 
 export interface SegmentStyleConfig {
