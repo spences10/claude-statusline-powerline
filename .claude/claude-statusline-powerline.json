@@ -1,0 +1,73 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
+  "color_theme": "night-owl",
+  "display": {
+    "lines": [
+      {
+        "segments": {
+          "directory": true,
+          "git": true
+        }
+      },
+      {
+        "segments": {
+          "model": true,
+          "session": true
+        }
+      }
+    ]
+  },
+  "segment_config": {
+    "segments": [
+      {
+        "type": "model",
+        "enabled": true,
+        "order": 1,
+        "style": {
+          "bg_color": "#1e40af",
+          "fg_color": "#000000",
+          "separator": {
+            "style": "double_chevron",
+            "color": "#1e40af"
+          },
+          "icons": {
+            "ai": "🤖"
+          }
+        }
+      },
+      {
+        "type": "directory",
+        "enabled": true,
+        "order": 2,
+        "style": {
+          "separator": {
+            "style": "double_chevron"
+          },
+          "icons": {
+            "folder": "🗄️"
+          }
+        }
+      },
+      {
+        "type": "git",
+        "enabled": true,
+        "order": 3,
+        "style": {
+          "separator": {
+            "style": "curvy"
+          }
+        }
+      },
+      {
+        "type": "session",
+        "enabled": true,
+        "order": 4,
+        "style": {
+          "separator": {
+            "style": "curvy"
+          }
+        }
+      }
+    ]
+  }
+}

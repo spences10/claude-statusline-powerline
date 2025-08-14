@@ -215,7 +215,8 @@ function load_config_from_file(): Partial<StatuslineConfig> | null {
 			name: 'project',
 			path: path.join(
 				process.cwd(),
-				'.claude-statusline-powerline.json',
+				'.claude',
+				'claude-statusline-powerline.json',
 			),
 		},
 	].filter((source) => source.path) as {
