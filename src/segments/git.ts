@@ -67,7 +67,7 @@ export class GitSegment extends BaseSegment {
 					: COLORS.fg.green;
 
 				return this.createSegment(
-					`${branch_icon} ${git_info.branch} ${status_icon}`,
+					`${branch_icon} ${git_info.branch} ${status_icon}`.trimEnd(),
 					fallback_bg,
 					COLORS.black,
 					fallback_separator,
@@ -77,7 +77,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${branch_icon} ${git_info.branch} ${status_icon}`,
+				`${branch_icon} ${git_info.branch} ${status_icon}`.trimEnd(),
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
@@ -98,7 +98,7 @@ export class GitSegment extends BaseSegment {
 
 			if (!theme) {
 				return this.createSegment(
-					`${folder_icon} no git`,
+					`${folder_icon} no git`.trimEnd(),
 					COLORS.bg.gray,
 					COLORS.white,
 					COLORS.fg.gray,
@@ -108,7 +108,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${folder_icon} no git`,
+				`${folder_icon} no git`.trimEnd(),
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
