@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.11
+
+### Patch Changes
+
+- 3bf9e48: git icon/segment alignment
+
 ## 0.0.10
 
 ### Patch Changes
