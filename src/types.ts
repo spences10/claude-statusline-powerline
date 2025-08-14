@@ -12,11 +12,6 @@ export interface ClaudeStatusInput {
 	};
 }
 
-export interface GitInfo {
-	branch: string;
-	is_dirty: boolean;
-}
-
 export interface StatusSegment {
 	content: string;
 	bg_color: string;
@@ -35,44 +30,58 @@ export type SeparatorStyle =
 	| 'double_chevron'
 	| 'none';
 
+// Base segment types that can be extended
+export type SegmentType = 'model' | 'directory' | 'git' | 'session';
+
+// Theme types that can be extended
+export type ThemeType =
+	| 'minimal'
+	| 'expressive'
+	| 'subtle'
+	| 'electric'
+	| 'curvy'
+	| 'angular'
+	| 'custom';
+
+// Color theme types that can be extended
+export type ColorTheme = 'dark' | 'electric' | 'night-owl';
+
+// Font profile types that can be extended
+export type FontProfile = 'powerline' | 'nerd-font';
+
+// Git state keys that can have different separator styles
+export type GitState =
+	| 'clean'
+	| 'dirty'
+	| 'ahead'
+	| 'behind'
+	| 'conflicts'
+	| 'staged'
+	| 'untracked';
+
 export interface SeparatorConfig {
 	model: SeparatorStyle;
-	directory: {
-		clean: SeparatorStyle;
-		dirty: SeparatorStyle;
-		no_git: SeparatorStyle;
-	};
-	git: {
-		clean: SeparatorStyle;
-		dirty: SeparatorStyle;
-	};
+	directory: SeparatorStyle;
+	git: Record<GitState, SeparatorStyle>;
+	session: SeparatorStyle;
 }
 
 export interface SeparatorProfile {
 	default?: SeparatorStyle;
 	overrides?: {
 		model?: SeparatorStyle;
-		directory_clean?: SeparatorStyle;
-		directory_dirty?: SeparatorStyle;
-		git_clean?: SeparatorStyle;
-		git_dirty?: SeparatorStyle;
-		directory_no_git?: SeparatorStyle;
+		directory?: SeparatorStyle;
+		session?: SeparatorStyle;
+	} & {
+		[K in GitState as `git_${K}`]?: SeparatorStyle;
 	};
 }
 
-export interface SegmentVisibility {
-	model: boolean;
-	directory: boolean;
-	git: boolean;
-	session: boolean;
-}
+export interface SegmentVisibility
+	extends Record<SegmentType, boolean> {}
 
-export interface LineSegments {
-	model?: boolean;
-	directory?: boolean;
-	git?: boolean;
-	session?: boolean;
-}
+export interface LineSegments
+	extends Partial<Record<SegmentType, boolean>> {}
 
 export interface DisplayLine {
 	segments: LineSegments;
@@ -82,7 +91,8 @@ export interface DisplayConfig {
 	lines: DisplayLine[];
 }
 
-export interface TruncationConfig {
+export interface TruncationConfig
+	extends Partial<Record<SegmentType, number>> {
 	model_length?: number;
 	directory_length?: number;
 	git_length?: number;
@@ -94,18 +104,11 @@ export interface StatuslineConfig {
 	separatorProfile?: SeparatorProfile;
 	segments: SegmentVisibility;
 	display?: DisplayConfig;
-	theme:
-		| 'minimal'
-		| 'expressive'
-		| 'subtle'
-		| 'electric'
-		| 'curvy'
-		| 'angular'
-		| 'custom';
-	color_theme?: string; // 'dark', 'electric', etc.
+	theme: ThemeType;
+	color_theme?: ColorTheme;
 	current_theme?: any; // Will be populated with actual theme object
 	// Font profile
-	font_profile?: string; // 'powerline', 'nerd-font'
+	font_profile?: FontProfile;
 	// New flexible segment configuration
 	segment_config?: SegmentsConfiguration;
 	// Truncation configuration
@@ -143,7 +146,7 @@ export interface SegmentStyleConfig {
 }
 
 export interface SegmentConfig {
-	type: 'model' | 'directory' | 'git' | 'session';
+	type: SegmentType;
 	enabled: boolean;
 	order: number;
 	style?: SegmentStyleConfig;

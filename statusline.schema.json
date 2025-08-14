@@ -4,6 +4,14 @@
   "title": "Claude Statusline Powerline Configuration",
   "description": "Configuration schema for Claude Code statusline with powerline symbols, git integration, and session tracking",
   "definitions": {
+    "ColorTheme": {
+      "enum": [
+        "dark",
+        "electric",
+        "night-owl"
+      ],
+      "type": "string"
+    },
     "DisplayConfig": {
       "properties": {
         "lines": {
@@ -29,6 +37,13 @@
       ],
       "type": "object"
     },
+    "FontProfile": {
+      "enum": [
+        "nerd-font",
+        "powerline"
+      ],
+      "type": "string"
+    },
     "LineSegments": {
       "properties": {
         "directory": {
@@ -46,6 +61,41 @@
       },
       "type": "object"
     },
+    "Record<GitState,SeparatorStyle>": {
+      "properties": {
+        "ahead": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "behind": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "clean": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "conflicts": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "dirty": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "staged": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "untracked": {
+          "$ref": "#/definitions/SeparatorStyle"
+        }
+      },
+      "required": [
+        "ahead",
+        "behind",
+        "clean",
+        "conflicts",
+        "dirty",
+        "staged",
+        "untracked"
+      ],
+      "type": "object"
+    },
     "SegmentConfig": {
       "properties": {
         "enabled": {
@@ -58,13 +108,7 @@
           "$ref": "#/definitions/SegmentStyleConfig"
         },
         "type": {
-          "enum": [
-            "directory",
-            "git",
-            "model",
-            "session"
-          ],
-          "type": "string"
+          "$ref": "#/definitions/SegmentType"
         }
       },
       "required": [
@@ -188,6 +232,15 @@
       },
       "type": "object"
     },
+    "SegmentType": {
+      "enum": [
+        "directory",
+        "git",
+        "model",
+        "session"
+      ],
+      "type": "string"
+    },
     "SegmentVisibility": {
       "properties": {
         "directory": {
@@ -228,47 +281,23 @@
     "SeparatorConfig": {
       "properties": {
         "directory": {
-          "properties": {
-            "clean": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "dirty": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "no_git": {
-              "$ref": "#/definitions/SeparatorStyle"
-            }
-          },
-          "required": [
-            "clean",
-            "dirty",
-            "no_git"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/SeparatorStyle"
         },
         "git": {
-          "properties": {
-            "clean": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "dirty": {
-              "$ref": "#/definitions/SeparatorStyle"
-            }
-          },
-          "required": [
-            "clean",
-            "dirty"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/Record<GitState,SeparatorStyle>"
         },
         "model": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "session": {
           "$ref": "#/definitions/SeparatorStyle"
         }
       },
       "required": [
         "directory",
         "git",
-        "model"
+        "model",
+        "session"
       ],
       "type": "object"
     },
@@ -278,27 +307,25 @@
           "$ref": "#/definitions/SeparatorStyle"
         },
         "overrides": {
-          "properties": {
-            "directory_clean": {
-              "$ref": "#/definitions/SeparatorStyle"
+          "allOf": [
+            {
+              "properties": {
+                "directory": {
+                  "$ref": "#/definitions/SeparatorStyle"
+                },
+                "model": {
+                  "$ref": "#/definitions/SeparatorStyle"
+                },
+                "session": {
+                  "$ref": "#/definitions/SeparatorStyle"
+                }
+              },
+              "type": "object"
             },
-            "directory_dirty": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "directory_no_git": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "git_clean": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "git_dirty": {
-              "$ref": "#/definitions/SeparatorStyle"
-            },
-            "model": {
-              "$ref": "#/definitions/SeparatorStyle"
+            {
+              "$ref": "#/definitions/{git_clean?:SeparatorStyle;git_dirty?:SeparatorStyle;git_ahead?:SeparatorStyle;git_behind?:SeparatorStyle;git_conflicts?:SeparatorStyle;git_staged?:SeparatorStyle;git_untracked?:SeparatorStyle;}"
             }
-          },
-          "type": "object"
+          ]
         }
       },
       "type": "object"
@@ -319,19 +346,69 @@
       "type": "string",
       "description": "Visual style of powerline separators between segments"
     },
+    "ThemeType": {
+      "enum": [
+        "angular",
+        "curvy",
+        "custom",
+        "electric",
+        "expressive",
+        "minimal",
+        "subtle"
+      ],
+      "type": "string"
+    },
     "TruncationConfig": {
       "properties": {
+        "directory": {
+          "type": "number"
+        },
         "directory_length": {
+          "type": "number"
+        },
+        "git": {
           "type": "number"
         },
         "git_length": {
           "type": "number"
         },
+        "model": {
+          "type": "number"
+        },
         "model_length": {
+          "type": "number"
+        },
+        "session": {
           "type": "number"
         },
         "session_length": {
           "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "{git_clean?:SeparatorStyle;git_dirty?:SeparatorStyle;git_ahead?:SeparatorStyle;git_behind?:SeparatorStyle;git_conflicts?:SeparatorStyle;git_staged?:SeparatorStyle;git_untracked?:SeparatorStyle;}": {
+      "properties": {
+        "git_ahead": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_behind": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_clean": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_conflicts": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_dirty": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_staged": {
+          "$ref": "#/definitions/SeparatorStyle"
+        },
+        "git_untracked": {
+          "$ref": "#/definitions/SeparatorStyle"
         }
       },
       "type": "object"
@@ -343,7 +420,7 @@
       "description": "JSON Schema reference for IntelliSense support"
     },
     "color_theme": {
-      "type": "string",
+      "$ref": "#/definitions/ColorTheme",
       "description": "Color theme for segment backgrounds and text",
       "enum": [
         "dark",
@@ -360,7 +437,7 @@
       "description": "Configure multiline layout and which segments appear on each line"
     },
     "font_profile": {
-      "type": "string",
+      "$ref": "#/definitions/FontProfile",
       "description": "Font compatibility profile determining available separator symbols",
       "enum": [
         "powerline",
@@ -385,6 +462,8 @@
       "description": "Configure separator styles for different segments and states"
     },
     "theme": {
+      "$ref": "#/definitions/ThemeType",
+      "description": "Separator theme preset determining visual style",
       "enum": [
         "minimal",
         "expressive",
@@ -393,8 +472,6 @@
         "curvy",
         "angular"
       ],
-      "type": "string",
-      "description": "Separator theme preset determining visual style",
       "default": "minimal"
     },
     "truncation": {

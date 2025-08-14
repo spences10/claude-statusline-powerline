@@ -89,7 +89,7 @@ export class SessionSegment extends BaseSegment {
 				COLORS.bg.purple,
 				COLORS.white,
 				COLORS.fg.purple,
-				undefined,
+				config.separators.session,
 				style_override,
 			);
 		}
@@ -99,7 +99,7 @@ export class SessionSegment extends BaseSegment {
 			theme.background,
 			theme.foreground,
 			theme.separator_color,
-			undefined,
+			config.separators.session,
 			style_override,
 		);
 	}

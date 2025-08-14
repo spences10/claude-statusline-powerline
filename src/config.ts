@@ -23,14 +23,14 @@ export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
 	'mixed-dynamic': {
 		default: 'curvy',
 		overrides: {
-			directory_dirty: 'lightning',
+			directory: 'lightning',
 			git_dirty: 'flame',
 		},
 	},
 	'minimal-clean': {
 		default: 'thin',
 		overrides: {
-			directory_dirty: 'thick',
+			directory: 'thick',
 			git_dirty: 'thick',
 		},
 	},
@@ -48,82 +48,94 @@ export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
 export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 	minimal: {
 		model: 'thin',
-		directory: {
-			clean: 'thin',
-			dirty: 'thick',
-			no_git: 'thin',
-		},
+		directory: 'thin',
 		git: {
 			clean: 'thin',
 			dirty: 'thick',
+			ahead: 'thin',
+			behind: 'thin',
+			conflicts: 'thick',
+			staged: 'thin',
+			untracked: 'thin',
 		},
+		session: 'thin',
 	},
 
 	expressive: {
 		model: 'wave',
-		directory: {
-			clean: 'wave',
-			dirty: 'flame',
-			no_git: 'thin',
-		},
+		directory: 'wave',
 		git: {
 			clean: 'thick',
 			dirty: 'lightning',
+			ahead: 'flame',
+			behind: 'wave',
+			conflicts: 'lightning',
+			staged: 'thick',
+			untracked: 'thin',
 		},
+		session: 'wave',
 	},
 
 	subtle: {
 		model: 'thick',
-		directory: {
-			clean: 'thick',
-			dirty: 'wave',
-			no_git: 'thin',
-		},
+		directory: 'thick',
 		git: {
 			clean: 'thick',
 			dirty: 'flame',
+			ahead: 'thick',
+			behind: 'thick',
+			conflicts: 'flame',
+			staged: 'thick',
+			untracked: 'thin',
 		},
+		session: 'thick',
 	},
 
 	// Fun experimental preset
 	electric: {
 		model: 'lightning',
-		directory: {
-			clean: 'flame',
-			dirty: 'lightning',
-			no_git: 'flame',
-		},
+		directory: 'flame',
 		git: {
 			clean: 'wave',
 			dirty: 'lightning',
+			ahead: 'lightning',
+			behind: 'wave',
+			conflicts: 'flame',
+			staged: 'lightning',
+			untracked: 'flame',
 		},
+		session: 'lightning',
 	},
 
 	// Powerline-extra-symbols themes for Victor Mono compatibility
 	curvy: {
 		model: 'curvy',
-		directory: {
-			clean: 'curvy',
-			dirty: 'angly',
-			no_git: 'curvy',
-		},
+		directory: 'curvy',
 		git: {
 			clean: 'curvy',
 			dirty: 'flame',
+			ahead: 'curvy',
+			behind: 'curvy',
+			conflicts: 'flame',
+			staged: 'curvy',
+			untracked: 'curvy',
 		},
+		session: 'curvy',
 	},
 
 	angular: {
 		model: 'angly',
-		directory: {
-			clean: 'angly',
-			dirty: 'angly2',
-			no_git: 'angly',
-		},
+		directory: 'angly',
 		git: {
 			clean: 'angly',
 			dirty: 'flame',
+			ahead: 'angly',
+			behind: 'angly',
+			conflicts: 'flame',
+			staged: 'angly',
+			untracked: 'angly',
 		},
+		session: 'angly',
 	},
 };
 
@@ -179,15 +191,17 @@ export function apply_separator_profile(
 
 	return {
 		model: overrides.model || default_style,
-		directory: {
-			clean: overrides.directory_clean || default_style,
-			dirty: overrides.directory_dirty || default_style,
-			no_git: overrides.directory_no_git || default_style,
-		},
+		directory: overrides.directory || default_style,
 		git: {
 			clean: overrides.git_clean || default_style,
 			dirty: overrides.git_dirty || default_style,
+			ahead: overrides.git_ahead || default_style,
+			behind: overrides.git_behind || default_style,
+			conflicts: overrides.git_conflicts || default_style,
+			staged: overrides.git_staged || default_style,
+			untracked: overrides.git_untracked || default_style,
 		},
+		session: overrides.session || default_style,
 	};
 }
 
@@ -198,11 +212,27 @@ function get_default_segment_visibility(): SegmentVisibility {
 
 // Load config from JSON file
 function load_config_from_file(): Partial<StatuslineConfig> | null {
+	// If STATUSLINE_CONFIG is set (demo mode), use only that config
+	if (process.env.STATUSLINE_CONFIG) {
+		try {
+			if (fs.existsSync(process.env.STATUSLINE_CONFIG)) {
+				const file_content = fs.readFileSync(
+					process.env.STATUSLINE_CONFIG,
+					'utf8',
+				);
+				return JSON.parse(file_content);
+			}
+		} catch (error) {
+			console.error(
+				`Failed to load config from ${process.env.STATUSLINE_CONFIG}:`,
+				error,
+			);
+		}
+		return null;
+	}
+
+	// Normal config loading hierarchy
 	const config_sources = [
-		{
-			name: 'environment',
-			path: process.env.STATUSLINE_CONFIG,
-		},
 		{
 			name: 'global',
 			path: path.join(
@@ -219,10 +249,7 @@ function load_config_from_file(): Partial<StatuslineConfig> | null {
 				'claude-statusline-powerline.json',
 			),
 		},
-	].filter((source) => source.path) as {
-		name: string;
-		path: string;
-	}[];
+	];
 
 	let merged_config: Partial<StatuslineConfig> = {};
 

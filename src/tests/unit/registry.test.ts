@@ -22,8 +22,11 @@ function run_registry_tests() {
 			console.log('❌ FAIL: Segment missing name or priority');
 			return false;
 		}
-		
-		if (typeof segment.is_enabled !== 'function' || typeof segment.build !== 'function') {
+
+		if (
+			typeof segment.is_enabled !== 'function' ||
+			typeof segment.build !== 'function'
+		) {
 			console.log('❌ FAIL: Segment missing required methods');
 			return false;
 		}
@@ -48,26 +51,44 @@ function run_registry_tests() {
 		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
-			directory: { clean: 'thick', dirty: 'thick', no_git: 'thick' },
-			git: { clean: 'thick', dirty: 'thick' }
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'thick',
+				ahead: 'thick',
+				behind: 'thick',
+				conflicts: 'thick',
+				staged: 'thick',
+				untracked: 'thick',
+			},
+			session: 'thick',
 		},
 		segments: {
 			model: true,
 			directory: false,
 			git: true,
-			session: false
-		}
+			session: false,
+		},
 	};
-	
-	const enabled_segments = segmentRegistry.get_enabled_segments(mock_config);
-	const enabled_names = enabled_segments.map(s => s.name.toLowerCase());
-	
-	if (enabled_names.includes('directory') || enabled_names.includes('session')) {
+
+	const enabled_segments =
+		segmentRegistry.get_enabled_segments(mock_config);
+	const enabled_names = enabled_segments.map((s) =>
+		s.name.toLowerCase(),
+	);
+
+	if (
+		enabled_names.includes('directory') ||
+		enabled_names.includes('session')
+	) {
 		console.log('❌ FAIL: Disabled segments should not be enabled');
 		return false;
 	}
-	
-	if (!enabled_names.includes('model') || !enabled_names.includes('git')) {
+
+	if (
+		!enabled_names.includes('model') ||
+		!enabled_names.includes('git')
+	) {
 		console.log('❌ FAIL: Enabled segments should be included');
 		return false;
 	}
@@ -76,8 +97,10 @@ function run_registry_tests() {
 	// Test 5: Expected segments exist
 	console.log('\nTest 5: Expected segments exist');
 	const expected_segments = ['model', 'directory', 'git', 'session'];
-	const registered_names = all_segments.map(s => s.name.toLowerCase());
-	
+	const registered_names = all_segments.map((s) =>
+		s.name.toLowerCase(),
+	);
+
 	for (const expected of expected_segments) {
 		if (!registered_names.includes(expected)) {
 			console.log(`❌ FAIL: Expected segment not found: ${expected}`);
