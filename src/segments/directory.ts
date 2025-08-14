@@ -24,7 +24,13 @@ export class DirectorySegment extends BaseSegment {
 		config: StatuslineConfig,
 	): SegmentData | null {
 		const cwd = data.workspace?.current_dir || process.cwd();
-		const dir_name = path.basename(cwd) || '~';
+		const full_dir_name = path.basename(cwd) || '~';
+
+		// Truncate long directory names
+		const dir_name =
+			full_dir_name.length > 25
+				? `${full_dir_name.slice(0, 22)}...`
+				: full_dir_name;
 		const font_profile = get_font_profile(config.font_profile);
 
 		// Determine separator style based on git status and next segment

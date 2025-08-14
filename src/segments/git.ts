@@ -38,6 +38,12 @@ export class GitSegment extends BaseSegment {
 		if (git_info) {
 			const style_override = this.getSegmentConfig(config);
 
+			// Truncate long branch names
+			const branch_name =
+				git_info.branch.length > 25
+					? `${git_info.branch.slice(0, 22)}...`
+					: git_info.branch;
+
 			// Get icons with potential user overrides
 			const branch_icon = get_symbol(
 				font_profile,
@@ -67,7 +73,7 @@ export class GitSegment extends BaseSegment {
 					: COLORS.fg.green;
 
 				return this.createSegment(
-					`${branch_icon} ${git_info.branch} ${status_icon}`.trimEnd(),
+					`${branch_icon} ${branch_name} ${status_icon}`.trimEnd(),
 					fallback_bg,
 					COLORS.black,
 					fallback_separator,
@@ -77,7 +83,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${branch_icon} ${git_info.branch} ${status_icon}`.trimEnd(),
+				`${branch_icon} ${branch_name} ${status_icon}`.trimEnd(),
 				theme.background,
 				theme.foreground,
 				theme.separator_color,

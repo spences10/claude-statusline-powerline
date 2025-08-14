@@ -181,6 +181,9 @@
             }
           },
           "type": "object"
+        },
+        "truncation_length": {
+          "type": "number"
         }
       },
       "type": "object"
@@ -315,6 +318,23 @@
       ],
       "type": "string",
       "description": "Visual style of powerline separators between segments"
+    },
+    "TruncationConfig": {
+      "properties": {
+        "directory_length": {
+          "type": "number"
+        },
+        "git_length": {
+          "type": "number"
+        },
+        "model_length": {
+          "type": "number"
+        },
+        "session_length": {
+          "type": "number"
+        }
+      },
+      "type": "object"
     }
   },
   "properties": {
@@ -376,6 +396,9 @@
       "type": "string",
       "description": "Separator theme preset determining visual style",
       "default": "minimal"
+    },
+    "truncation": {
+      "$ref": "#/definitions/TruncationConfig"
     }
   },
   "type": "object",
