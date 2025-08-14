@@ -15,13 +15,20 @@ export class ModelSegment extends BaseSegment {
 		config: StatuslineConfig,
 	): SegmentData | null {
 		const model = data.model?.display_name || 'Claude';
+		const style_override = this.getSegmentConfig(config);
+
+		const max_length =
+			style_override?.truncation_length ||
+			config.truncation?.model_length ||
+			15;
 
 		// Truncate long model names
 		const display_model =
-			model.length > 15 ? `${model.slice(0, 12)}...` : model;
+			model.length > max_length
+				? `${model.slice(0, max_length - 3)}...`
+				: model;
 
 		const theme = config.current_theme?.segments.model;
-		const style_override = this.getSegmentConfig(config);
 		const font_profile = get_font_profile(config.font_profile);
 
 		// Get AI icon with potential user override

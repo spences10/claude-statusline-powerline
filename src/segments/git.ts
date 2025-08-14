@@ -38,10 +38,15 @@ export class GitSegment extends BaseSegment {
 		if (git_info) {
 			const style_override = this.getSegmentConfig(config);
 
+			const max_length =
+				style_override?.truncation_length ||
+				config.truncation?.git_length ||
+				25;
+
 			// Truncate long branch names
 			const branch_name =
-				git_info.branch.length > 25
-					? `${git_info.branch.slice(0, 22)}...`
+				git_info.branch.length > max_length
+					? `${git_info.branch.slice(0, max_length - 3)}...`
 					: git_info.branch;
 
 			// Get icons with potential user overrides
