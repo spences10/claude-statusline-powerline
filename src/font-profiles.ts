@@ -11,6 +11,13 @@ export interface FontProfile {
 		error: string;
 		info: string;
 		cost: string;
+		ahead: string;
+		behind: string;
+		conflicts: string;
+		staged_add: string;
+		staged_del: string;
+		unstaged: string;
+		untracked: string;
 	};
 	separators: {
 		basic: {
@@ -39,7 +46,7 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 		name: 'Powerline Compatible',
 		description: 'Basic powerline fonts with core symbol support',
 		symbols: {
-			branch: ' \uE0A0', // intentional space for alignment
+			branch: ' \uE0A0',
 			dirty: '\u00B1',
 			clean: '\u2713',
 			folder: '📁',
@@ -48,6 +55,13 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			error: '\u2717',
 			info: '\u2022',
 			cost: '💰',
+			ahead: '⇡',
+			behind: '⇣',
+			conflicts: '⚠️',
+			staged_add: '\u207A', // superscript plus ⁺
+			staged_del: '\u207B', // superscript minus ⁻
+			unstaged: '\u02DC', // small tilde ˜
+			untracked: '\u1D58', // superscript u ᵘ
 		},
 		separators: {
 			basic: {
@@ -78,11 +92,18 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 			dirty: '\u00B1',
 			clean: '\u2713',
 			folder: '\uF07B',
-			ai: '\uF544', // Nerd Font robot icon
+			ai: '\uF544',
 			warning: '\uF071',
 			error: '\uF00D',
 			info: '\uF05A',
 			cost: '\uF0D6',
+			ahead: '\uF062',
+			behind: '\uF063',
+			conflicts: '\uF071',
+			staged_add: '\uF067',
+			staged_del: '\uF068',
+			unstaged: '\uF111',
+			untracked: '\uF128',
 		},
 		separators: {
 			basic: {

@@ -13,7 +13,8 @@ support.
 ## ✨ Features
 
 - 🎨 **Powerline styling** with beautiful separators and colors
-- 🌿 **Git integration** - shows branch name and dirty status
+- 🌿 **Enhanced git integration** - comprehensive status with
+  superscript symbols
 - 📁 **Directory display** - current working directory
 - 📱 **Model info** - shows which Claude model you're using
 - 💰 **Session tracking** - real-time token usage and cost estimation
@@ -223,7 +224,14 @@ segment styles:
 - `folder` - Directory/folder icon
 - `branch` - Git branch icon
 - `clean` - Clean git status icon
-- `dirty` - Dirty git status icon
+- `dirty` - Dirty git status icon (fallback)
+- `ahead` - Commits ahead of remote
+- `behind` - Commits behind remote
+- `conflicts` - Merge conflicts
+- `staged_add` - Staged additions/modifications
+- `staged_del` - Staged deletions
+- `unstaged` - Unstaged working directory changes
+- `untracked` - Untracked files
 - `cost` - Session cost/usage icon
 
 You can use any Unicode character, emoji, or Nerd Font icon code
@@ -247,6 +255,65 @@ For complex statuslines, use multi-line layouts:
 				"segments": {
 					"git": true,
 					"session": true
+				}
+			}
+		]
+	}
+}
+```
+
+## 🌿 Enhanced Git Status
+
+The git segment displays comprehensive repository information using
+beautiful superscript symbols optimized for Victor Mono font:
+
+### Git Status Symbols
+
+**Powerline Font Profile:**
+
+- `⇡2` - 2 commits ahead of remote
+- `⇣1` - 1 commit behind remote
+- `⚠️` - Merge conflicts present
+- `⁺3` - 3 staged additions/modifications
+- `⁻1` - 1 staged deletion
+- `˜2` - 2 unstaged changes in working directory
+- `ᵘ4` - 4 untracked files
+
+**Example outputs:**
+
+- Clean repo: ` main ✓`
+- Complex status: ` main ⇡2 ⁺3 ˜1 ᵘ2`
+- With conflicts: ` main ⚠️ ⁺1`
+- Behind remote: ` main ⇣3 ˜2`
+
+### Truncation Control
+
+Long branch names and directory names are automatically truncated. You
+can configure the maximum length:
+
+```json
+{
+	"truncation": {
+		"model_length": 15,
+		"directory_length": 25,
+		"git_length": 20,
+		"session_length": 30
+	}
+}
+```
+
+Or override per segment:
+
+```json
+{
+	"segment_config": {
+		"segments": [
+			{
+				"type": "git",
+				"enabled": true,
+				"order": 3,
+				"style": {
+					"truncation_length": 15
 				}
 			}
 		]
@@ -306,7 +373,7 @@ powerline-style status.
 
 1. **Model** (Blue) - Shows the Claude model name
 2. **Directory** (Gray) - Shows current directory name
-3. **Git** (Green/Yellow) - Shows branch and status (✓ clean, ± dirty)
+3. **Git** (Green/Yellow) - Enhanced status with superscript symbols
 4. **Session** (Purple) - Token usage, cost, and context monitoring
    - Format: `💰 {tokens}k • ${cost} {context}`
    - Context shows: remaining tokens (< 75%), percentage (75-89%), or

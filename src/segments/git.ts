@@ -55,9 +55,83 @@ export class GitSegment extends BaseSegment {
 				'branch',
 				style_override?.icons,
 			);
-			const status_icon = git_info.is_dirty
-				? get_symbol(font_profile, 'dirty', style_override?.icons)
-				: get_symbol(font_profile, 'clean', style_override?.icons);
+
+			// Build status indicators
+			let status_parts: string[] = [];
+
+			// Ahead/behind arrows with counts
+			if (git_info.ahead > 0) {
+				const ahead_icon = get_symbol(
+					font_profile,
+					'ahead',
+					style_override?.icons,
+				);
+				status_parts.push(`${ahead_icon}${git_info.ahead}`);
+			}
+			if (git_info.behind > 0) {
+				const behind_icon = get_symbol(
+					font_profile,
+					'behind',
+					style_override?.icons,
+				);
+				status_parts.push(`${behind_icon}${git_info.behind}`);
+			}
+
+			// Conflict warning
+			if (git_info.conflicts) {
+				const conflicts_icon = get_symbol(
+					font_profile,
+					'conflicts',
+					style_override?.icons,
+				);
+				status_parts.push(conflicts_icon);
+			}
+
+			// Staged additions/deletions counts (only show if > 0)
+			if (git_info.staged_add > 0) {
+				const staged_add_icon = get_symbol(
+					font_profile,
+					'staged_add',
+					style_override?.icons,
+				);
+				status_parts.push(`${staged_add_icon}${git_info.staged_add}`);
+			}
+			if (git_info.staged_del > 0) {
+				const staged_del_icon = get_symbol(
+					font_profile,
+					'staged_del',
+					style_override?.icons,
+				);
+				status_parts.push(`${staged_del_icon}${git_info.staged_del}`);
+			}
+
+			// Unstaged changes count
+			if (git_info.unstaged > 0) {
+				const unstaged_icon = get_symbol(
+					font_profile,
+					'unstaged',
+					style_override?.icons,
+				);
+				status_parts.push(`${unstaged_icon}${git_info.unstaged}`);
+			}
+			if (git_info.untracked > 0) {
+				const untracked_icon = get_symbol(
+					font_profile,
+					'untracked',
+					style_override?.icons,
+				);
+				status_parts.push(`${untracked_icon}${git_info.untracked}`);
+			}
+
+			// Fallback to basic clean/dirty if no detailed status
+			if (status_parts.length === 0) {
+				const status_icon = git_info.is_dirty
+					? get_symbol(font_profile, 'dirty', style_override?.icons)
+					: get_symbol(font_profile, 'clean', style_override?.icons);
+				status_parts.push(status_icon);
+			}
+
+			const status_display = status_parts.join(' ');
 
 			const separator_style = git_info.is_dirty
 				? config.separators.git.dirty
@@ -78,7 +152,7 @@ export class GitSegment extends BaseSegment {
 					: COLORS.fg.green;
 
 				return this.createSegment(
-					`${branch_icon} ${branch_name} ${status_icon}`.trimEnd(),
+					`${branch_icon} ${branch_name} ${status_display}`.trimEnd(),
 					fallback_bg,
 					COLORS.black,
 					fallback_separator,
@@ -88,7 +162,7 @@ export class GitSegment extends BaseSegment {
 			}
 
 			return this.createSegment(
-				`${branch_icon} ${branch_name} ${status_icon}`.trimEnd(),
+				`${branch_icon} ${branch_name} ${status_display}`.trimEnd(),
 				theme.background,
 				theme.foreground,
 				theme.separator_color,
