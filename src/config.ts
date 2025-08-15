@@ -59,6 +59,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'thin',
 		},
 		session: 'thin',
+		context: 'thin',
 	},
 
 	expressive: {
@@ -74,6 +75,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'thin',
 		},
 		session: 'wave',
+		context: 'curvy',
 	},
 
 	subtle: {
@@ -89,6 +91,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'thin',
 		},
 		session: 'thick',
+		context: 'thick',
 	},
 
 	// Fun experimental preset
@@ -105,6 +108,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'flame',
 		},
 		session: 'lightning',
+		context: 'lightning',
 	},
 
 	// Powerline-extra-symbols themes for Victor Mono compatibility
@@ -121,6 +125,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'curvy',
 		},
 		session: 'curvy',
+		context: 'curvy',
 	},
 
 	angular: {
@@ -136,6 +141,7 @@ export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
 			untracked: 'angly',
 		},
 		session: 'angly',
+		context: 'angly',
 	},
 };
 
@@ -145,6 +151,7 @@ export const DEFAULT_SEGMENTS: SegmentVisibility = {
 	directory: true,
 	git: true,
 	session: true,
+	context: true, // enabled by default
 };
 
 // Default segments configuration with ordering and basic styling
@@ -202,6 +209,7 @@ export function apply_separator_profile(
 			untracked: overrides.git_untracked || default_style,
 		},
 		session: overrides.session || default_style,
+		context: overrides.context || default_style,
 	};
 }
 

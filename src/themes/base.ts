@@ -32,6 +32,10 @@ export abstract class BaseTheme implements StatuslineTheme {
 				this.palette.secondary,
 				this.palette.text_light,
 			),
+			context: create_segment_theme(
+				'#0891b2', // Cyan/teal for context (brain/cache)
+				this.palette.text_light,
+			),
 		};
 	}
 }

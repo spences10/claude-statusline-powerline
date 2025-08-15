@@ -53,6 +53,9 @@
     "LineSegments": {
       "description": "Defines which segments appear on a specific line\nSegments are optional (can be omitted from a line)",
       "properties": {
+        "context": {
+          "type": "boolean"
+        },
         "directory": {
           "type": "boolean"
         },
@@ -249,8 +252,9 @@
       "type": "object"
     },
     "SegmentType": {
-      "description": "Types of segments that can be displayed in the statusline\n- `model`: Shows current AI model information\n- `directory`: Shows current directory/path\n- `git`: Shows git repository status\n- `session`: Shows session usage/cost information",
+      "description": "Types of segments that can be displayed in the statusline\n- `model`: Shows current AI model information\n- `directory`: Shows current directory/path\n- `git`: Shows git repository status\n- `session`: Shows session usage/cost information\n- `context`: Shows cache hit rate and context usage",
       "enum": [
+        "context",
         "directory",
         "git",
         "model",
@@ -261,6 +265,9 @@
     "SegmentVisibility": {
       "description": "Defines which segments are visible in the statusline\nAll segment types must be explicitly enabled/disabled",
       "properties": {
+        "context": {
+          "type": "boolean"
+        },
         "directory": {
           "type": "boolean"
         },
@@ -275,6 +282,7 @@
         }
       },
       "required": [
+        "context",
         "directory",
         "git",
         "model",
@@ -301,6 +309,10 @@
     "SeparatorConfig": {
       "description": "Configuration for separator styles across all segments\nDefines which separator style to use for each segment type and git state",
       "properties": {
+        "context": {
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Separator style for the context segment"
+        },
         "directory": {
           "$ref": "#/definitions/SeparatorStyle",
           "description": "Separator style for the directory segment"
@@ -319,6 +331,7 @@
         }
       },
       "required": [
+        "context",
         "directory",
         "git",
         "model",
@@ -337,6 +350,10 @@
           "allOf": [
             {
               "properties": {
+                "context": {
+                  "$ref": "#/definitions/SeparatorStyle",
+                  "description": "Override separator for context segment"
+                },
                 "directory": {
                   "$ref": "#/definitions/SeparatorStyle",
                   "description": "Override separator for directory segment"
@@ -393,6 +410,9 @@
     "TruncationConfig": {
       "description": "Configuration for truncating segment content when too long",
       "properties": {
+        "context": {
+          "type": "number"
+        },
         "directory": {
           "type": "number"
         },

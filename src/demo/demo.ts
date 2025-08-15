@@ -29,12 +29,14 @@ const DEMO_COMBINATIONS = [
 				untracked: 'none',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
@@ -54,16 +56,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'dark',
+		color_theme: 'dark',
 		desc: 'Dark + Curvy',
 		layout: 'single',
 		separators: {
@@ -79,16 +83,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'curvy',
 			},
 			session: 'curvy',
+			context: 'curvy',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'dark',
+		color_theme: 'dark',
 		desc: 'Dark + Angular',
 		layout: 'single',
 		separators: {
@@ -104,16 +110,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'angly',
 			},
 			session: 'angly',
+			context: 'angly',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'dark',
+		color_theme: 'dark',
 		desc: 'Dark + Double Chevron',
 		layout: 'single',
 		separators: {
@@ -129,18 +137,20 @@ const DEMO_COMBINATIONS = [
 				untracked: 'double_chevron',
 			},
 			session: 'double_chevron',
+			context: 'double_chevron',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 
 	// Electric theme combinations
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Minimal',
 		layout: 'single',
 		separators: {
@@ -156,16 +166,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'none',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Expressive',
 		layout: 'single',
 		separators: {
@@ -181,16 +193,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Electric',
 		layout: 'single',
 		separators: {
@@ -206,16 +220,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Subtle',
 		layout: 'single',
 		separators: {
@@ -231,18 +247,20 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 
 	// Night Owl theme combinations
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Minimal',
 		layout: 'single',
 		separators: {
@@ -258,16 +276,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'none',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Expressive',
 		layout: 'single',
 		separators: {
@@ -283,16 +303,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Curvy',
 		layout: 'single',
 		separators: {
@@ -308,16 +330,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'curvy',
 			},
 			session: 'curvy',
+			context: 'curvy',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Angular',
 		layout: 'single',
 		separators: {
@@ -333,18 +357,20 @@ const DEMO_COMBINATIONS = [
 				untracked: 'angly',
 			},
 			session: 'angly',
+			context: 'angly',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 
 	// Multi-line layouts
 	{
-		color: 'dark',
+		color_theme: 'dark',
 		desc: 'Dark + Minimal (2-line)',
 		layout: 'two-line',
 		separators: {
@@ -360,6 +386,7 @@ const DEMO_COMBINATIONS = [
 				untracked: 'none',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		display: {
 			lines: [
@@ -369,7 +396,7 @@ const DEMO_COMBINATIONS = [
 		},
 	},
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Expressive (2-line)',
 		layout: 'two-line',
 		separators: {
@@ -385,6 +412,7 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		display: {
 			lines: [
@@ -394,7 +422,7 @@ const DEMO_COMBINATIONS = [
 		},
 	},
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Curvy (2-line)',
 		layout: 'two-line',
 		separators: {
@@ -410,6 +438,7 @@ const DEMO_COMBINATIONS = [
 				untracked: 'curvy',
 			},
 			session: 'curvy',
+			context: 'curvy',
 		},
 		display: {
 			lines: [
@@ -421,7 +450,7 @@ const DEMO_COMBINATIONS = [
 
 	// Special segment combinations
 	{
-		color: 'dark',
+		color_theme: 'dark',
 		desc: 'Dark + Minimal (model only)',
 		layout: 'minimal',
 		separators: {
@@ -437,16 +466,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'none',
 			},
 			session: 'none',
+			context: 'none',
 		},
 		segments: {
 			model: true,
 			directory: false,
 			git: false,
 			session: false,
+			context: false,
 		},
 	},
 	{
-		color: 'electric',
+		color_theme: 'electric',
 		desc: 'Electric + Electric (git focus)',
 		layout: 'git-focus',
 		separators: {
@@ -462,16 +493,18 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		segments: {
 			model: false,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	},
 	{
-		color: 'night-owl',
+		color_theme: 'night-owl',
 		desc: 'Night Owl + Expressive (workspace)',
 		layout: 'workspace',
 		separators: {
@@ -487,6 +520,7 @@ const DEMO_COMBINATIONS = [
 				untracked: 'thin',
 			},
 			session: 'wave',
+			context: 'wave',
 		},
 		display: {
 			lines: [

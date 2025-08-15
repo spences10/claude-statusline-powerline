@@ -21,6 +21,7 @@ export const FONT_PROFILES: Record<string, FontProfileData> = {
 			staged_del: '\u207B', // superscript minus ⁻
 			unstaged: '\u02DC', // small tilde ˜
 			untracked: '\u1D58', // superscript u ᵘ
+			brain: '🧠',
 		},
 		separators: {
 			basic: {
@@ -63,6 +64,7 @@ export const FONT_PROFILES: Record<string, FontProfileData> = {
 			staged_del: '\uF068',
 			unstaged: '\uF111',
 			untracked: '\uF128',
+			brain: '\uF7DC', // nerd font brain icon
 		},
 		separators: {
 			basic: {

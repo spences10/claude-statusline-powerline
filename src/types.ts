@@ -67,8 +67,14 @@ export type SeparatorStyle =
  * - `directory`: Shows current directory/path
  * - `git`: Shows git repository status
  * - `session`: Shows session usage/cost information
+ * - `context`: Shows cache hit rate and context usage
  */
-export type SegmentType = 'model' | 'directory' | 'git' | 'session';
+export type SegmentType =
+	| 'model'
+	| 'directory'
+	| 'git'
+	| 'session'
+	| 'context';
 
 /**
  * Available themes that define separator and styling patterns
@@ -136,6 +142,8 @@ export interface SeparatorConfig {
 	git: Record<GitState, SeparatorStyle>;
 	/** Separator style for the session segment */
 	session: SeparatorStyle;
+	/** Separator style for the context segment */
+	context: SeparatorStyle;
 }
 
 /**
@@ -153,6 +161,8 @@ export interface SeparatorProfile {
 		directory?: SeparatorStyle;
 		/** Override separator for session segment */
 		session?: SeparatorStyle;
+		/** Override separator for context segment */
+		context?: SeparatorStyle;
 	} & {
 		/** Override separators for specific git states (e.g., git_dirty, git_clean) */
 		[K in GitState as `git_${K}`]?: SeparatorStyle;
@@ -362,6 +372,7 @@ export interface StatuslineTheme {
 			dirty: SegmentTheme;
 		};
 		session: SegmentTheme;
+		context: SegmentTheme;
 	};
 }
 
@@ -392,6 +403,7 @@ export interface FontProfileData {
 		staged_del: string;
 		unstaged: string;
 		untracked: string;
+		brain: string;
 	};
 	separators: {
 		basic: {
