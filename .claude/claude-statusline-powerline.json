@@ -1,5 +1,5 @@
 {
-  "$schema": "/home/scott/repos/claude-statusline-powerline/statusline.schema.json",
+  "$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
   "color_theme": "night-owl",
   "display": {
     "lines": [
@@ -74,7 +74,8 @@
             "style": "curvy"
           }
         }
-      },{
+      },
+      {
         "type": "context",
         "enabled": true,
         "order": 5,
