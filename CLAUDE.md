@@ -65,7 +65,8 @@ pnpm run release      # Build and publish
 
 ### Configuration System
 
-- **Config**: `src/config.ts` - Handles JSON file loading, theme application
+- **Config**: `src/config.ts` - Handles JSON file loading, theme
+  application
 - **Themes**: `src/themes/` - Color themes (dark, electric) with
   segment-specific colors
 - **Separators**: Multiple styles (thick, thin, curvy, flame,
@@ -76,15 +77,19 @@ pnpm run release      # Build and publish
 ### JSON Configuration
 
 Configuration is handled via JSON files:
+
 - `~/.claude/claude-statusline-powerline.json` (global)
 - `./.claude-statusline-powerline.json` (project-specific)
 - `./statusline.config.json` (alternative name)
 - `./.statusline.json` (alternative name)
 
 **Configuration options:**
+
 - `color_theme` - Color theme ("dark", "electric", "night-owl")
-- `theme` - Separator theme ("minimal", "expressive", "subtle", "electric", "curvy", "angular")
-- `separator_profile` - Override separators ("all-curvy", "mixed-dynamic", etc.)
+- `theme` - Separator theme ("minimal", "expressive", "subtle",
+  "electric", "curvy", "angular")
+- `separator_profile` - Override separators ("all-curvy",
+  "mixed-dynamic", etc.)
 - `font_profile` - Font compatibility ("powerline", "nerd-font")
 - `segments` - Toggle individual segments and set display order
 

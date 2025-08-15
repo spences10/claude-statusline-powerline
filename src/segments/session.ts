@@ -1,19 +1,7 @@
 import * as fs from 'fs';
 import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
-import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
 import { BaseSegment, SegmentData } from './base';
-
-// ANSI color codes
-const COLORS = {
-	bg: {
-		purple: '\x1b[45m',
-	},
-	fg: {
-		purple: '\x1b[35m',
-	},
-	white: '\x1b[97m',
-};
 
 interface SessionUsage {
 	totalInputTokens: number;
@@ -71,34 +59,15 @@ export class SessionSegment extends BaseSegment {
 			context_display = ` ${Math.round(context_remaining / 1000)}k left`;
 		}
 
+		const { style_override, get_icon } = this.setup_segment(config);
 		const theme = config.current_theme?.segments.session;
-		const style_override = this.getSegmentConfig(config);
-		const font_profile = get_font_profile(config.font_profile);
+		const cost_icon = get_icon('cost');
+		const content = `${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`;
 
-		// Get cost icon with potential user override
-		const cost_icon = get_symbol(
-			font_profile,
-			'cost',
-			style_override?.icons,
-		);
-
-		if (!theme) {
-			// Fallback colors
-			return this.createSegment(
-				`${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
-				COLORS.bg.purple,
-				COLORS.white,
-				COLORS.fg.purple,
-				config.separators.session,
-				style_override,
-			);
-		}
-
-		return this.createSegment(
-			`${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`,
-			theme.background,
-			theme.foreground,
-			theme.separator_color,
+		return this.create_segment_with_fallback(
+			content,
+			theme,
+			'session',
 			config.separators.session,
 			style_override,
 		);

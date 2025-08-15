@@ -5,19 +5,15 @@ import {
 	DisplayLine,
 	StatuslineConfig,
 } from '../types';
+import { ANSI_RESET } from '../utils/ansi';
 import { segmentRegistry } from './registry';
-
-// ANSI color codes
-const COLORS = {
-	reset: '\x1b[0m',
-};
 
 function create_segment(
 	content: string,
 	bg_color: string,
 	fg_color: string,
 ): string {
-	return `${bg_color}${fg_color}${content} ${COLORS.reset}`;
+	return `${bg_color}${fg_color}${content} ${ANSI_RESET}`;
 }
 
 function build_line_segments(
