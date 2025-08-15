@@ -7,38 +7,7 @@ additional improvements.
 
 ## 🎯 Current Status
 
-### ✅ Completed Features
-
-- [x] Basic statusline with Model, Directory, and Git segments
-- [x] Powerline symbols and separators (thick, thin, flame, wave,
-      lightning)
-- [x] Theme-based configuration (minimal, expressive, subtle,
-      electric)
-- [x] Git branch and dirty status indicators
-- [x] Configurable separator styles based on git status
-- [x] **Session tracking with usage metrics** - Real-time token and
-      cost display with cumulative session totals
-- [x] **Cost tracking and budget monitoring** - Model-specific pricing
-      with context window warnings at 75% and 90%
-- [x] **Context window tracking** - Shows remaining tokens with smart
-      display (tokens left vs percentage warnings)
-- [x] **Transcript parsing** - Direct JSONL parsing of Claude Code's
-      session transcripts for accurate cumulative usage
-- [x] **🎨 MODULAR THEME SYSTEM** - Complete architectural refactor
-      with:
-  - [x] Segment registry for pluggable architecture
-  - [x] Color theme system (Dark vs Electric themes working!)
-  - [x] Separator style system with multiple font profile support
-  - [x] TypeScript demo script with comprehensive testing
-  - [x] Theme + separator + segment visibility combinations
-
 ### 🐛 Current Issues (High Priority)
-
-- [x] **SEPARATOR STYLES WORKING** - Migrated to JSON configuration
-  - ✅ Complete migration from environment variables to JSON config
-  - ✅ All separator themes work via JSON configuration
-  - ✅ Victor Mono shows thin vs thick separators correctly
-  - ✅ Color themes and separators fully functional
 
 - [ ] **SEPARATOR_THEMES Configuration** - Review and refactor
       predefined separator themes
@@ -56,20 +25,9 @@ additional improvements.
 
 #### Session & Usage Tracking
 
-- [x] **Session segment** - Track current session usage
-  - [x] Token counting (input/output/cached) with cumulative totals
-  - [x] Cost calculation in dollars with model-specific pricing
-  - [x] Context window tracking with smart display (75%: show %, 90%+:
-        warning !%)
-  - [x] Session duration calculation from first to last message
-  - [x] Direct transcript parsing (JSONL format, no external
-        dependencies)
-  - [x] Real-time parsing of entire session history for accurate
-        totals
-  - [ ] **Cache hit rate tracking** - Show cache efficiency with
-        `cache_read_input_tokens` vs `cache_creation_input_tokens`
-        ratio for performance insights (e.g., "85% cached" or cache
-        hit icon)
+- [ ] **Cache hit rate tracking** - Show cache efficiency with
+      `cache_read_input_tokens` vs `cache_creation_input_tokens` ratio
+      for performance insights (e.g., "85% cached" or cache hit icon)
 
 - [ ] **Daily usage segment** ("today")
   - [ ] Daily token and cost aggregation
@@ -78,29 +36,11 @@ additional improvements.
   - [ ] Visual indicators: "25%" normal, "+75%" moderate, "!85%"
         warning
 
-#### Enhanced Git Integration
-
-- [ ] **Comprehensive git status symbols**
-  - [ ] Current: `✓` clean, `±` dirty
-  - [ ] Add: `⚠` conflicts, `↑3` ahead, `↓2` behind
-  - [ ] Add: `⇕` diverged, `?` untracked files count
-  - [ ] Add: `+` staged changes, `-` deletions
-  - [ ] Git SHA display (short hash, configurable)
-  - [ ] **Git commit ahead/behind from transcript data** - Use `⇡` up
-        arrow / `⇣` down arrow with commit numbers from Claude Code
-        session transcript data
-
-#### AI Model Enhancement
-
-- [ ] **Configurable AI model symbols**
-  - [ ] Default options: `⚡`, `🤖`, `🧠`, `✨`, `🔮`
-  - [ ] User-configurable via environment variable
-  - [ ] Model-specific symbols (Claude: `⚡`, GPT: `🤖`, etc.)
-
 #### Advanced Separator Features
 
 - [ ] **New separator styles**
-  - [ ] Current: thick, thin, flame, wave, lightning
+  - [ ] Current: thick, thin, flame, wave, lightning, curvy, angly,
+        angly2, double_chevron
   - [ ] Add: "pulse" (alternating thickness)
   - [ ] Add: "gradient" (color transitions)
   - [ ] Add: "arrow" (custom arrow shapes)
@@ -113,13 +53,7 @@ additional improvements.
 
 #### Configuration Enhancements
 
-- [ ] **Multi-line layout support**
-  - [ ] Split segments across multiple lines
-  - [ ] Prevent segment cutoff in narrow terminals
-  - [ ] Configurable line arrangements
-
 - [ ] **Advanced theming**
-  - [ ] 24-bit color support (hex colors)
   - [ ] Light/dark theme variants
   - [ ] Custom theme creation wizard
   - [ ] Theme inheritance and overrides
@@ -144,7 +78,6 @@ additional improvements.
 #### Developer Experience
 
 - [ ] **Configuration management**
-  - [ ] Config file validation
   - [ ] Live config reload
   - [ ] Multiple config profiles
 
@@ -155,7 +88,7 @@ additional improvements.
 
 ## 🔧 Implementation Notes
 
-### 🎨 Modular Theme System Architecture (NEW!)
+### 🎨 Modular Theme System Architecture
 
 - ✅ **Segment Registry**: Pluggable architecture with `BaseSegment`
   interface
@@ -165,7 +98,7 @@ additional improvements.
   thin/thick/curvy/angly/flame/wave/lightning
 - ✅ **Font Profiles**: powerline (basic) vs nerd-font (full icons)
 - ✅ **TypeScript Demo**: `src/demo/demo.ts` with comprehensive
-  testing and performance metrics and performance metrics
+  testing and performance metrics
 - ✅ **Configuration System**: JSON config support (environment
   variables removed)
 
@@ -201,24 +134,6 @@ additional improvements.
 - JSON config file support
 - Sensible defaults with easy customization
 - Multiple config file locations for flexibility
-
-## 🎨 Visual Design Goals
-
-- **Clarity**: Information should be immediately readable
-- **Efficiency**: Minimal performance impact
-- **Personality**: Fun and engaging while professional
-- **Flexibility**: Adaptable to different workflows and preferences
-
-## 🚀 Deployment Strategy
-
-1. **Phase 1**: Session/cost tracking (high value, builds on existing
-   foundation)
-2. **Phase 2**: Enhanced git status (natural extension of current
-   features)
-3. **Phase 3**: AI model symbols and separator enhancements (polish
-   and personality)
-4. **Phase 4**: Advanced features and additional segments (power user
-   features)
 
 ## 📚 References
 
