@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
+  "$schema": "/home/scott/repos/claude-statusline-powerline/statusline.schema.json",
   "color_theme": "night-owl",
   "display": {
     "lines": [
@@ -13,6 +13,11 @@
         "segments": {
           "model": true,
           "session": true
+        }
+      },
+      {
+        "segments": {
+          "context": true
         }
       }
     ]
@@ -65,6 +70,16 @@
         "enabled": true,
         "order": 4,
         "style": {
+          "separator": {
+            "style": "curvy"
+          }
+        }
+      },{
+        "type": "context",
+        "enabled": true,
+        "order": 5,
+        "style": {
+          "fg_color": "#000000",
           "separator": {
             "style": "curvy"
           }

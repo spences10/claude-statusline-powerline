@@ -49,12 +49,14 @@ function run_base_segment_tests() {
 				untracked: 'thick',
 			},
 			session: 'thick',
+			context: 'thick',
 		},
 		segments: {
 			model: true,
 			directory: true,
 			git: true,
 			session: true,
+			context: false,
 		},
 	};
 

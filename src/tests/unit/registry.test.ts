@@ -62,12 +62,14 @@ function run_registry_tests() {
 				untracked: 'thick',
 			},
 			session: 'thick',
+			context: 'thick',
 		},
 		segments: {
 			model: true,
 			directory: false,
 			git: true,
 			session: false,
+			context: false,
 		},
 	};
 
