@@ -1,85 +1,35 @@
 import { spawn } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { ClaudeStatusInput, SeparatorConfig } from '../types';
+import {
+	ClaudeStatusInput,
+	ColorTheme,
+	DisplayConfig,
+	FontProfile,
+	SegmentVisibility,
+	SeparatorConfig,
+} from '../types';
 
-// Separator style configurations
-const SEPARATOR_STYLES: Record<string, SeparatorConfig> = {
-	minimal: {
-		model: 'none',
-		directory: 'none',
-		git: {
-			clean: 'none',
-			dirty: 'none',
-			ahead: 'none',
-			behind: 'none',
-			conflicts: 'none',
-			staged: 'none',
-			untracked: 'none',
+const DEMO_COMBINATIONS = [
+	// Dark theme combinations
+	{
+		color_theme: 'dark' as ColorTheme,
+		desc: 'Dark + Minimal',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
 		},
-		session: 'none',
-	},
-	expressive: {
-		model: 'wave',
-		directory: 'thick',
-		git: {
-			clean: 'thick',
-			dirty: 'lightning',
-			ahead: 'flame',
-			behind: 'wave',
-			conflicts: 'lightning',
-			staged: 'thick',
-			untracked: 'thin',
-		},
-		session: 'wave',
-	},
-	curvy: {
-		model: 'curvy',
-		directory: 'curvy',
-		git: {
-			clean: 'curvy',
-			dirty: 'curvy',
-			ahead: 'curvy',
-			behind: 'curvy',
-			conflicts: 'curvy',
-			staged: 'curvy',
-			untracked: 'curvy',
-		},
-		session: 'curvy',
-	},
-	angular: {
-		model: 'angly',
-		directory: 'angly',
-		git: {
-			clean: 'angly',
-			dirty: 'angly',
-			ahead: 'angly',
-			behind: 'angly',
-			conflicts: 'angly',
-			staged: 'angly',
-			untracked: 'angly',
-		},
-		session: 'angly',
-	},
-	double_chevron: {
-		model: 'double_chevron',
-		directory: 'double_chevron',
-		git: {
-			clean: 'double_chevron',
-			dirty: 'double_chevron',
-			ahead: 'double_chevron',
-			behind: 'double_chevron',
-			conflicts: 'double_chevron',
-			staged: 'double_chevron',
-			untracked: 'double_chevron',
-		},
-		session: 'double_chevron',
-	},
-};
-
-// Layout configurations
-const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
-	single: {
 		segments: {
 			model: true,
 			directory: true,
@@ -87,7 +37,330 @@ const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
 			session: true,
 		},
 	},
-	'two-line': {
+	{
+		color_theme: 'dark',
+		desc: 'Dark + Expressive',
+		layout: 'single',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'dark',
+		desc: 'Dark + Curvy',
+		layout: 'single',
+		separators: {
+			model: 'curvy',
+			directory: 'curvy',
+			git: {
+				clean: 'curvy',
+				dirty: 'curvy',
+				ahead: 'curvy',
+				behind: 'curvy',
+				conflicts: 'curvy',
+				staged: 'curvy',
+				untracked: 'curvy',
+			},
+			session: 'curvy',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'dark',
+		desc: 'Dark + Angular',
+		layout: 'single',
+		separators: {
+			model: 'angly',
+			directory: 'angly',
+			git: {
+				clean: 'angly',
+				dirty: 'angly',
+				ahead: 'angly',
+				behind: 'angly',
+				conflicts: 'angly',
+				staged: 'angly',
+				untracked: 'angly',
+			},
+			session: 'angly',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'dark',
+		desc: 'Dark + Double Chevron',
+		layout: 'single',
+		separators: {
+			model: 'double_chevron',
+			directory: 'double_chevron',
+			git: {
+				clean: 'double_chevron',
+				dirty: 'double_chevron',
+				ahead: 'double_chevron',
+				behind: 'double_chevron',
+				conflicts: 'double_chevron',
+				staged: 'double_chevron',
+				untracked: 'double_chevron',
+			},
+			session: 'double_chevron',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+
+	// Electric theme combinations
+	{
+		color: 'electric',
+		desc: 'Electric + Minimal',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'electric',
+		desc: 'Electric + Expressive',
+		layout: 'single',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'electric',
+		desc: 'Electric + Electric',
+		layout: 'single',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'electric',
+		desc: 'Electric + Subtle',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'thin',
+			git: {
+				clean: 'thin',
+				dirty: 'thin',
+				ahead: 'thin',
+				behind: 'thin',
+				conflicts: 'thin',
+				staged: 'thin',
+				untracked: 'thin',
+			},
+			session: 'none',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+
+	// Night Owl theme combinations
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Minimal',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Expressive',
+		layout: 'single',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Curvy',
+		layout: 'single',
+		separators: {
+			model: 'curvy',
+			directory: 'curvy',
+			git: {
+				clean: 'curvy',
+				dirty: 'curvy',
+				ahead: 'curvy',
+				behind: 'curvy',
+				conflicts: 'curvy',
+				staged: 'curvy',
+				untracked: 'curvy',
+			},
+			session: 'curvy',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Angular',
+		layout: 'single',
+		separators: {
+			model: 'angly',
+			directory: 'angly',
+			git: {
+				clean: 'angly',
+				dirty: 'angly',
+				ahead: 'angly',
+				behind: 'angly',
+				conflicts: 'angly',
+				staged: 'angly',
+				untracked: 'angly',
+			},
+			session: 'angly',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+		},
+	},
+
+	// Multi-line layouts
+	{
+		color: 'dark',
+		desc: 'Dark + Minimal (2-line)',
+		layout: 'two-line',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+		},
 		display: {
 			lines: [
 				{ segments: { directory: true, git: true } },
@@ -95,7 +368,76 @@ const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
 			],
 		},
 	},
-	minimal: {
+	{
+		color: 'electric',
+		desc: 'Electric + Expressive (2-line)',
+		layout: 'two-line',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
+		display: {
+			lines: [
+				{ segments: { directory: true, git: true } },
+				{ segments: { model: true, session: true } },
+			],
+		},
+	},
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Curvy (2-line)',
+		layout: 'two-line',
+		separators: {
+			model: 'curvy',
+			directory: 'curvy',
+			git: {
+				clean: 'curvy',
+				dirty: 'curvy',
+				ahead: 'curvy',
+				behind: 'curvy',
+				conflicts: 'curvy',
+				staged: 'curvy',
+				untracked: 'curvy',
+			},
+			session: 'curvy',
+		},
+		display: {
+			lines: [
+				{ segments: { directory: true, git: true } },
+				{ segments: { model: true, session: true } },
+			],
+		},
+	},
+
+	// Special segment combinations
+	{
+		color: 'dark',
+		desc: 'Dark + Minimal (model only)',
+		layout: 'minimal',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+		},
 		segments: {
 			model: true,
 			directory: false,
@@ -103,7 +445,24 @@ const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
 			session: false,
 		},
 	},
-	'git-focus': {
+	{
+		color: 'electric',
+		desc: 'Electric + Electric (git focus)',
+		layout: 'git-focus',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
 		segments: {
 			model: false,
 			directory: true,
@@ -111,45 +470,62 @@ const LAYOUT_CONFIGS: Record<string, Partial<DemoConfig>> = {
 			session: true,
 		},
 	},
-	workspace: {
+	{
+		color: 'night-owl',
+		desc: 'Night Owl + Expressive (workspace)',
+		layout: 'workspace',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+		},
 		display: {
 			lines: [
-				{
-					segments: { directory: true, git: true, session: true },
-				},
+				{ segments: { directory: true, git: true, session: true } },
 			],
 		},
 	},
-};
-
-function get_layout_config(layout: string): Partial<DemoConfig> {
-	return LAYOUT_CONFIGS[layout] || LAYOUT_CONFIGS.single;
-}
+] as Array<{
+	color_theme: ColorTheme;
+	desc: string;
+	layout: string;
+	separators: SeparatorConfig;
+	segments?: SegmentVisibility;
+	display?: DisplayConfig;
+}>;
 
 function create_demo_config(
-	combo: { color: string; style: string; layout: string },
-	fontProfile: 'powerline' | 'nerd-font',
+	combo: (typeof DEMO_COMBINATIONS)[0],
+	fontProfile: FontProfile,
 ): DemoConfig {
 	const config: DemoConfig = {
-		color_theme: combo.color,
-		theme: combo.style,
+		color_theme: combo.color_theme,
 		font_profile: fontProfile,
+		separators: combo.separators,
 	};
 
-	// Add separator configuration
-	if (SEPARATOR_STYLES[combo.style]) {
-		config.separators = SEPARATOR_STYLES[combo.style];
+	// Add segments or display configuration
+	if (combo.segments) {
+		config.segments = combo.segments;
 	}
-
-	// Add layout configuration
-	const layout_config = get_layout_config(combo.layout);
-	Object.assign(config, layout_config);
+	if (combo.display) {
+		config.display = combo.display;
+	}
 
 	return config;
 }
 
 async function run_demo(
-	fontProfile: 'powerline' | 'nerd-font',
+	fontProfile: FontProfile,
 	title: string,
 	icon: string,
 ): Promise<void> {
@@ -157,7 +533,7 @@ async function run_demo(
 	console.log(`${icon} ${title}`);
 	console.log('==================================================\n');
 
-	for (const [index, combo] of ALL_COMBINATIONS.entries()) {
+	for (const [index, combo] of DEMO_COMBINATIONS.entries()) {
 		console.log(`--- ${combo.desc} ---`);
 
 		// Cycle through different usage scenarios for variety in session costs
@@ -362,136 +738,6 @@ function run_statusline_with_config(
 		});
 	});
 }
-
-// Comprehensive combinations covering all variations
-const ALL_COMBINATIONS = [
-	// Basic theme combinations
-	{
-		color: 'dark',
-		style: 'minimal',
-		desc: 'Dark + Minimal',
-		layout: 'single',
-	},
-	{
-		color: 'dark',
-		style: 'expressive',
-		desc: 'Dark + Expressive',
-		layout: 'single',
-	},
-	{
-		color: 'dark',
-		style: 'curvy',
-		desc: 'Dark + Curvy',
-		layout: 'single',
-	},
-	{
-		color: 'dark',
-		style: 'angular',
-		desc: 'Dark + Angular',
-		layout: 'single',
-	},
-	{
-		color: 'dark',
-		style: 'double_chevron',
-		desc: 'Dark + Double Chevron',
-		layout: 'single',
-	},
-
-	{
-		color: 'electric',
-		style: 'minimal',
-		desc: 'Electric + Minimal',
-		layout: 'single',
-	},
-	{
-		color: 'electric',
-		style: 'expressive',
-		desc: 'Electric + Expressive',
-		layout: 'single',
-	},
-	{
-		color: 'electric',
-		style: 'electric',
-		desc: 'Electric + Electric',
-		layout: 'single',
-	},
-	{
-		color: 'electric',
-		style: 'subtle',
-		desc: 'Electric + Subtle',
-		layout: 'single',
-	},
-
-	{
-		color: 'night-owl',
-		style: 'minimal',
-		desc: 'Night Owl + Minimal',
-		layout: 'single',
-	},
-	{
-		color: 'night-owl',
-		style: 'expressive',
-		desc: 'Night Owl + Expressive',
-		layout: 'single',
-	},
-	{
-		color: 'night-owl',
-		style: 'curvy',
-		desc: 'Night Owl + Curvy',
-		layout: 'single',
-	},
-	{
-		color: 'night-owl',
-		style: 'angular',
-		desc: 'Night Owl + Angular',
-		layout: 'single',
-	},
-
-	// Multi-line layouts
-	{
-		color: 'dark',
-		style: 'minimal',
-		desc: 'Dark + Minimal (2-line)',
-		layout: 'two-line',
-	},
-	{
-		color: 'electric',
-		style: 'expressive',
-		desc: 'Electric + Expressive (2-line)',
-		layout: 'two-line',
-	},
-	{
-		color: 'night-owl',
-		style: 'curvy',
-		desc: 'Night Owl + Curvy (2-line)',
-		layout: 'two-line',
-	},
-
-	// Minimal segment combinations
-	{
-		color: 'dark',
-		style: 'minimal',
-		desc: 'Dark + Minimal (model only)',
-		layout: 'minimal',
-	},
-	{
-		color: 'electric',
-		style: 'electric',
-		desc: 'Electric + Electric (git focus)',
-		layout: 'git-focus',
-	},
-	{
-		color: 'night-owl',
-		style: 'expressive',
-		desc: 'Night Owl + Expressive (workspace)',
-		layout: 'workspace',
-	},
-] as Array<{
-	color: string;
-	style: string;
-	desc: string;
-	layout: string;
-}>;
 
 async function demo_powerline() {
 	return run_demo('powerline', 'Powerline Font Demo', '🎨');
