@@ -4,11 +4,13 @@ import * as path from 'node:path';
 
 import { get_theme } from './themes';
 import {
+	GitState,
 	ModelPricing,
 	SegmentsConfiguration,
 	SegmentVisibility,
 	SeparatorConfig,
 	SeparatorProfile,
+	SeparatorStyle,
 	StatuslineConfig,
 } from './types';
 
@@ -44,105 +46,97 @@ export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
 	},
 };
 
+// Helper function to create separator theme with base style and overrides
+function create_separator_theme(
+	base_style: SeparatorStyle,
+	overrides: {
+		model?: SeparatorStyle;
+		directory?: SeparatorStyle;
+		git?: Partial<Record<GitState, SeparatorStyle>>;
+		session?: SeparatorStyle;
+		context?: SeparatorStyle;
+	} = {},
+): SeparatorConfig {
+	const base_theme: SeparatorConfig = {
+		model: base_style,
+		directory: base_style,
+		git: {
+			clean: base_style,
+			dirty: base_style,
+			ahead: base_style,
+			behind: base_style,
+			conflicts: base_style,
+			staged: base_style,
+			untracked: base_style,
+		},
+		session: base_style,
+		context: base_style,
+	};
+
+	return {
+		...base_theme,
+		...overrides,
+		git: {
+			...base_theme.git,
+			...overrides.git,
+		},
+	};
+}
+
 // Separator theme presets
 export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
-	minimal: {
-		model: 'thin',
-		directory: 'thin',
+	minimal: create_separator_theme('thin', {
 		git: {
-			clean: 'thin',
 			dirty: 'thick',
-			ahead: 'thin',
-			behind: 'thin',
 			conflicts: 'thick',
-			staged: 'thin',
-			untracked: 'thin',
 		},
-		session: 'thin',
-		context: 'thin',
-	},
+	}),
 
-	expressive: {
-		model: 'wave',
-		directory: 'wave',
+	expressive: create_separator_theme('wave', {
 		git: {
 			clean: 'thick',
 			dirty: 'lightning',
 			ahead: 'flame',
-			behind: 'wave',
 			conflicts: 'lightning',
 			staged: 'thick',
 			untracked: 'thin',
 		},
-		session: 'wave',
 		context: 'curvy',
-	},
+	}),
 
-	subtle: {
-		model: 'thick',
-		directory: 'thick',
+	subtle: create_separator_theme('thick', {
 		git: {
-			clean: 'thick',
 			dirty: 'flame',
-			ahead: 'thick',
-			behind: 'thick',
 			conflicts: 'flame',
-			staged: 'thick',
 			untracked: 'thin',
 		},
-		session: 'thick',
-		context: 'thick',
-	},
+	}),
 
 	// Fun experimental preset
-	electric: {
-		model: 'lightning',
+	electric: create_separator_theme('lightning', {
 		directory: 'flame',
 		git: {
 			clean: 'wave',
-			dirty: 'lightning',
-			ahead: 'lightning',
 			behind: 'wave',
 			conflicts: 'flame',
-			staged: 'lightning',
 			untracked: 'flame',
 		},
-		session: 'lightning',
-		context: 'lightning',
-	},
+	}),
 
 	// Powerline-extra-symbols themes for Victor Mono compatibility
-	curvy: {
-		model: 'curvy',
-		directory: 'curvy',
+	curvy: create_separator_theme('curvy', {
 		git: {
-			clean: 'curvy',
 			dirty: 'flame',
-			ahead: 'curvy',
-			behind: 'curvy',
 			conflicts: 'flame',
-			staged: 'curvy',
-			untracked: 'curvy',
 		},
-		session: 'curvy',
-		context: 'curvy',
-	},
+	}),
 
-	angular: {
-		model: 'angly',
-		directory: 'angly',
+	angular: create_separator_theme('angly', {
 		git: {
-			clean: 'angly',
 			dirty: 'flame',
-			ahead: 'angly',
-			behind: 'angly',
 			conflicts: 'flame',
-			staged: 'angly',
-			untracked: 'angly',
 		},
-		session: 'angly',
-		context: 'angly',
-	},
+	}),
 };
 
 // Default segment visibility

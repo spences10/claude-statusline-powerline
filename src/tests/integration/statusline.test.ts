@@ -9,7 +9,7 @@ function run_statusline_integration_tests() {
 	const mock_data: ClaudeStatusInput = {
 		session_id: 'test-session-123',
 		model: { display_name: 'Claude Sonnet 4' },
-		workspace: { current_dir: process.cwd() }
+		workspace: { current_dir: process.cwd() },
 	};
 
 	// Test 1: Basic statusline generation
@@ -19,7 +19,7 @@ function run_statusline_integration_tests() {
 		console.log('❌ FAIL: Should return a string');
 		return false;
 	}
-	
+
 	if (result.length === 0) {
 		console.log('❌ FAIL: Result should not be empty');
 		return false;
@@ -50,12 +50,14 @@ function run_statusline_integration_tests() {
 	const different_data: ClaudeStatusInput = {
 		session_id: 'different-session',
 		model: { display_name: 'Different Model' },
-		workspace: { current_dir: '/different/path' }
+		workspace: { current_dir: '/different/path' },
 	};
-	
+
 	const different_result = build_statusline(different_data);
 	if (result === different_result) {
-		console.log('❌ FAIL: Different inputs should produce different outputs');
+		console.log(
+			'❌ FAIL: Different inputs should produce different outputs',
+		);
 		return false;
 	}
 	console.log('✅ PASS: Different inputs produce different outputs');
@@ -65,18 +67,23 @@ function run_statusline_integration_tests() {
 	const minimal_data: ClaudeStatusInput = {
 		session_id: '',
 		model: { display_name: '' },
-		workspace: { current_dir: '' }
+		workspace: { current_dir: '' },
 	};
-	
+
 	try {
 		const minimal_result = build_statusline(minimal_data);
 		if (typeof minimal_result !== 'string') {
-			console.log('❌ FAIL: Should still return string with minimal data');
+			console.log(
+				'❌ FAIL: Should still return string with minimal data',
+			);
 			return false;
 		}
 		console.log('✅ PASS: Handles minimal data gracefully');
 	} catch (error) {
-		console.log('❌ FAIL: Should not throw with minimal data:', error);
+		console.log(
+			'❌ FAIL: Should not throw with minimal data:',
+			error,
+		);
 		return false;
 	}
 
