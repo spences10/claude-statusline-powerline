@@ -1,16 +1,5 @@
 import { execSync } from 'node:child_process';
-
-export interface GitInfo {
-	branch: string;
-	is_dirty: boolean;
-	ahead: number;
-	behind: number;
-	conflicts: boolean;
-	staged_add: number;
-	staged_del: number;
-	unstaged: number;
-	untracked: number;
-}
+import { GitInfo } from '../types';
 
 export function get_git_info(cwd: string): GitInfo | null {
 	try {

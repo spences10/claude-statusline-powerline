@@ -312,3 +312,152 @@ export interface SegmentsConfiguration {
 	/** Array of segment configurations */
 	segments: SegmentConfig[];
 }
+
+// =============================================================================
+// THEME INTERFACES
+// =============================================================================
+
+/**
+ * Base colors for a theme - hex values
+ */
+export interface ThemePalette {
+	/** Primary accent color */
+	primary: string;
+	/** Secondary accent color */
+	secondary: string;
+	/** Success/clean state color */
+	success: string;
+	/** Warning/dirty state color */
+	warning: string;
+	/** Error/conflict state color */
+	error: string;
+	/** Neutral/directory color */
+	neutral: string;
+	/** Light text color */
+	text_light: string;
+	/** Dark text color */
+	text_dark: string;
+}
+
+/**
+ * Individual segment styling with ANSI codes
+ */
+export interface SegmentTheme {
+	background: string;
+	foreground: string;
+	separator_color: string;
+}
+
+/**
+ * Complete theme with computed segment styles
+ */
+export interface StatuslineTheme {
+	name: string;
+	palette: ThemePalette;
+	segments: {
+		model: SegmentTheme;
+		directory: SegmentTheme;
+		git: {
+			clean: SegmentTheme;
+			dirty: SegmentTheme;
+		};
+		session: SegmentTheme;
+	};
+}
+
+// =============================================================================
+// FONT PROFILE INTERFACES
+// =============================================================================
+
+/**
+ * Complete font profile with symbols and separators
+ */
+export interface FontProfileData {
+	name: string;
+	description: string;
+	symbols: {
+		branch: string;
+		dirty: string;
+		clean: string;
+		folder: string;
+		ai: string;
+		warning: string;
+		error: string;
+		info: string;
+		cost: string;
+		ahead: string;
+		behind: string;
+		conflicts: string;
+		staged_add: string;
+		staged_del: string;
+		unstaged: string;
+		untracked: string;
+	};
+	separators: {
+		basic: {
+			left: string;
+			right: string;
+			left_thin: string;
+			right_thin: string;
+		};
+		extra: {
+			curvy?: string;
+			curvy_left?: string;
+			angly?: string;
+			angly_left?: string;
+			angly2?: string;
+			angly2_left?: string;
+			flame?: string;
+			flame_left?: string;
+			double_chevron?: string;
+			double_chevron_left?: string;
+		};
+	};
+}
+
+// =============================================================================
+// GIT INTERFACES
+// =============================================================================
+
+/**
+ * Git repository information
+ */
+export interface GitInfo {
+	branch: string;
+	is_dirty: boolean;
+	ahead: number;
+	behind: number;
+	conflicts: boolean;
+	staged_add: number;
+	staged_del: number;
+	unstaged: number;
+	untracked: number;
+}
+
+// =============================================================================
+// SEGMENT INTERFACES
+// =============================================================================
+
+/**
+ * Segment data with styling information
+ */
+export interface SegmentData {
+	content: string;
+	bg_color: string;
+	fg_color: string;
+	separator_from_color: string;
+	separator_style?: string;
+}
+
+/**
+ * Interface for segment builders
+ */
+export interface SegmentBuilder {
+	name: string;
+	priority: number; // Lower numbers appear first
+	is_enabled(config: StatuslineConfig): boolean;
+	build(
+		data: ClaudeStatusInput,
+		config: StatuslineConfig,
+	): SegmentData | null;
+}

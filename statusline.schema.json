@@ -2,9 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
   "title": "Claude Statusline Powerline Configuration",
-  "description": "Configuration schema for Claude Code statusline with powerline symbols, git integration, and session tracking",
+  "description": "Complete configuration for the statusline\nThis is the main configuration interface that combines all settings",
   "definitions": {
     "ColorTheme": {
+      "description": "Available color themes\n- `dark`: Dark theme with muted colors\n- `electric`: High-contrast electric colors\n- `night-owl`: Night Owl inspired color scheme",
       "enum": [
         "dark",
         "electric",
@@ -13,8 +14,10 @@
       "type": "string"
     },
     "DisplayConfig": {
+      "description": "Multi-line display configuration\nAllows organizing segments across multiple lines",
       "properties": {
         "lines": {
+          "description": "Array of line configurations",
           "items": {
             "$ref": "#/definitions/DisplayLine"
           },
@@ -27,9 +30,11 @@
       "type": "object"
     },
     "DisplayLine": {
+      "description": "Configuration for a single display line",
       "properties": {
         "segments": {
-          "$ref": "#/definitions/LineSegments"
+          "$ref": "#/definitions/LineSegments",
+          "description": "Which segments to show on this line"
         }
       },
       "required": [
@@ -38,6 +43,7 @@
       "type": "object"
     },
     "FontProfile": {
+      "description": "Font profiles that determine available separator characters\n- `powerline`: Uses Powerline font symbols\n- `nerd-font`: Uses Nerd Font symbols with more variety",
       "enum": [
         "nerd-font",
         "powerline"
@@ -45,6 +51,7 @@
       "type": "string"
     },
     "LineSegments": {
+      "description": "Defines which segments appear on a specific line\nSegments are optional (can be omitted from a line)",
       "properties": {
         "directory": {
           "type": "boolean"
@@ -97,18 +104,23 @@
       "type": "object"
     },
     "SegmentConfig": {
+      "description": "Configuration for a single segment with advanced options",
       "properties": {
         "enabled": {
+          "description": "Whether this segment is enabled",
           "type": "boolean"
         },
         "order": {
+          "description": "Display order (lower numbers appear first)",
           "type": "number"
         },
         "style": {
-          "$ref": "#/definitions/SegmentStyleConfig"
+          "$ref": "#/definitions/SegmentStyleConfig",
+          "description": "Custom styling for this segment"
         },
         "type": {
-          "$ref": "#/definitions/SegmentType"
+          "$ref": "#/definitions/SegmentType",
+          "description": "Type of segment"
         }
       },
       "required": [
@@ -119,11 +131,12 @@
       "type": "object"
     },
     "SegmentStyleConfig": {
+      "description": "Styling configuration for individual segments",
       "properties": {
         "bg_color": {
+          "description": "Background color in hex format (e.g., #1e40af)",
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Background color in hex format (e.g., #1e40af)",
           "examples": [
             "#1e40af",
             "#059669",
@@ -131,9 +144,9 @@
           ]
         },
         "fg_color": {
+          "description": "Foreground (text) color in hex format (e.g., #ffffff)",
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{6}$",
-          "description": "Foreground (text) color in hex format (e.g., #ffffff)",
           "examples": [
             "#ffffff",
             "#000000"
@@ -144,8 +157,8 @@
             "type": "string",
             "description": "Additional custom icon mappings"
           },
-          "type": "object",
           "description": "Custom icons for segment symbols",
+          "type": "object",
           "properties": {
             "folder": {
               "type": "string",
@@ -210,29 +223,33 @@
           }
         },
         "separator": {
+          "description": "Separator styling",
           "properties": {
             "color": {
+              "description": "Separator color in hex format",
               "type": "string",
               "pattern": "^#[0-9a-fA-F]{6}$",
-              "description": "Separator color in hex format",
               "examples": [
                 "#1e40af",
                 "#059669"
               ]
             },
             "style": {
-              "$ref": "#/definitions/SeparatorStyle"
+              "$ref": "#/definitions/SeparatorStyle",
+              "description": "Separator style override"
             }
           },
           "type": "object"
         },
         "truncation_length": {
+          "description": "Maximum length before truncation",
           "type": "number"
         }
       },
       "type": "object"
     },
     "SegmentType": {
+      "description": "Types of segments that can be displayed in the statusline\n- `model`: Shows current AI model information\n- `directory`: Shows current directory/path\n- `git`: Shows git repository status\n- `session`: Shows session usage/cost information",
       "enum": [
         "directory",
         "git",
@@ -242,6 +259,7 @@
       "type": "string"
     },
     "SegmentVisibility": {
+      "description": "Defines which segments are visible in the statusline\nAll segment types must be explicitly enabled/disabled",
       "properties": {
         "directory": {
           "type": "boolean"
@@ -265,8 +283,10 @@
       "type": "object"
     },
     "SegmentsConfiguration": {
+      "description": "Advanced segment configuration system\nAllows fine-grained control over segment appearance and behavior",
       "properties": {
         "segments": {
+          "description": "Array of segment configurations",
           "items": {
             "$ref": "#/definitions/SegmentConfig"
           },
@@ -279,18 +299,23 @@
       "type": "object"
     },
     "SeparatorConfig": {
+      "description": "Configuration for separator styles across all segments\nDefines which separator style to use for each segment type and git state",
       "properties": {
         "directory": {
-          "$ref": "#/definitions/SeparatorStyle"
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Separator style for the directory segment"
         },
         "git": {
-          "$ref": "#/definitions/Record<GitState,SeparatorStyle>"
+          "$ref": "#/definitions/Record<GitState,SeparatorStyle>",
+          "description": "Separator styles for different git states"
         },
         "model": {
-          "$ref": "#/definitions/SeparatorStyle"
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Separator style for the model segment"
         },
         "session": {
-          "$ref": "#/definitions/SeparatorStyle"
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Separator style for the session segment"
         }
       },
       "required": [
@@ -302,22 +327,27 @@
       "type": "object"
     },
     "SeparatorProfile": {
+      "description": "Profile-based separator configuration with defaults and overrides\nAllows defining a default separator style with specific overrides",
       "properties": {
         "default": {
-          "$ref": "#/definitions/SeparatorStyle"
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Default separator style for all segments"
         },
         "overrides": {
           "allOf": [
             {
               "properties": {
                 "directory": {
-                  "$ref": "#/definitions/SeparatorStyle"
+                  "$ref": "#/definitions/SeparatorStyle",
+                  "description": "Override separator for directory segment"
                 },
                 "model": {
-                  "$ref": "#/definitions/SeparatorStyle"
+                  "$ref": "#/definitions/SeparatorStyle",
+                  "description": "Override separator for model segment"
                 },
                 "session": {
-                  "$ref": "#/definitions/SeparatorStyle"
+                  "$ref": "#/definitions/SeparatorStyle",
+                  "description": "Override separator for session segment"
                 }
               },
               "type": "object"
@@ -325,12 +355,14 @@
             {
               "$ref": "#/definitions/{git_clean?:SeparatorStyle;git_dirty?:SeparatorStyle;git_ahead?:SeparatorStyle;git_behind?:SeparatorStyle;git_conflicts?:SeparatorStyle;git_staged?:SeparatorStyle;git_untracked?:SeparatorStyle;}"
             }
-          ]
+          ],
+          "description": "Specific overrides for individual segments"
         }
       },
       "type": "object"
     },
     "SeparatorStyle": {
+      "description": "Visual style of powerline separators between segments",
       "enum": [
         "angly",
         "angly2",
@@ -343,10 +375,10 @@
         "thin",
         "wave"
       ],
-      "type": "string",
-      "description": "Visual style of powerline separators between segments"
+      "type": "string"
     },
     "ThemeType": {
+      "description": "Available themes that define separator and styling patterns\n- `minimal`: Clean, minimal separators\n- `expressive`: Mixed separator styles with visual variety\n- `subtle`: Understated styling\n- `electric`: Bold, high-contrast styling\n- `curvy`: All curved separators\n- `angular`: All angular separators\n- `custom`: User-defined theme",
       "enum": [
         "angular",
         "curvy",
@@ -359,29 +391,34 @@
       "type": "string"
     },
     "TruncationConfig": {
+      "description": "Configuration for truncating segment content when too long",
       "properties": {
         "directory": {
           "type": "number"
         },
         "directory_length": {
+          "description": "Maximum characters for directory segment",
           "type": "number"
         },
         "git": {
           "type": "number"
         },
         "git_length": {
+          "description": "Maximum characters for git segment",
           "type": "number"
         },
         "model": {
           "type": "number"
         },
         "model_length": {
+          "description": "Maximum characters for model segment",
           "type": "number"
         },
         "session": {
           "type": "number"
         },
         "session_length": {
+          "description": "Maximum characters for session segment",
           "type": "number"
         }
       },
@@ -475,7 +512,8 @@
       "default": "minimal"
     },
     "truncation": {
-      "$ref": "#/definitions/TruncationConfig"
+      "$ref": "#/definitions/TruncationConfig",
+      "description": "Content truncation settings"
     }
   },
   "type": "object",

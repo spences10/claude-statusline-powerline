@@ -1,47 +1,6 @@
-export interface FontProfile {
-	name: string;
-	description: string;
-	symbols: {
-		branch: string;
-		dirty: string;
-		clean: string;
-		folder: string;
-		ai: string;
-		warning: string;
-		error: string;
-		info: string;
-		cost: string;
-		ahead: string;
-		behind: string;
-		conflicts: string;
-		staged_add: string;
-		staged_del: string;
-		unstaged: string;
-		untracked: string;
-	};
-	separators: {
-		basic: {
-			left: string;
-			right: string;
-			left_thin: string;
-			right_thin: string;
-		};
-		extra: {
-			curvy?: string;
-			curvy_left?: string;
-			angly?: string;
-			angly_left?: string;
-			angly2?: string;
-			angly2_left?: string;
-			flame?: string;
-			flame_left?: string;
-			double_chevron?: string;
-			double_chevron_left?: string;
-		};
-	};
-}
+import { FontProfileData } from './types';
 
-export const FONT_PROFILES: Record<string, FontProfile> = {
+export const FONT_PROFILES: Record<string, FontProfileData> = {
 	powerline: {
 		name: 'Powerline Compatible',
 		description: 'Basic powerline fonts with core symbol support',
@@ -127,14 +86,14 @@ export const FONT_PROFILES: Record<string, FontProfile> = {
 };
 
 // Get font profile from config or default to powerline
-export function get_font_profile(profile_name?: string): FontProfile {
+export function get_font_profile(profile_name?: string): FontProfileData {
 	const name = profile_name || 'powerline';
 	return FONT_PROFILES[name] || FONT_PROFILES['powerline'];
 }
 
 export function get_symbol(
-	font_profile: FontProfile,
-	symbol_name: keyof FontProfile['symbols'],
+	font_profile: FontProfileData,
+	symbol_name: keyof FontProfileData['symbols'],
 	icon_overrides?: { [key: string]: string },
 ): string {
 	if (icon_overrides && icon_overrides[symbol_name]) {

@@ -77,14 +77,14 @@ function run_base_segment_tests() {
 
 	// Test 2: Hex color conversion
 	console.log('\nTest 2: Hex color conversion');
-	if (!result.bg_color.startsWith('\x1b[48;5;')) {
+	if (!result.bg_color.startsWith('\x1b[48;2;')) {
 		console.log(
 			'❌ FAIL: Background color should be converted to ANSI',
 		);
 		return false;
 	}
 
-	if (!result.fg_color.startsWith('\x1b[38;5;')) {
+	if (!result.fg_color.startsWith('\x1b[38;2;')) {
 		console.log(
 			'❌ FAIL: Foreground color should be converted to ANSI',
 		);

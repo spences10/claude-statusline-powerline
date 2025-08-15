@@ -1,16 +1,5 @@
 import { get_font_profile } from '../font-profiles';
-
-export type SeparatorStyle =
-	| 'thick'
-	| 'thin'
-	| 'flame'
-	| 'wave'
-	| 'lightning'
-	| 'curvy'
-	| 'angly'
-	| 'angly2'
-	| 'double_chevron'
-	| 'none';
+import { SeparatorStyle } from '../types';
 
 // ANSI color codes
 const COLORS = {

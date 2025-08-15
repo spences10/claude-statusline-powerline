@@ -1,14 +1,14 @@
+export { BaseTheme } from './base';
 export {
-	BaseTheme,
-	ColorPalette,
+	ThemePalette,
 	SegmentTheme,
 	StatuslineTheme,
-} from './base';
+} from '../types';
 export { DarkTheme } from './dark';
 export { ElectricTheme } from './electric';
 export { NightOwlTheme } from './night-owl';
 
-import { StatuslineTheme } from './base';
+import { StatuslineTheme } from '../types';
 import { DarkTheme } from './dark';
 import { ElectricTheme } from './electric';
 import { NightOwlTheme } from './night-owl';
