@@ -1,60 +1,37 @@
-export interface ColorPalette {
-	// Background colors
-	bg: {
-		blue: string;
-		green: string;
-		yellow: string;
-		red: string;
-		purple: string;
-		cyan: string;
-		gray: string;
-		black: string;
-		white: string;
-	};
-	// Foreground colors
-	fg: {
-		blue: string;
-		green: string;
-		yellow: string;
-		red: string;
-		purple: string;
-		cyan: string;
-		gray: string;
-		black: string;
-		white: string;
-	};
-}
+import { StatuslineTheme, ThemePalette } from '../types';
+import { create_segment_theme } from '../utils/colors';
 
-export interface SegmentTheme {
-	background: string;
-	foreground: string;
-	separator_color: string;
-}
-
-export interface StatuslineTheme {
-	name: string;
-	colors: ColorPalette;
-	segments: {
-		model: SegmentTheme;
-		directory: SegmentTheme;
-		git: {
-			clean: SegmentTheme;
-			dirty: SegmentTheme;
-		};
-		session: SegmentTheme;
-	};
-}
-
+/**
+ * Base theme class that generates segments from palette
+ */
 export abstract class BaseTheme implements StatuslineTheme {
 	abstract name: string;
-	abstract colors: ColorPalette;
-	abstract segments: {
-		model: SegmentTheme;
-		directory: SegmentTheme;
-		git: {
-			clean: SegmentTheme;
-			dirty: SegmentTheme;
+	abstract palette: ThemePalette;
+
+	get segments() {
+		return {
+			model: create_segment_theme(
+				this.palette.primary,
+				this.palette.text_light,
+			),
+			directory: create_segment_theme(
+				this.palette.neutral,
+				this.palette.text_light,
+			),
+			git: {
+				clean: create_segment_theme(
+					this.palette.success,
+					this.palette.text_dark,
+				),
+				dirty: create_segment_theme(
+					this.palette.warning,
+					this.palette.text_dark,
+				),
+			},
+			session: create_segment_theme(
+				this.palette.secondary,
+				this.palette.text_light,
+			),
 		};
-		session: SegmentTheme;
-	};
+	}
 }
