@@ -1,5 +1,12 @@
 # claude-statusline-powerline
 
+## 0.0.14
+
+### Patch Changes
+
+- b282ae9: Add context segment to statusline with cache hit rate and
+  token usage
+
 ## 0.0.13
 
 ### Patch Changes
