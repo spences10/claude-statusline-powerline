@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.15
+
+### Patch Changes
+
+- 74f2fe8: add utility function for formatting token counts
+
 ## 0.0.14
 
 ### Patch Changes
