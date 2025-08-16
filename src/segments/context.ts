@@ -2,6 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import { format_tokens } from '../utils/token-formatting';
 import { BaseSegment, SegmentData } from './base';
 
 interface ContextInfo {
@@ -37,16 +38,6 @@ export class ContextSegment extends BaseSegment {
 		if (context_info.session_type === 'cold') {
 			display = `${brain_icon} Cold`;
 		} else {
-			const format_tokens = (tokens: number): string => {
-				if (tokens >= 1000000) {
-					return `${(tokens / 1000000).toFixed(1)}M`;
-				} else if (tokens >= 1000) {
-					return `${(tokens / 1000).toFixed(1)}k`;
-				} else {
-					return tokens.toString();
-				}
-			};
-
 			const formatted_tokens = format_tokens(
 				context_info.total_cache_tokens,
 			);

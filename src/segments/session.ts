@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import { format_tokens } from '../utils/token-formatting';
 import { BaseSegment, SegmentData } from './base';
 
 interface SessionUsage {
@@ -62,7 +63,7 @@ export class SessionSegment extends BaseSegment {
 		const { style_override, get_icon } = this.setup_segment(config);
 		const theme = config.current_theme?.segments.session;
 		const cost_icon = get_icon('cost');
-		const content = `${cost_icon} ${(total_tokens / 1000).toFixed(0)}k • ${cost_str}${context_display}`;
+		const content = `${cost_icon} ${format_tokens(total_tokens)} • ${cost_str}${context_display}`;
 
 		return this.create_segment_with_fallback(
 			content,
