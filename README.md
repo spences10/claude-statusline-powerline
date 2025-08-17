@@ -10,6 +10,8 @@ A beautiful powerline-style statusline for Claude Code with git
 integration, session tracking, and settings config IntelliSense
 support.
 
+![demo of themes](/demo.png)
+
 ## ✨ Features
 
 - 🎨 **Powerline styling** with beautiful separators and colors
