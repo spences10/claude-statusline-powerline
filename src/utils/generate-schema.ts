@@ -63,14 +63,11 @@ function generate_schema(): void {
 			enhanced_schema.properties.segments.description =
 				'Control which segments are visible in the statusline';
 		}
-		if (enhanced_schema.properties.display) {
-			enhanced_schema.properties.display.description =
-				'Configure multiline layout and which segments appear on each line';
-		}
 		if (enhanced_schema.properties.color_theme) {
 			enhanced_schema.properties.color_theme.description =
 				'Color theme for segment backgrounds and text';
-			enhanced_schema.properties.color_theme.enum = Object.keys(THEMES);
+			enhanced_schema.properties.color_theme.enum =
+				Object.keys(THEMES);
 			enhanced_schema.properties.color_theme.default = 'dark';
 		}
 		if (enhanced_schema.properties.font_profile) {
@@ -82,7 +79,7 @@ function generate_schema(): void {
 		}
 		if (enhanced_schema.properties.segment_config) {
 			enhanced_schema.properties.segment_config.description =
-				'Advanced segment configuration with custom ordering, styling, and granular control';
+				'Advanced segment configuration with multiline layout, styling, and granular control';
 		}
 		if (enhanced_schema.properties.current_theme) {
 			enhanced_schema.properties.current_theme.description =
@@ -181,31 +178,37 @@ function generate_schema(): void {
 	enhanced_schema.examples = [
 		{
 			color_theme: 'dark',
-			segments: {
-				model: true,
-				directory: true,
-				git: true,
-				session: true,
+			segment_config: {
+				segments: [
+					{ type: 'model' },
+					{ type: 'directory' },
+					{ type: 'git' },
+					{ type: 'session' },
+				],
 			},
 		},
 		{
-			display: {
+			color_theme: 'electric',
+			segment_config: {
 				lines: [
 					{
-						segments: {
-							directory: true,
-							git: true,
-							model: true,
-						},
+						directory: true,
+						git: true,
+						model: true,
 					},
 					{
-						segments: {
-							session: true,
-						},
+						session: true,
+						context: true,
 					},
 				],
+				segments: [
+					{ type: 'model' },
+					{ type: 'directory' },
+					{ type: 'git' },
+					{ type: 'session' },
+					{ type: 'context' },
+				],
 			},
-			color_theme: 'electric',
 		},
 	];
 

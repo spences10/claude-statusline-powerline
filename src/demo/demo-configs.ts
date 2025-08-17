@@ -1,14 +1,9 @@
-import type {
-	ColorTheme,
-	DisplayConfig,
-	SegmentsConfiguration,
-} from '../types.js';
+import type { ColorTheme, SegmentsConfiguration } from '../types.js';
 
 // Configuration interface matching the JSON structure used in .claude/claude-statusline-powerline.json
 interface DemoConfigEntry {
 	description: string;
 	color_theme: ColorTheme;
-	display: DisplayConfig;
 	segment_config: SegmentsConfiguration;
 }
 
@@ -16,33 +11,23 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 	{
 		description: 'Night Owl + 3-line layout',
 		color_theme: 'night-owl',
-		display: {
+		segment_config: {
 			lines: [
 				{
-					segments: {
-						directory: true,
-						git: true,
-					},
+					directory: true,
+					git: true,
 				},
 				{
-					segments: {
-						model: true,
-						session: true,
-					},
+					model: true,
+					session: true,
 				},
 				{
-					segments: {
-						context: true,
-					},
+					context: true,
 				},
 			],
-		},
-		segment_config: {
 			segments: [
 				{
 					type: 'model',
-					enabled: true,
-					order: 1,
 					style: {
 						separator: {
 							style: 'double_chevron',
@@ -54,8 +39,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'directory',
-					enabled: true,
-					order: 2,
 					style: {
 						truncation_length: 30,
 						separator: {
@@ -68,8 +51,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'git',
-					enabled: true,
-					order: 3,
 					style: {
 						truncation_length: 30,
 						separator: {
@@ -79,8 +60,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'session',
-					enabled: true,
-					order: 4,
 					style: {
 						separator: {
 							style: 'curvy',
@@ -89,8 +68,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'context',
-					enabled: true,
-					order: 5,
 					style: {
 						separator: {
 							style: 'curvy',
@@ -103,24 +80,21 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 	{
 		description: 'Dark + Minimal single line',
 		color_theme: 'dark',
-		display: {
+		segment_config: {
 			lines: [
 				{
-					segments: {
-						model: true,
-						directory: true,
-						git: true,
-						session: true,
-					},
+					directory: true,
+					git: true,
+					model: true,
+					session: true,
+				},
+				{
+					context: true,
 				},
 			],
-		},
-		segment_config: {
 			segments: [
 				{
 					type: 'model',
-					enabled: true,
-					order: 1,
 					style: {
 						separator: {
 							style: 'none',
@@ -129,8 +103,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'directory',
-					enabled: true,
-					order: 2,
 					style: {
 						separator: {
 							style: 'none',
@@ -139,8 +111,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'git',
-					enabled: true,
-					order: 3,
 					style: {
 						separator: {
 							style: 'none',
@@ -149,8 +119,14 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'session',
-					enabled: true,
-					order: 4,
+					style: {
+						separator: {
+							style: 'none',
+						},
+					},
+				},
+				{
+					type: 'context',
 					style: {
 						separator: {
 							style: 'none',
@@ -163,24 +139,21 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 	{
 		description: 'Electric + Mixed separators',
 		color_theme: 'electric',
-		display: {
+		segment_config: {
 			lines: [
 				{
-					segments: {
-						model: true,
-						directory: true,
-						git: true,
-						session: true,
-					},
+					directory: true,
+					git: true,
+					model: true,
+					session: true,
+				},
+				{
+					context: true,
 				},
 			],
-		},
-		segment_config: {
 			segments: [
 				{
 					type: 'model',
-					enabled: true,
-					order: 1,
 					style: {
 						separator: {
 							style: 'wave',
@@ -189,8 +162,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'directory',
-					enabled: true,
-					order: 2,
 					style: {
 						separator: {
 							style: 'thick',
@@ -199,8 +170,6 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'git',
-					enabled: true,
-					order: 3,
 					style: {
 						separator: {
 							style: 'lightning',
@@ -209,11 +178,17 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 				},
 				{
 					type: 'session',
-					enabled: true,
-					order: 4,
 					style: {
 						separator: {
 							style: 'wave',
+						},
+					},
+				},
+				{
+					type: 'context',
+					style: {
+						separator: {
+							style: 'flame',
 						},
 					},
 				},

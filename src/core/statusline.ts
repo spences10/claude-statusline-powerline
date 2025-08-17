@@ -2,7 +2,7 @@ import { load_config } from '../config';
 import { create_styled_separator } from '../separators/styles';
 import {
 	ClaudeStatusInput,
-	DisplayLine,
+	LineSegments,
 	StatuslineConfig,
 } from '../types';
 import { ANSI_RESET } from '../utils/ansi';
@@ -19,20 +19,22 @@ function create_segment(
 function build_line_segments(
 	data: ClaudeStatusInput,
 	config: StatuslineConfig,
-	line_config: DisplayLine,
+	line_segments: LineSegments,
 ): string {
 	const segments = [];
 
-	// Build segments for this line based on line configuration
-	const enabled_segment_builders = segmentRegistry.get_all_segments();
-
-	for (const segment_builder of enabled_segment_builders) {
-		const segment_name =
-			segment_builder.name.toLowerCase() as keyof typeof line_config.segments;
-		if (line_config.segments[segment_name]) {
-			const segment = segment_builder.build(data, config);
-			if (segment) {
-				segments.push(segment);
+	// Build segments in the order specified in the line configuration
+	for (const [segment_name, enabled] of Object.entries(
+		line_segments,
+	)) {
+		if (enabled) {
+			const segment_builder =
+				segmentRegistry.get_segment(segment_name);
+			if (segment_builder) {
+				const segment = segment_builder.build(data, config);
+				if (segment) {
+					segments.push(segment);
+				}
 			}
 		}
 	}
@@ -83,19 +85,18 @@ function build_line_segments(
 export function build_statusline(data: ClaudeStatusInput): string {
 	const config = load_config();
 
-	// Check if multiline display configuration exists
+	// Check if multiline configuration exists in segment_config
 	if (
-		config.display &&
-		config.display.lines &&
-		config.display.lines.length > 0
+		config.segment_config?.lines &&
+		config.segment_config.lines.length > 0
 	) {
 		// Build multiline output
 		const lines = [];
-		for (const line_config of config.display.lines) {
+		for (const line_segments of config.segment_config.lines) {
 			const line_output = build_line_segments(
 				data,
 				config,
-				line_config,
+				line_segments,
 			);
 			if (line_output) {
 				lines.push(line_output);

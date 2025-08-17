@@ -108,6 +108,19 @@ async function run_demo(
 			create_mock_transcript(scenario),
 		);
 
+		// Create mock session file for context segment
+		const workspace_dir = BASE_DATA.workspace.current_dir.replace(/\//g, '-');
+		const session_dir = path.join(
+			process.env.HOME || '',
+			'.claude/projects',
+			workspace_dir,
+		);
+		const session_file = path.join(session_dir, `${BASE_DATA.session_id}.jsonl`);
+		
+		// Ensure directory exists
+		fs.mkdirSync(session_dir, { recursive: true });
+		fs.writeFileSync(session_file, create_mock_transcript(scenario));
+
 		const demo_data = {
 			...BASE_DATA,
 			transcript_path: temp_transcript_path,
@@ -129,6 +142,9 @@ async function run_demo(
 		} finally {
 			if (fs.existsSync(temp_transcript_path)) {
 				fs.unlinkSync(temp_transcript_path);
+			}
+			if (fs.existsSync(session_file)) {
+				fs.unlinkSync(session_file);
 			}
 		}
 		console.log('');

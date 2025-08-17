@@ -39,23 +39,15 @@ function create_default_config(): void {
 				segments: [
 					{
 						type: 'model',
-						enabled: true,
-						order: 1,
 					},
 					{
 						type: 'directory',
-						enabled: true,
-						order: 2,
 					},
 					{
 						type: 'git',
-						enabled: true,
-						order: 3,
 					},
 					{
 						type: 'session',
-						enabled: true,
-						order: 4,
 					},
 				],
 			},

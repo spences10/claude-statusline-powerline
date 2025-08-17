@@ -1,33 +1,23 @@
 {
 	"$schema": "../statusline.schema.json",
 	"color_theme": "night-owl",
-	"display": {
+	"segment_config": {
 		"lines": [
 			{
-				"segments": {
-					"directory": true,
-					"git": true
-				}
+				"directory": true,
+				"git": true
 			},
 			{
-				"segments": {
-					"model": true,
-					"session": true
-				}
+				"model": true,
+				"session": true
 			},
 			{
-				"segments": {
-					"context": true
-				}
+				"context": true
 			}
-		]
-	},
-	"segment_config": {
+		],
 		"segments": [
 			{
 				"type": "model",
-				"enabled": true,
-				"order": 1,
 				"style": {
 					"separator": {
 						"style": "double_chevron"
@@ -39,8 +29,6 @@
 			},
 			{
 				"type": "directory",
-				"enabled": true,
-				"order": 2,
 				"style": {
 					"truncation_length": 30,
 					"separator": {
@@ -53,8 +41,6 @@
 			},
 			{
 				"type": "git",
-				"enabled": true,
-				"order": 3,
 				"style": {
 					"truncation_length": 30,
 					"separator": {
@@ -64,8 +50,6 @@
 			},
 			{
 				"type": "session",
-				"enabled": true,
-				"order": 4,
 				"style": {
 					"separator": {
 						"style": "curvy"
@@ -74,8 +58,6 @@
 			},
 			{
 				"type": "context",
-				"enabled": true,
-				"order": 5,
 				"style": {
 					"separator": {
 						"style": "curvy"

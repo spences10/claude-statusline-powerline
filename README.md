@@ -24,6 +24,19 @@ support.
 - 🎯 **Settings IntelliSense** - autocomplete, validation, and hover
   docs in settings files
 
+## 📊 Available Segments
+
+| Segment       | Icon | Description                               | Example Output                 |
+| ------------- | ---- | ----------------------------------------- | ------------------------------ |
+| **Model**     | ⚡   | Shows the Claude model being used         | `⚡ Claude Sonnet 4`           |
+| **Directory** | 📁   | Current working directory name            | `📁 my-project`                |
+| **Git**       | 🌿   | Git branch and status with superscript    | `🌿 main ⁺3 ˜1 ᵘ2`             |
+| **Session**   | 💰   | Token usage, cost, and context monitoring | `💰 1.2k • $0.01 999k left`    |
+| **Context**   | 🧠   | Cache performance and session state       | `🧠 10.5k cached (70% reused)` |
+
+All segments can be **shown/hidden** (via `lines` configuration),
+**reordered**, and **customized** through the configuration file.
+
 ## Themes & Configuration
 
 ### 🎨 Color Themes:
@@ -40,7 +53,6 @@ support.
 - **`solarized-light`** - Light theme based on Solarized
 - **`gruvbox-light`** - Light variant of Gruvbox
 - **`alucard`** - Dark red theme inspired by Hellsing
-
 
 ### ⚡ Available Separator Styles:
 
@@ -82,29 +94,19 @@ Claude Statusline Powerline uses JSON configuration files with
 	"segment_config": {
 		"segments": [
 			{
-				"type": "model",
-				"enabled": true,
-				"order": 1
+				"type": "model"
 			},
 			{
-				"type": "directory",
-				"enabled": true,
-				"order": 2
+				"type": "directory"
 			},
 			{
-				"type": "git",
-				"enabled": true,
-				"order": 3
+				"type": "git"
 			},
 			{
-				"type": "session",
-				"enabled": true,
-				"order": 4
+				"type": "session"
 			},
 			{
-				"type": "context",
-				"enabled": true,
-				"order": 5
+				"type": "context"
 			}
 		]
 	}
@@ -128,29 +130,50 @@ Claude Statusline Powerline uses JSON configuration files with
 - `"gruvbox-light"` - Light warm theme
 - `"alucard"` - Dark red/crimson theme
 
-
 **Font Profiles:**
 
 - `"powerline"` - Basic powerline font support
 - `"nerd-font"` - Full Nerd Font support with more icons
 
+### Multi-line Layout & Segment Ordering
 
-### Custom Segment Ordering
-
-You can reorder segments by changing the `order` property:
+Control segment layout and ordering using the `lines` configuration:
 
 ```json
 {
 	"segment_config": {
+		"lines": [
+			{
+				"directory": true,
+				"git": true
+			},
+			{
+				"model": true,
+				"session": true
+			},
+			{
+				"context": true
+			}
+		],
 		"segments": [
-			{ "type": "git", "enabled": true, "order": 1 },
-			{ "type": "model", "enabled": true, "order": 2 },
-			{ "type": "directory", "enabled": true, "order": 3 },
-			{ "type": "session", "enabled": false, "order": 4 }
+			{ "type": "git" },
+			{ "type": "model" },
+			{ "type": "directory" },
+			{ "type": "session" }
 		]
 	}
 }
 ```
+
+**Control rules:**
+
+- **Visibility**: Only segments present in `lines` configuration are
+  shown
+- **Between lines**: Order determined by position in `lines` array
+- **Within lines**: Order determined by property order in each line
+  object
+- **Styling**: Use `segments` array to configure colors, icons,
+  separators, etc.
 
 ### Custom Icons
 
@@ -163,8 +186,6 @@ segment styles:
 		"segments": [
 			{
 				"type": "model",
-				"enabled": true,
-				"order": 1,
 				"style": {
 					"icons": {
 						"ai": "🤖"
@@ -173,8 +194,6 @@ segment styles:
 			},
 			{
 				"type": "directory",
-				"enabled": true,
-				"order": 2,
 				"style": {
 					"icons": {
 						"folder": "🗂️"
@@ -183,8 +202,6 @@ segment styles:
 			},
 			{
 				"type": "git",
-				"enabled": true,
-				"order": 3,
 				"style": {
 					"icons": {
 						"branch": "🌿",
@@ -195,8 +212,6 @@ segment styles:
 			},
 			{
 				"type": "session",
-				"enabled": true,
-				"order": 4,
 				"style": {
 					"icons": {
 						"cost": "💲"
@@ -237,8 +252,6 @@ Customize separators for individual segments or git states:
 		"segments": [
 			{
 				"type": "git",
-				"enabled": true,
-				"order": 3,
 				"style": {
 					"separator": {
 						"clean": "thick",
@@ -249,8 +262,6 @@ Customize separators for individual segments or git states:
 			},
 			{
 				"type": "model",
-				"enabled": true,
-				"order": 1,
 				"style": {
 					"separator": {
 						"style": "curvy"
@@ -262,30 +273,25 @@ Customize separators for individual segments or git states:
 }
 ```
 
-### Multi-line Layout Support
+### Single Line Layout
 
-For complex statuslines, use multi-line layouts:
+For simple single-line statuslines, just omit the `lines`
+configuration:
 
 ```json
 {
-	"display": {
-		"lines": [
-			{
-				"segments": {
-					"model": true,
-					"directory": true
-				}
-			},
-			{
-				"segments": {
-					"git": true,
-					"session": true
-				}
-			}
+	"segment_config": {
+		"segments": [
+			{ "type": "model" },
+			{ "type": "directory" },
+			{ "type": "git" },
+			{ "type": "session" }
 		]
 	}
 }
 ```
+
+Segments will appear in the order enabled segments are found.
 
 ## 🌿 Enhanced Git Status
 
@@ -313,7 +319,8 @@ beautiful superscript symbols optimized for Victor Mono font:
 
 ### Truncation Control
 
-Long segment content is automatically truncated. You can configure the maximum length per segment:
+Long segment content is automatically truncated. You can configure the
+maximum length per segment:
 
 ```json
 {
@@ -321,8 +328,6 @@ Long segment content is automatically truncated. You can configure the maximum l
 		"segments": [
 			{
 				"type": "git",
-				"enabled": true,
-				"order": 3,
 				"style": {
 					"truncation_length": 15
 				}

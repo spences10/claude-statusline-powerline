@@ -6,10 +6,6 @@ export class GitSegment extends BaseSegment {
 	name = 'git';
 	priority = 30;
 
-	is_enabled(config: StatuslineConfig): boolean {
-		return this.isSegmentEnabled(config);
-	}
-
 	build(
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,

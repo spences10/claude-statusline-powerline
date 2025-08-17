@@ -16,7 +16,6 @@ export abstract class BaseSegment implements SegmentBuilder {
 	abstract name: string;
 	abstract priority: number;
 
-	abstract is_enabled(config: StatuslineConfig): boolean;
 	abstract build(
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,
@@ -63,19 +62,6 @@ export abstract class BaseSegment implements SegmentBuilder {
 		);
 
 		return segment_config?.style;
-	}
-
-	/**
-	 * Check if this segment is enabled in the segment config
-	 */
-	protected isSegmentEnabled(config: StatuslineConfig): boolean {
-		if (!config.segment_config?.segments) return true; // Default to enabled
-
-		const segment_config = config.segment_config.segments.find(
-			(s) => s.type === this.name.toLowerCase(),
-		);
-
-		return segment_config?.enabled ?? true; // Default to enabled if not specified
 	}
 
 	/**

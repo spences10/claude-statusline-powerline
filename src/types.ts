@@ -166,23 +166,6 @@ export interface LineSegments
 	extends Partial<Record<SegmentType, boolean>> {}
 
 /**
- * Configuration for a single display line
- */
-export interface DisplayLine {
-	/** Which segments to show on this line */
-	segments: LineSegments;
-}
-
-/**
- * Multi-line display configuration
- * Allows organizing segments across multiple lines
- */
-export interface DisplayConfig {
-	/** Array of line configurations */
-	lines: DisplayLine[];
-}
-
-/**
  * Configuration for truncating segment content when too long
  */
 
@@ -193,8 +176,6 @@ export interface DisplayConfig {
 export interface StatuslineConfig {
 	/** Separator styles configuration */
 	separators: SeparatorConfig;
-	/** Multi-line display configuration (overrides segments) */
-	display?: DisplayConfig;
 	/** Color scheme */
 	color_theme?: ColorTheme;
 	/** Runtime theme object (populated automatically) */
@@ -269,10 +250,6 @@ export interface SegmentStyleConfig {
 export interface SegmentConfig {
 	/** Type of segment */
 	type: SegmentType;
-	/** Whether this segment is enabled */
-	enabled: boolean;
-	/** Display order (lower numbers appear first) */
-	order: number;
 	/** Custom styling for this segment */
 	style?: SegmentStyleConfig;
 }
@@ -284,6 +261,8 @@ export interface SegmentConfig {
 export interface SegmentsConfiguration {
 	/** Array of segment configurations */
 	segments: SegmentConfig[];
+	/** Multi-line configuration - which segments appear on each line */
+	lines?: LineSegments[];
 }
 
 // =============================================================================
@@ -430,7 +409,6 @@ export interface SegmentData {
 export interface SegmentBuilder {
 	name: string;
 	priority: number; // Lower numbers appear first
-	is_enabled(config: StatuslineConfig): boolean;
 	build(
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,
