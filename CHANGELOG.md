@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.16
+
+### Patch Changes
+
+- fc7ecb1: update/simplify settings configuration
+
 ## 0.0.15
 
 ### Patch Changes
