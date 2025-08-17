@@ -23,10 +23,7 @@ function run_registry_tests() {
 			return false;
 		}
 
-		if (
-			typeof segment.is_enabled !== 'function' ||
-			typeof segment.build !== 'function'
-		) {
+		if (typeof segment.build !== 'function') {
 			console.log('❌ FAIL: Segment missing required methods');
 			return false;
 		}
@@ -43,8 +40,8 @@ function run_registry_tests() {
 	}
 	console.log('✅ PASS: Segments ordered by priority');
 
-	// Test 4: Enabled segments filtering
-	console.log('\nTest 4: Enabled segments filtering');
+	// Test 4: Segment configuration handling
+	console.log('\nTest 4: Segment configuration handling');
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
 		font_profile: 'powerline',
@@ -64,38 +61,30 @@ function run_registry_tests() {
 			context: 'thick',
 		},
 		segment_config: {
-			segments: [
-				{ type: 'model', enabled: true, order: 1 },
-				{ type: 'directory', enabled: false, order: 2 },
-				{ type: 'git', enabled: true, order: 3 },
-				{ type: 'session', enabled: false, order: 4 },
-				{ type: 'context', enabled: false, order: 5 },
-			],
+			segments: [{ type: 'model' }, { type: 'git' }],
 		},
 	};
 
-	const enabled_segments =
+	const configured_segments =
 		segmentRegistry.get_enabled_segments(mock_config);
-	const enabled_names = enabled_segments.map((s) =>
+	const configured_names = configured_segments.map((s) =>
 		s.name.toLowerCase(),
 	);
 
-	if (
-		enabled_names.includes('directory') ||
-		enabled_names.includes('session')
-	) {
-		console.log('❌ FAIL: Disabled segments should not be enabled');
+	// Should return only configured segments
+	if (configured_names.length !== 2) {
+		console.log('❌ FAIL: Should return only configured segments');
 		return false;
 	}
 
 	if (
-		!enabled_names.includes('model') ||
-		!enabled_names.includes('git')
+		!configured_names.includes('model') ||
+		!configured_names.includes('git')
 	) {
-		console.log('❌ FAIL: Enabled segments should be included');
+		console.log('❌ FAIL: Configured segments should be included');
 		return false;
 	}
-	console.log('✅ PASS: Segment filtering works correctly');
+	console.log('✅ PASS: Segment configuration works correctly');
 
 	// Test 5: Expected segments exist
 	console.log('\nTest 5: Expected segments exist');

@@ -22,35 +22,6 @@
       ],
       "type": "string"
     },
-    "DisplayConfig": {
-      "description": "Multi-line display configuration\nAllows organizing segments across multiple lines",
-      "properties": {
-        "lines": {
-          "description": "Array of line configurations",
-          "items": {
-            "$ref": "#/definitions/DisplayLine"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "lines"
-      ],
-      "type": "object"
-    },
-    "DisplayLine": {
-      "description": "Configuration for a single display line",
-      "properties": {
-        "segments": {
-          "$ref": "#/definitions/LineSegments",
-          "description": "Which segments to show on this line"
-        }
-      },
-      "required": [
-        "segments"
-      ],
-      "type": "object"
-    },
     "FontProfile": {
       "description": "Font profiles that determine available separator characters\n- `powerline`: Uses Powerline font symbols\n- `nerd-font`: Uses Nerd Font symbols with more variety",
       "enum": [
@@ -118,14 +89,6 @@
     "SegmentConfig": {
       "description": "Configuration for a single segment with advanced options",
       "properties": {
-        "enabled": {
-          "description": "Whether this segment is enabled",
-          "type": "boolean"
-        },
-        "order": {
-          "description": "Display order (lower numbers appear first)",
-          "type": "number"
-        },
         "style": {
           "$ref": "#/definitions/SegmentStyleConfig",
           "description": "Custom styling for this segment"
@@ -136,8 +99,6 @@
         }
       },
       "required": [
-        "enabled",
-        "order",
         "type"
       ],
       "type": "object"
@@ -274,6 +235,13 @@
     "SegmentsConfiguration": {
       "description": "Advanced segment configuration system\nAllows fine-grained control over segment appearance and behavior",
       "properties": {
+        "lines": {
+          "description": "Multi-line configuration - which segments appear on each line",
+          "items": {
+            "$ref": "#/definitions/LineSegments"
+          },
+          "type": "array"
+        },
         "segments": {
           "description": "Array of segment configurations",
           "items": {
@@ -364,10 +332,6 @@
     "current_theme": {
       "description": "Internal property populated with actual theme object - not for user configuration"
     },
-    "display": {
-      "$ref": "#/definitions/DisplayConfig",
-      "description": "Configure multiline layout and which segments appear on each line"
-    },
     "font_profile": {
       "$ref": "#/definitions/FontProfile",
       "description": "Font compatibility profile determining available separator symbols",
@@ -379,7 +343,7 @@
     },
     "segment_config": {
       "$ref": "#/definitions/SegmentsConfiguration",
-      "description": "Advanced segment configuration with custom ordering, styling, and granular control"
+      "description": "Advanced segment configuration with multiline layout, styling, and granular control"
     },
     "separators": {
       "$ref": "#/definitions/SeparatorConfig",
@@ -391,31 +355,55 @@
   "examples": [
     {
       "color_theme": "dark",
-      "segments": {
-        "model": true,
-        "directory": true,
-        "git": true,
-        "session": true
+      "segment_config": {
+        "segments": [
+          {
+            "type": "model"
+          },
+          {
+            "type": "directory"
+          },
+          {
+            "type": "git"
+          },
+          {
+            "type": "session"
+          }
+        ]
       }
     },
     {
-      "display": {
+      "color_theme": "electric",
+      "segment_config": {
         "lines": [
           {
-            "segments": {
-              "directory": true,
-              "git": true,
-              "model": true
-            }
+            "directory": true,
+            "git": true,
+            "model": true
           },
           {
-            "segments": {
-              "session": true
-            }
+            "session": true,
+            "context": true
+          }
+        ],
+        "segments": [
+          {
+            "type": "model"
+          },
+          {
+            "type": "directory"
+          },
+          {
+            "type": "git"
+          },
+          {
+            "type": "session"
+          },
+          {
+            "type": "context"
           }
         ]
-      },
-      "color_theme": "electric"
+      }
     }
   ]
 }

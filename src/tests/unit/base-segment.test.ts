@@ -52,11 +52,11 @@ function run_base_segment_tests() {
 		},
 		segment_config: {
 			segments: [
-				{ type: 'model', enabled: true, order: 1 },
-				{ type: 'directory', enabled: true, order: 2 },
-				{ type: 'git', enabled: true, order: 3 },
-				{ type: 'session', enabled: true, order: 4 },
-				{ type: 'context', enabled: false, order: 5 },
+				{ type: 'model' },
+				{ type: 'directory' },
+				{ type: 'git' },
+				{ type: 'session' },
+				{ type: 'context' },
 			],
 		},
 	};

@@ -15,10 +15,6 @@ export class ContextSegment extends BaseSegment {
 	name = 'context';
 	priority = 45;
 
-	is_enabled(config: StatuslineConfig): boolean {
-		return this.isSegmentEnabled(config);
-	}
-
 	build(
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,

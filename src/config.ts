@@ -27,33 +27,23 @@ const DEFAULT_SEPARATORS: SeparatorConfig = {
 	context: 'thick',
 };
 
-// Default segments configuration with ordering and basic styling
+// Default segments configuration with basic styling
 export const DEFAULT_SEGMENTS_CONFIG: SegmentsConfiguration = {
 	segments: [
 		{
 			type: 'model',
-			enabled: true,
-			order: 1,
 		},
 		{
 			type: 'directory',
-			enabled: true,
-			order: 2,
 		},
 		{
 			type: 'git',
-			enabled: true,
-			order: 3,
 		},
 		{
 			type: 'session',
-			enabled: true,
-			order: 4,
 		},
 		{
 			type: 'context',
-			enabled: true,
-			order: 5,
 		},
 	],
 };
@@ -143,8 +133,6 @@ export const DEFAULT_CONFIG_TEMPLATE = {
 		segments: [
 			{
 				type: 'model',
-				enabled: true,
-				order: 1,
 				style: {
 					bg_color: '#1e40af',
 					fg_color: '#ffffff',
@@ -156,18 +144,12 @@ export const DEFAULT_CONFIG_TEMPLATE = {
 			},
 			{
 				type: 'directory',
-				enabled: true,
-				order: 2,
 			},
 			{
 				type: 'git',
-				enabled: true,
-				order: 3,
 			},
 			{
 				type: 'session',
-				enabled: true,
-				order: 4,
 			},
 		],
 	},

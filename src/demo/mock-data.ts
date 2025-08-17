@@ -12,21 +12,21 @@ export const MOCK_USAGE_SCENARIOS: MockUsageScenario[] = [
 		description: 'Light usage - quick questions',
 		input_tokens: 800,
 		output_tokens: 400,
-		cache_tokens: 200,
+		cache_tokens: 15000, // Warm session
 	},
 	{
 		name: 'medium',
 		description: 'Medium usage - code reviews',
 		input_tokens: 5000,
 		output_tokens: 3200,
-		cache_tokens: 1500,
+		cache_tokens: 25000, // Warm session
 	},
 	{
 		name: 'heavy',
 		description: 'Heavy usage - large refactoring',
 		input_tokens: 45000,
 		output_tokens: 32000,
-		cache_tokens: 8000,
+		cache_tokens: 50000, // Warm session
 	},
 	{
 		name: 'extreme',
