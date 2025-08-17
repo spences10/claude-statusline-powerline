@@ -208,7 +208,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 
 	// Claude Sonnet 4 - 1M context support with tiered pricing
 	'claude-sonnet-4-20250514': {
-		name: 'Claude Sonnet 4',
+		name: 'Sonnet 4',
 		input_tokens: 3, // ≤200K tokens, 6 for >200K
 		output_tokens: 15, // ≤200K tokens, 22.5 for >200K
 		cache_tokens: 0.3,
@@ -217,7 +217,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 
 	// Claude Sonnet 4 (simplified alias)
 	'claude-sonnet-4': {
-		name: 'Claude Sonnet 4',
+		name: 'Sonnet 4',
 		input_tokens: 3, // ≤200K tokens, 6 for >200K
 		output_tokens: 15, // ≤200K tokens, 22.5 for >200K
 		cache_tokens: 0.3,
@@ -226,7 +226,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 
 	// Claude Sonnet 3.7
 	'claude-3-7-sonnet-20250219': {
-		name: 'Claude Sonnet 3.7',
+		name: 'Sonnet 3.7',
 		input_tokens: 3,
 		output_tokens: 15,
 		cache_tokens: 0.3,
@@ -235,7 +235,7 @@ export const MODEL_PRICING: Record<string, ModelPricing> = {
 
 	// Claude Haiku 3.5
 	'claude-3-5-haiku-20241022': {
-		name: 'Claude Haiku 3.5',
+		name: 'Haiku 3.5',
 		input_tokens: 0.8,
 		output_tokens: 4,
 		cache_tokens: 0.08,

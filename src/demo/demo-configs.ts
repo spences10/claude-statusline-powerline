@@ -9,6 +9,21 @@ interface DemoConfigEntry {
 
 export const DEMO_CONFIGS: DemoConfigEntry[] = [
 	{
+		description: 'Default Config',
+		color_theme: 'dark',
+		segment_config: {
+			lines: [
+				{
+					model: true,
+					directory: true,
+					git: true,
+					session: true,
+				},
+			],
+			segments: [],
+		},
+	},
+	{
 		description: 'Night Owl + 3-line layout',
 		color_theme: 'night-owl',
 		segment_config: {
