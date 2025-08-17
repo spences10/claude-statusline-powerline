@@ -78,7 +78,7 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 		},
 	},
 	{
-		description: 'Dark + Minimal single line',
+		description: 'Dark + Minimal',
 		color_theme: 'dark',
 		segment_config: {
 			lines: [
