@@ -1,4 +1,4 @@
-import { load_config, SEPARATOR_THEMES } from '../../config';
+import { load_config } from '../../config';
 import { THEMES } from '../../themes';
 
 function run_config_tests() {
@@ -12,31 +12,14 @@ function run_config_tests() {
 		return false;
 	}
 
-	if (!config.color_theme || !config.theme || !config.font_profile) {
+	if (!config.color_theme || !config.font_profile) {
 		console.log('❌ FAIL: Config missing required properties');
 		return false;
 	}
 	console.log('✅ PASS: Default config loads correctly');
 
-	// Test 2: Separator themes exist
-	console.log('\nTest 2: Separator themes');
-	const theme_names = Object.keys(SEPARATOR_THEMES);
-	if (theme_names.length === 0) {
-		console.log('❌ FAIL: No separator themes found');
-		return false;
-	}
-
-	const required_themes = ['minimal', 'expressive'];
-	for (const theme of required_themes) {
-		if (!SEPARATOR_THEMES[theme]) {
-			console.log(`❌ FAIL: Missing required theme: ${theme}`);
-			return false;
-		}
-	}
-	console.log('✅ PASS: Separator themes exist');
-
-	// Test 3: Color themes exist
-	console.log('\nTest 3: Color themes');
+	// Test 2: Color themes exist
+	console.log('\nTest 2: Color themes');
 	const color_theme_names = Object.keys(THEMES);
 	if (color_theme_names.length === 0) {
 		console.log('❌ FAIL: No color themes found');
@@ -52,31 +35,23 @@ function run_config_tests() {
 	}
 	console.log('✅ PASS: Color themes exist');
 
-	// Test 4: Theme structure validation
-	console.log('\nTest 4: Theme structure validation');
-	for (const [theme_name, theme] of Object.entries(
-		SEPARATOR_THEMES,
-	)) {
-		if (!theme.model || !theme.directory || !theme.git) {
-			console.log(
-				`❌ FAIL: Theme ${theme_name} missing required segments`,
-			);
-			return false;
-		}
-
-		if (!theme.directory) {
-			console.log(
-				`❌ FAIL: Theme ${theme_name} missing directory separator`,
-			);
-			return false;
-		}
-
-		if (!theme.git.clean || !theme.git.dirty) {
-			console.log(`❌ FAIL: Theme ${theme_name} missing git states`);
-			return false;
-		}
+	// Test 3: Separator config validation
+	console.log('\nTest 3: Separator config validation');
+	if (!config.separators) {
+		console.log('❌ FAIL: Config missing separators');
+		return false;
 	}
-	console.log('✅ PASS: Theme structures valid');
+
+	if (!config.separators.model || !config.separators.directory || !config.separators.git) {
+		console.log('❌ FAIL: Separators missing required segments');
+		return false;
+	}
+
+	if (!config.separators.git.clean || !config.separators.git.dirty) {
+		console.log('❌ FAIL: Git separators missing states');
+		return false;
+	}
+	console.log('✅ PASS: Separator config valid');
 
 	console.log('\n✅ All Config tests passed!\n');
 	return true;

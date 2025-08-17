@@ -34,7 +34,6 @@ function run_base_segment_tests() {
 	};
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
-		theme: 'minimal',
 		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
@@ -51,12 +50,14 @@ function run_base_segment_tests() {
 			session: 'thick',
 			context: 'thick',
 		},
-		segments: {
-			model: true,
-			directory: true,
-			git: true,
-			session: true,
-			context: false,
+		segment_config: {
+			segments: [
+				{ type: 'model', enabled: true, order: 1 },
+				{ type: 'directory', enabled: true, order: 2 },
+				{ type: 'git', enabled: true, order: 3 },
+				{ type: 'session', enabled: true, order: 4 },
+				{ type: 'context', enabled: false, order: 5 },
+			],
 		},
 	};
 

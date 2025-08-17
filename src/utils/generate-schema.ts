@@ -1,7 +1,6 @@
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 
-import { SEPARATOR_THEMES } from '../config';
 import { FONT_PROFILES } from '../font-profiles';
 import { THEMES } from '../themes';
 
@@ -56,33 +55,39 @@ function generate_schema(): void {
 
 	// Add descriptions to main properties
 	if (enhanced_schema.properties) {
-		enhanced_schema.properties.separators.description =
-			'Configure separator styles for different segments and states';
-		enhanced_schema.properties.separatorProfile.description =
-			"Override separator styles with predefined profiles like 'all-curvy', 'mixed-dynamic', etc.";
-		enhanced_schema.properties.segments.description =
-			'Control which segments are visible in the statusline';
-		enhanced_schema.properties.display.description =
-			'Configure multiline layout and which segments appear on each line';
-		enhanced_schema.properties.theme.description =
-			'Separator theme preset determining visual style';
-		enhanced_schema.properties.color_theme.description =
-			'Color theme for segment backgrounds and text';
-		enhanced_schema.properties.font_profile.description =
-			'Font compatibility profile determining available separator symbols';
-		enhanced_schema.properties.segment_config.description =
-			'Advanced segment configuration with custom ordering, styling, and granular control';
-		enhanced_schema.properties.current_theme.description =
-			'Internal property populated with actual theme object - not for user configuration';
-
-		enhanced_schema.properties.color_theme.enum = Object.keys(THEMES);
-		enhanced_schema.properties.color_theme.default = 'dark';
-		enhanced_schema.properties.font_profile.enum =
-			Object.keys(FONT_PROFILES);
-		enhanced_schema.properties.font_profile.default = 'powerline';
-		enhanced_schema.properties.theme.enum =
-			Object.keys(SEPARATOR_THEMES);
-		enhanced_schema.properties.theme.default = 'minimal';
+		if (enhanced_schema.properties.separators) {
+			enhanced_schema.properties.separators.description =
+				'Configure separator styles for different segments and states';
+		}
+		if (enhanced_schema.properties.segments) {
+			enhanced_schema.properties.segments.description =
+				'Control which segments are visible in the statusline';
+		}
+		if (enhanced_schema.properties.display) {
+			enhanced_schema.properties.display.description =
+				'Configure multiline layout and which segments appear on each line';
+		}
+		if (enhanced_schema.properties.color_theme) {
+			enhanced_schema.properties.color_theme.description =
+				'Color theme for segment backgrounds and text';
+			enhanced_schema.properties.color_theme.enum = Object.keys(THEMES);
+			enhanced_schema.properties.color_theme.default = 'dark';
+		}
+		if (enhanced_schema.properties.font_profile) {
+			enhanced_schema.properties.font_profile.description =
+				'Font compatibility profile determining available separator symbols';
+			enhanced_schema.properties.font_profile.enum =
+				Object.keys(FONT_PROFILES);
+			enhanced_schema.properties.font_profile.default = 'powerline';
+		}
+		if (enhanced_schema.properties.segment_config) {
+			enhanced_schema.properties.segment_config.description =
+				'Advanced segment configuration with custom ordering, styling, and granular control';
+		}
+		if (enhanced_schema.properties.current_theme) {
+			enhanced_schema.properties.current_theme.description =
+				'Internal property populated with actual theme object - not for user configuration';
+		}
 	}
 
 	if (enhanced_schema.definitions?.SegmentStyleConfig) {
@@ -176,7 +181,6 @@ function generate_schema(): void {
 	enhanced_schema.examples = [
 		{
 			color_theme: 'dark',
-			theme: 'minimal',
 			segments: {
 				model: true,
 				directory: true,
@@ -202,7 +206,6 @@ function generate_schema(): void {
 				],
 			},
 			color_theme: 'electric',
-			theme: 'expressive',
 		},
 	];
 

@@ -271,34 +271,6 @@
       ],
       "type": "string"
     },
-    "SegmentVisibility": {
-      "description": "Defines which segments are visible in the statusline\nAll segment types must be explicitly enabled/disabled",
-      "properties": {
-        "context": {
-          "type": "boolean"
-        },
-        "directory": {
-          "type": "boolean"
-        },
-        "git": {
-          "type": "boolean"
-        },
-        "model": {
-          "type": "boolean"
-        },
-        "session": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "context",
-        "directory",
-        "git",
-        "model",
-        "session"
-      ],
-      "type": "object"
-    },
     "SegmentsConfiguration": {
       "description": "Advanced segment configuration system\nAllows fine-grained control over segment appearance and behavior",
       "properties": {
@@ -348,45 +320,6 @@
       ],
       "type": "object"
     },
-    "SeparatorProfile": {
-      "description": "Profile-based separator configuration with defaults and overrides\nAllows defining a default separator style with specific overrides",
-      "properties": {
-        "default": {
-          "$ref": "#/definitions/SeparatorStyle",
-          "description": "Default separator style for all segments"
-        },
-        "overrides": {
-          "allOf": [
-            {
-              "properties": {
-                "context": {
-                  "$ref": "#/definitions/SeparatorStyle",
-                  "description": "Override separator for context segment"
-                },
-                "directory": {
-                  "$ref": "#/definitions/SeparatorStyle",
-                  "description": "Override separator for directory segment"
-                },
-                "model": {
-                  "$ref": "#/definitions/SeparatorStyle",
-                  "description": "Override separator for model segment"
-                },
-                "session": {
-                  "$ref": "#/definitions/SeparatorStyle",
-                  "description": "Override separator for session segment"
-                }
-              },
-              "type": "object"
-            },
-            {
-              "$ref": "#/definitions/{git_clean?:SeparatorStyle;git_dirty?:SeparatorStyle;git_ahead?:SeparatorStyle;git_behind?:SeparatorStyle;git_conflicts?:SeparatorStyle;git_staged?:SeparatorStyle;git_untracked?:SeparatorStyle;}"
-            }
-          ],
-          "description": "Specific overrides for individual segments"
-        }
-      },
-      "type": "object"
-    },
     "SeparatorStyle": {
       "description": "Visual style of powerline separators between segments",
       "enum": [
@@ -402,82 +335,6 @@
         "wave"
       ],
       "type": "string"
-    },
-    "ThemeType": {
-      "description": "Available themes that define separator and styling patterns\n- `minimal`: Clean, minimal separators\n- `expressive`: Mixed separator styles with visual variety\n- `subtle`: Understated styling\n- `electric`: Bold, high-contrast styling\n- `curvy`: All curved separators\n- `angular`: All angular separators\n- `custom`: User-defined theme",
-      "enum": [
-        "angular",
-        "curvy",
-        "custom",
-        "electric",
-        "expressive",
-        "minimal",
-        "subtle"
-      ],
-      "type": "string"
-    },
-    "TruncationConfig": {
-      "description": "Configuration for truncating segment content when too long",
-      "properties": {
-        "context": {
-          "type": "number"
-        },
-        "directory": {
-          "type": "number"
-        },
-        "directory_length": {
-          "description": "Maximum characters for directory segment",
-          "type": "number"
-        },
-        "git": {
-          "type": "number"
-        },
-        "git_length": {
-          "description": "Maximum characters for git segment",
-          "type": "number"
-        },
-        "model": {
-          "type": "number"
-        },
-        "model_length": {
-          "description": "Maximum characters for model segment",
-          "type": "number"
-        },
-        "session": {
-          "type": "number"
-        },
-        "session_length": {
-          "description": "Maximum characters for session segment",
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "{git_clean?:SeparatorStyle;git_dirty?:SeparatorStyle;git_ahead?:SeparatorStyle;git_behind?:SeparatorStyle;git_conflicts?:SeparatorStyle;git_staged?:SeparatorStyle;git_untracked?:SeparatorStyle;}": {
-      "properties": {
-        "git_ahead": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_behind": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_clean": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_conflicts": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_dirty": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_staged": {
-          "$ref": "#/definitions/SeparatorStyle"
-        },
-        "git_untracked": {
-          "$ref": "#/definitions/SeparatorStyle"
-        }
-      },
-      "type": "object"
     }
   },
   "properties": {
@@ -524,34 +381,9 @@
       "$ref": "#/definitions/SegmentsConfiguration",
       "description": "Advanced segment configuration with custom ordering, styling, and granular control"
     },
-    "segments": {
-      "$ref": "#/definitions/SegmentVisibility",
-      "description": "Control which segments are visible in the statusline"
-    },
-    "separatorProfile": {
-      "$ref": "#/definitions/SeparatorProfile",
-      "description": "Override separator styles with predefined profiles like 'all-curvy', 'mixed-dynamic', etc."
-    },
     "separators": {
       "$ref": "#/definitions/SeparatorConfig",
       "description": "Configure separator styles for different segments and states"
-    },
-    "theme": {
-      "$ref": "#/definitions/ThemeType",
-      "description": "Separator theme preset determining visual style",
-      "enum": [
-        "minimal",
-        "expressive",
-        "subtle",
-        "electric",
-        "curvy",
-        "angular"
-      ],
-      "default": "minimal"
-    },
-    "truncation": {
-      "$ref": "#/definitions/TruncationConfig",
-      "description": "Content truncation settings"
     }
   },
   "type": "object",
@@ -559,7 +391,6 @@
   "examples": [
     {
       "color_theme": "dark",
-      "theme": "minimal",
       "segments": {
         "model": true,
         "directory": true,
@@ -584,8 +415,7 @@
           }
         ]
       },
-      "color_theme": "electric",
-      "theme": "expressive"
+      "color_theme": "electric"
     }
   ]
 }

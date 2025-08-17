@@ -66,6 +66,19 @@ export abstract class BaseSegment implements SegmentBuilder {
 	}
 
 	/**
+	 * Check if this segment is enabled in the segment config
+	 */
+	protected isSegmentEnabled(config: StatuslineConfig): boolean {
+		if (!config.segment_config?.segments) return true; // Default to enabled
+
+		const segment_config = config.segment_config.segments.find(
+			(s) => s.type === this.name.toLowerCase(),
+		);
+
+		return segment_config?.enabled ?? true; // Default to enabled if not specified
+	}
+
+	/**
 	 * Common setup pattern used by all segments
 	 * Returns font profile, style override, and icon getter function
 	 */

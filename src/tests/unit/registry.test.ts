@@ -47,7 +47,6 @@ function run_registry_tests() {
 	console.log('\nTest 4: Enabled segments filtering');
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
-		theme: 'minimal',
 		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
@@ -64,12 +63,14 @@ function run_registry_tests() {
 			session: 'thick',
 			context: 'thick',
 		},
-		segments: {
-			model: true,
-			directory: false,
-			git: true,
-			session: false,
-			context: false,
+		segment_config: {
+			segments: [
+				{ type: 'model', enabled: true, order: 1 },
+				{ type: 'directory', enabled: false, order: 2 },
+				{ type: 'git', enabled: true, order: 3 },
+				{ type: 'session', enabled: false, order: 4 },
+				{ type: 'context', enabled: false, order: 5 },
+			],
 		},
 	};
 

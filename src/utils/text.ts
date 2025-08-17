@@ -24,26 +24,29 @@ export function truncate_text(
  * Get the maximum length for a segment from config with fallbacks
  */
 export function get_segment_max_length(
-	segment_type: 'model' | 'directory' | 'git',
+	segment_type: 'model' | 'directory' | 'git' | 'session' | 'context',
 	style_override: SegmentStyleConfig | undefined,
 	config: StatuslineConfig,
 ): number {
-	// Priority: style override > global config > defaults
+	// Use style override if provided, otherwise use sensible defaults
 	if (style_override?.truncation_length) {
 		return style_override.truncation_length;
 	}
 
-	// Global config fallbacks
-	const global_truncation = config.truncation;
+	// Sensible defaults for each segment type
 	switch (segment_type) {
 		case 'model':
-			return global_truncation?.model_length || 15;
+			return 15;
 		case 'directory':
-			return global_truncation?.directory_length || 25;
+			return 25;
 		case 'git':
-			return global_truncation?.git_length || 25;
+			return 25;
+		case 'session':
+			return 30;
+		case 'context':
+			return 20;
 		default:
-			return 20; // Default fallback
+			return 20;
 	}
 }
 

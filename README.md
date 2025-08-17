@@ -19,35 +19,28 @@ support.
 - 📱 **Model info** - shows which Claude model you're using
 - 💰 **Session tracking** - real-time token usage and cost estimation
 - 📊 **Context monitoring** - smart warnings at 75% and 90% usage
-- 🧠 **Settings IntelliSense** - autocomplete, validation, and hover
+- 🧠 **Context caching** - displays cache hit rate and warm/cold
+  sessions
+- 🎯 **Settings IntelliSense** - autocomplete, validation, and hover
   docs in settings files
 
-## Separator Themes & Profiles
+## Themes & Configuration
 
 ### 🎨 Color Themes:
 
 - **`dark`** - Default professional dark theme
 - **`electric`** - High-contrast electric theme with vibrant colors
+- **`night-owl`** - Dark theme inspired by Night Owl
+- **`dracula`** - Popular Dracula theme colors
+- **`gruvbox`** - Retro groove color scheme
+- **`one-dark`** - Atom's One Dark theme
+- **`monokai`** - Classic Monokai theme
+- **`nord`** - Arctic, north-bluish theme
+- **`tokyo-night`** - Modern dark theme
+- **`solarized-light`** - Light theme based on Solarized
+- **`gruvbox-light`** - Light variant of Gruvbox
+- **`alucard`** - Dark red theme inspired by Hellsing
 
-### 🔧 Separator Themes:
-
-- **`minimal`** - Subtle thin separators, clean and professional
-- **`expressive`** - Full range of dynamic effects (default)
-- **`subtle`** - Balanced thick separators with gentle waves
-- **`electric`** - Maximum drama with lightning everywhere! ⚡
-- **`curvy`** - Smooth curved separators throughout
-- **`angular`** - Sharp angular separators for a modern look
-
-### 🔧 Separator Profiles
-
-Override any theme's separators with these profiles:
-
-- **`all-curvy`** - Make everything use curved separators
-- **`all-angly`** - All angular separators
-- **`mixed-dynamic`** - Curved by default, lightning/flame for dirty
-  repos
-- **`minimal-clean`** - Thin separators with thick accents for changes
-- **`electric-chaos`** - Maximum separator variety for power users
 
 ### ⚡ Available Separator Styles:
 
@@ -85,9 +78,7 @@ Claude Statusline Powerline uses JSON configuration files with
 {
 	"$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
 	"color_theme": "dark",
-	"theme": "expressive",
 	"font_profile": "nerd-font",
-	"separator_profile": "all-curvy",
 	"segment_config": {
 		"segments": [
 			{
@@ -109,6 +100,11 @@ Claude Statusline Powerline uses JSON configuration files with
 				"type": "session",
 				"enabled": true,
 				"order": 4
+			},
+			{
+				"type": "context",
+				"enabled": true,
+				"order": 5
 			}
 		]
 	}
@@ -121,29 +117,23 @@ Claude Statusline Powerline uses JSON configuration files with
 
 - `"dark"` - Classic blue/gray/yellow theme
 - `"electric"` - Purple/cyan/red theme
+- `"night-owl"` - Dark theme with blue/purple accents
+- `"dracula"` - Purple/pink/green Dracula theme
+- `"gruvbox"` - Warm retro colors
+- `"one-dark"` - Blue/purple Atom theme
+- `"monokai"` - Classic yellow/orange/green
+- `"nord"` - Cool blue/teal arctic theme
+- `"tokyo-night"` - Modern purple/blue theme
+- `"solarized-light"` - Light theme with blue accents
+- `"gruvbox-light"` - Light warm theme
+- `"alucard"` - Dark red/crimson theme
 
-**Separator Themes:**
-
-- `"minimal"` - Clean and simple separators
-- `"expressive"` - Bold, dynamic separators
-- `"subtle"` - Refined, understated style
-- `"electric"` - High-energy, lightning-style separators
-- `"curvy"` - Smooth, curved separators (Victor Mono compatible)
-- `"angular"` - Sharp, angular separators (Victor Mono compatible)
 
 **Font Profiles:**
 
 - `"powerline"` - Basic powerline font support
 - `"nerd-font"` - Full Nerd Font support with more icons
 
-**Separator Profiles:**
-
-- `"all-curvy"` - All curved separators
-- `"all-angly"` - All angular separators
-- `"mixed-dynamic"` - Curved with dynamic dirty state indicators
-- `"minimal-clean"` - Thin separators with thick for dirty states
-- `"electric-chaos"` - High-energy mix of lightning and flame
-  separators
 
 ### Custom Segment Ordering
 
@@ -237,6 +227,41 @@ segment styles:
 You can use any Unicode character, emoji, or Nerd Font icon code
 (e.g., `\uF07B` for folder).
 
+### Custom Separators
+
+Customize separators for individual segments or git states:
+
+```json
+{
+	"segment_config": {
+		"segments": [
+			{
+				"type": "git",
+				"enabled": true,
+				"order": 3,
+				"style": {
+					"separator": {
+						"clean": "thick",
+						"dirty": "lightning",
+						"conflicts": "flame"
+					}
+				}
+			},
+			{
+				"type": "model",
+				"enabled": true,
+				"order": 1,
+				"style": {
+					"separator": {
+						"style": "curvy"
+					}
+				}
+			}
+		]
+	}
+}
+```
+
 ### Multi-line Layout Support
 
 For complex statuslines, use multi-line layouts:
@@ -288,21 +313,7 @@ beautiful superscript symbols optimized for Victor Mono font:
 
 ### Truncation Control
 
-Long branch names and directory names are automatically truncated. You
-can configure the maximum length:
-
-```json
-{
-	"truncation": {
-		"model_length": 15,
-		"directory_length": 25,
-		"git_length": 20,
-		"session_length": 30
-	}
-}
-```
-
-Or override per segment:
+Long segment content is automatically truncated. You can configure the maximum length per segment:
 
 ```json
 {
@@ -371,21 +382,16 @@ powerline-style status.
 
 ## Segments
 
-1. **Model** (Blue) - Shows the Claude model name
-2. **Directory** (Gray) - Shows current directory name
-3. **Git** (Green/Yellow) - Enhanced status with superscript symbols
-4. **Session** (Purple) - Token usage, cost, and context monitoring
+1. **Model** - Shows the Claude model name
+2. **Directory** - Shows current directory name
+3. **Git** - Enhanced status with superscript symbols
+4. **Session** - Token usage, cost, and context monitoring
    - Format: `💰 {tokens}k • ${cost} {context}`
    - Context shows: remaining tokens (< 75%), percentage (75-89%), or
      warning (!90%+)
-
-## Colors
-
-- 🔵 **Blue** - Model information
-- ⚫ **Gray** - Directory/path information
-- 🟢 **Green** - Clean git repository
-- 🟡 **Yellow** - Dirty git repository (uncommitted changes)
-- 🟣 **Purple** - Session usage and cost tracking
+5. **Context** - Cache performance and session state
+   - Shows cache hit rate and total cached tokens for warm sessions
+   - Displays "Cold" for new sessions without significant cache usage
 
 ## Credits
 

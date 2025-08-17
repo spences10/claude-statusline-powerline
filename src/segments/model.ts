@@ -6,7 +6,7 @@ export class ModelSegment extends BaseSegment {
 	priority = 10;
 
 	is_enabled(config: StatuslineConfig): boolean {
-		return config.segments.model;
+		return this.isSegmentEnabled(config);
 	}
 
 	build(
