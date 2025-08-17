@@ -5,12 +5,12 @@ export class ElectricTheme extends BaseTheme {
 	name = 'electric';
 
 	palette: ThemePalette = {
-		primary: '#d946ef',
-		secondary: '#0ea5e9',
-		success: '#00ff41',
-		warning: '#ff4500',
-		error: '#ff1744',
-		neutral: '#00e5ff',
+		primary: '#ff00ff', // Electric magenta
+		secondary: '#00ffff', // Electric cyan
+		success: '#00ff00', // Electric green
+		warning: '#ffff00', // Electric yellow
+		error: '#ff0080', // Electric pink
+		neutral: '#8080ff', // Electric blue
 		text_light: '#ffffff',
 		text_dark: '#000000',
 	};

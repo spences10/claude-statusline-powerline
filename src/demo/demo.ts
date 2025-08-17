@@ -258,6 +258,149 @@ const DEMO_COMBINATIONS = [
 		},
 	},
 
+	// Dracula theme combinations
+	{
+		color_theme: 'dracula',
+		desc: 'Dracula + Minimal',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+			context: 'none',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+			context: false,
+		},
+	},
+	{
+		color_theme: 'dracula',
+		desc: 'Dracula + Expressive',
+		layout: 'single',
+		separators: {
+			model: 'wave',
+			directory: 'thick',
+			git: {
+				clean: 'thick',
+				dirty: 'lightning',
+				ahead: 'flame',
+				behind: 'wave',
+				conflicts: 'lightning',
+				staged: 'thick',
+				untracked: 'thin',
+			},
+			session: 'wave',
+			context: 'wave',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+			context: false,
+		},
+	},
+
+	// Gruvbox theme combinations
+	{
+		color_theme: 'gruvbox',
+		desc: 'Gruvbox + Curvy',
+		layout: 'single',
+		separators: {
+			model: 'curvy',
+			directory: 'curvy',
+			git: {
+				clean: 'curvy',
+				dirty: 'curvy',
+				ahead: 'curvy',
+				behind: 'curvy',
+				conflicts: 'curvy',
+				staged: 'curvy',
+				untracked: 'curvy',
+			},
+			session: 'curvy',
+			context: 'curvy',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+			context: false,
+		},
+	},
+
+	// Tokyo Night theme combinations
+	{
+		color_theme: 'tokyo-night',
+		desc: 'Tokyo Night + Angular',
+		layout: 'single',
+		separators: {
+			model: 'angly',
+			directory: 'angly',
+			git: {
+				clean: 'angly',
+				dirty: 'angly',
+				ahead: 'angly',
+				behind: 'angly',
+				conflicts: 'angly',
+				staged: 'angly',
+				untracked: 'angly',
+			},
+			session: 'angly',
+			context: 'angly',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+			context: false,
+		},
+	},
+
+	// Light theme combinations
+	{
+		color_theme: 'solarized-light',
+		desc: 'Solarized Light + Minimal',
+		layout: 'single',
+		separators: {
+			model: 'none',
+			directory: 'none',
+			git: {
+				clean: 'none',
+				dirty: 'none',
+				ahead: 'none',
+				behind: 'none',
+				conflicts: 'none',
+				staged: 'none',
+				untracked: 'none',
+			},
+			session: 'none',
+			context: 'none',
+		},
+		segments: {
+			model: true,
+			directory: true,
+			git: true,
+			session: true,
+			context: false,
+		},
+	},
+
 	// Night Owl theme combinations
 	{
 		color_theme: 'night-owl',
@@ -369,6 +512,32 @@ const DEMO_COMBINATIONS = [
 	},
 
 	// Multi-line layouts
+	{
+		color_theme: 'dracula',
+		desc: 'Dracula + Curvy (2-line)',
+		layout: 'two-line',
+		separators: {
+			model: 'curvy',
+			directory: 'curvy',
+			git: {
+				clean: 'curvy',
+				dirty: 'curvy',
+				ahead: 'curvy',
+				behind: 'curvy',
+				conflicts: 'curvy',
+				staged: 'curvy',
+				untracked: 'curvy',
+			},
+			session: 'curvy',
+			context: 'curvy',
+		},
+		display: {
+			lines: [
+				{ segments: { directory: true, git: true } },
+				{ segments: { model: true, session: true } },
+			],
+		},
+	},
 	{
 		color_theme: 'dark',
 		desc: 'Dark + Minimal (2-line)',

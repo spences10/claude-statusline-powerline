@@ -7,9 +7,18 @@
     "ColorTheme": {
       "description": "Available color themes\n- `dark`: Dark theme with muted colors\n- `electric`: High-contrast electric colors\n- `night-owl`: Night Owl inspired color scheme",
       "enum": [
+        "alucard",
         "dark",
+        "dracula",
         "electric",
-        "night-owl"
+        "gruvbox",
+        "gruvbox-light",
+        "monokai",
+        "night-owl",
+        "nord",
+        "one-dark",
+        "solarized-light",
+        "tokyo-night"
       ],
       "type": "string"
     },
@@ -482,7 +491,16 @@
       "enum": [
         "dark",
         "electric",
-        "night-owl"
+        "night-owl",
+        "dracula",
+        "gruvbox",
+        "one-dark",
+        "monokai",
+        "nord",
+        "tokyo-night",
+        "solarized-light",
+        "gruvbox-light",
+        "alucard"
       ],
       "default": "dark"
     },

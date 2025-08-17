@@ -16,7 +16,7 @@ export abstract class BaseTheme implements StatuslineTheme {
 			),
 			directory: create_segment_theme(
 				this.palette.neutral,
-				this.palette.text_light,
+				this.palette.text_dark,
 			),
 			git: {
 				clean: create_segment_theme(
@@ -34,7 +34,7 @@ export abstract class BaseTheme implements StatuslineTheme {
 			),
 			context: create_segment_theme(
 				'#0891b2', // Cyan/teal for context (brain/cache)
-				this.palette.text_light,
+				this.palette.text_dark,
 			),
 		};
 	}
