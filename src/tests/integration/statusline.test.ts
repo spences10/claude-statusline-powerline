@@ -8,7 +8,7 @@ function run_statusline_integration_tests() {
 
 	const mock_data: ClaudeStatusInput = {
 		session_id: 'test-session-123',
-		model: { display_name: 'Claude Sonnet 4' },
+		model: { display_name: 'Sonnet 4' },
 		workspace: { current_dir: process.cwd() },
 	};
 
@@ -38,7 +38,7 @@ function run_statusline_integration_tests() {
 	console.log('\nTest 3: Model name in output');
 	// Remove ANSI codes for content checking
 	const clean_result = result.replace(/\x1b\[[0-9;]*m/g, '');
-	if (!clean_result.includes('Claude Sonnet 4')) {
+	if (!clean_result.includes('Sonnet 4')) {
 		console.log('❌ FAIL: Model name should appear in output');
 		console.log('Clean result:', clean_result);
 		return false;

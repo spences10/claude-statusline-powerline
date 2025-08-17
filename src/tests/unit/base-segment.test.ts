@@ -29,7 +29,7 @@ function run_base_segment_tests() {
 	const segment = new TestSegment();
 	const mock_data: ClaudeStatusInput = {
 		session_id: 'test-session',
-		model: { display_name: 'Claude Sonnet 4' },
+		model: { display_name: 'Sonnet 4' },
 		workspace: { current_dir: '/test' },
 	};
 	const mock_config: StatuslineConfig = {

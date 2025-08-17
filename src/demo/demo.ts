@@ -12,7 +12,7 @@ const BASE_DATA: ClaudeStatusInput = {
 	session_id: 'demo-session',
 	model: {
 		id: 'claude-sonnet-4-20250514',
-		display_name: 'Claude Sonnet 4',
+		display_name: 'Sonnet 4',
 	},
 	workspace: {
 		current_dir: process.cwd(),
@@ -109,14 +109,20 @@ async function run_demo(
 		);
 
 		// Create mock session file for context segment
-		const workspace_dir = BASE_DATA.workspace.current_dir.replace(/\//g, '-');
+		const workspace_dir = BASE_DATA.workspace.current_dir.replace(
+			/\//g,
+			'-',
+		);
 		const session_dir = path.join(
 			process.env.HOME || '',
 			'.claude/projects',
 			workspace_dir,
 		);
-		const session_file = path.join(session_dir, `${BASE_DATA.session_id}.jsonl`);
-		
+		const session_file = path.join(
+			session_dir,
+			`${BASE_DATA.session_id}.jsonl`,
+		);
+
 		// Ensure directory exists
 		fs.mkdirSync(session_dir, { recursive: true });
 		fs.writeFileSync(session_file, create_mock_transcript(scenario));
