@@ -29,7 +29,6 @@
 				"enabled": true,
 				"order": 1,
 				"style": {
-					"fg_color": "#000000",
 					"separator": {
 						"style": "double_chevron"
 					},
