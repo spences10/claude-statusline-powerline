@@ -7,7 +7,7 @@ export class DirectorySegment extends BaseSegment {
 	priority = 20;
 
 	is_enabled(config: StatuslineConfig): boolean {
-		return config.segments.directory;
+		return this.isSegmentEnabled(config);
 	}
 
 	build(

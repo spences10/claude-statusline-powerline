@@ -7,7 +7,7 @@ export class GitSegment extends BaseSegment {
 	priority = 30;
 
 	is_enabled(config: StatuslineConfig): boolean {
-		return config.segments.git;
+		return this.isSegmentEnabled(config);
 	}
 
 	build(

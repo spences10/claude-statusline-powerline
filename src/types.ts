@@ -159,36 +159,6 @@ export interface SeparatorConfig {
 }
 
 /**
- * Profile-based separator configuration with defaults and overrides
- * Allows defining a default separator style with specific overrides
- */
-export interface SeparatorProfile {
-	/** Default separator style for all segments */
-	default?: SeparatorStyle;
-	/** Specific overrides for individual segments */
-	overrides?: {
-		/** Override separator for model segment */
-		model?: SeparatorStyle;
-		/** Override separator for directory segment */
-		directory?: SeparatorStyle;
-		/** Override separator for session segment */
-		session?: SeparatorStyle;
-		/** Override separator for context segment */
-		context?: SeparatorStyle;
-	} & {
-		/** Override separators for specific git states (e.g., git_dirty, git_clean) */
-		[K in GitState as `git_${K}`]?: SeparatorStyle;
-	};
-}
-
-/**
- * Defines which segments are visible in the statusline
- * All segment types must be explicitly enabled/disabled
- */
-export interface SegmentVisibility
-	extends Record<SegmentType, boolean> {}
-
-/**
  * Defines which segments appear on a specific line
  * Segments are optional (can be omitted from a line)
  */
@@ -215,17 +185,6 @@ export interface DisplayConfig {
 /**
  * Configuration for truncating segment content when too long
  */
-export interface TruncationConfig
-	extends Partial<Record<SegmentType, number>> {
-	/** Maximum characters for model segment */
-	model_length?: number;
-	/** Maximum characters for directory segment */
-	directory_length?: number;
-	/** Maximum characters for git segment */
-	git_length?: number;
-	/** Maximum characters for session segment */
-	session_length?: number;
-}
 
 /**
  * Complete configuration for the statusline
@@ -234,14 +193,8 @@ export interface TruncationConfig
 export interface StatuslineConfig {
 	/** Separator styles configuration */
 	separators: SeparatorConfig;
-	/** Alternative profile-based separator configuration */
-	separatorProfile?: SeparatorProfile;
-	/** Which segments to display */
-	segments: SegmentVisibility;
 	/** Multi-line display configuration (overrides segments) */
 	display?: DisplayConfig;
-	/** Theme for styling and separator patterns */
-	theme: ThemeType;
 	/** Color scheme */
 	color_theme?: ColorTheme;
 	/** Runtime theme object (populated automatically) */
@@ -250,8 +203,6 @@ export interface StatuslineConfig {
 	font_profile?: FontProfile;
 	/** Advanced segment configuration with styling */
 	segment_config?: SegmentsConfiguration;
-	/** Content truncation settings */
-	truncation?: TruncationConfig;
 }
 
 /**

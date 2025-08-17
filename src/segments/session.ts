@@ -18,7 +18,7 @@ export class SessionSegment extends BaseSegment {
 	priority = 40;
 
 	is_enabled(config: StatuslineConfig): boolean {
-		return config.segments.session;
+		return this.isSegmentEnabled(config);
 	}
 
 	build(

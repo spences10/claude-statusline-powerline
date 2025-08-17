@@ -4,148 +4,27 @@ import * as path from 'node:path';
 
 import { get_theme } from './themes';
 import {
-	GitState,
 	ModelPricing,
 	SegmentsConfiguration,
-	SegmentVisibility,
 	SeparatorConfig,
-	SeparatorProfile,
-	SeparatorStyle,
 	StatuslineConfig,
 } from './types';
 
-// Separator profile presets for easy customization
-export const SEPARATOR_PROFILES: Record<string, SeparatorProfile> = {
-	'all-curvy': {
-		default: 'curvy',
+// Default separator configuration - simple and clean
+const DEFAULT_SEPARATORS: SeparatorConfig = {
+	model: 'thick',
+	directory: 'thick',
+	git: {
+		clean: 'thick',
+		dirty: 'thick',
+		ahead: 'thick',
+		behind: 'thick',
+		conflicts: 'thick',
+		staged: 'thick',
+		untracked: 'thick',
 	},
-	'all-angly': {
-		default: 'angly',
-	},
-	'mixed-dynamic': {
-		default: 'curvy',
-		overrides: {
-			directory: 'lightning',
-			git_dirty: 'flame',
-		},
-	},
-	'minimal-clean': {
-		default: 'thin',
-		overrides: {
-			directory: 'thick',
-			git_dirty: 'thick',
-		},
-	},
-	'electric-chaos': {
-		default: 'lightning',
-		overrides: {
-			model: 'flame',
-			git_clean: 'angly2',
-			git_dirty: 'lightning',
-		},
-	},
-};
-
-// Helper function to create separator theme with base style and overrides
-function create_separator_theme(
-	base_style: SeparatorStyle,
-	overrides: {
-		model?: SeparatorStyle;
-		directory?: SeparatorStyle;
-		git?: Partial<Record<GitState, SeparatorStyle>>;
-		session?: SeparatorStyle;
-		context?: SeparatorStyle;
-	} = {},
-): SeparatorConfig {
-	const base_theme: SeparatorConfig = {
-		model: base_style,
-		directory: base_style,
-		git: {
-			clean: base_style,
-			dirty: base_style,
-			ahead: base_style,
-			behind: base_style,
-			conflicts: base_style,
-			staged: base_style,
-			untracked: base_style,
-		},
-		session: base_style,
-		context: base_style,
-	};
-
-	return {
-		...base_theme,
-		...overrides,
-		git: {
-			...base_theme.git,
-			...overrides.git,
-		},
-	};
-}
-
-// Separator theme presets
-export const SEPARATOR_THEMES: Record<string, SeparatorConfig> = {
-	minimal: create_separator_theme('thin', {
-		git: {
-			dirty: 'thick',
-			conflicts: 'thick',
-		},
-	}),
-
-	expressive: create_separator_theme('wave', {
-		git: {
-			clean: 'thick',
-			dirty: 'lightning',
-			ahead: 'flame',
-			conflicts: 'lightning',
-			staged: 'thick',
-			untracked: 'thin',
-		},
-		context: 'curvy',
-	}),
-
-	subtle: create_separator_theme('thick', {
-		git: {
-			dirty: 'flame',
-			conflicts: 'flame',
-			untracked: 'thin',
-		},
-	}),
-
-	// Fun experimental preset
-	electric: create_separator_theme('lightning', {
-		directory: 'flame',
-		git: {
-			clean: 'wave',
-			behind: 'wave',
-			conflicts: 'flame',
-			untracked: 'flame',
-		},
-	}),
-
-	// Powerline-extra-symbols themes for Victor Mono compatibility
-	curvy: create_separator_theme('curvy', {
-		git: {
-			dirty: 'flame',
-			conflicts: 'flame',
-		},
-	}),
-
-	angular: create_separator_theme('angly', {
-		git: {
-			dirty: 'flame',
-			conflicts: 'flame',
-		},
-	}),
-};
-
-// Default segment visibility
-export const DEFAULT_SEGMENTS: SegmentVisibility = {
-	model: true,
-	directory: true,
-	git: true,
-	session: true,
-	context: true, // enabled by default
+	session: 'thick',
+	context: 'thick',
 };
 
 // Default segments configuration with ordering and basic styling
@@ -171,46 +50,19 @@ export const DEFAULT_SEGMENTS_CONFIG: SegmentsConfiguration = {
 			enabled: true,
 			order: 4,
 		},
+		{
+			type: 'context',
+			enabled: true,
+			order: 5,
+		},
 	],
 };
 
 // Default configuration
 export const DEFAULT_CONFIG: StatuslineConfig = {
-	separators: SEPARATOR_THEMES.expressive,
-	segments: DEFAULT_SEGMENTS,
-	theme: 'expressive',
+	separators: DEFAULT_SEPARATORS,
 	segment_config: DEFAULT_SEGMENTS_CONFIG,
 };
-
-// Apply separator profile to override theme separators
-export function apply_separator_profile(
-	base_config: SeparatorConfig,
-	profile: SeparatorProfile,
-): SeparatorConfig {
-	const default_style = profile.default || 'thick';
-	const overrides = profile.overrides || {};
-
-	return {
-		model: overrides.model || default_style,
-		directory: overrides.directory || default_style,
-		git: {
-			clean: overrides.git_clean || default_style,
-			dirty: overrides.git_dirty || default_style,
-			ahead: overrides.git_ahead || default_style,
-			behind: overrides.git_behind || default_style,
-			conflicts: overrides.git_conflicts || default_style,
-			staged: overrides.git_staged || default_style,
-			untracked: overrides.git_untracked || default_style,
-		},
-		session: overrides.session || default_style,
-		context: overrides.context || default_style,
-	};
-}
-
-// Default segment visibility
-function get_default_segment_visibility(): SegmentVisibility {
-	return DEFAULT_SEGMENTS;
-}
 
 // Load config from JSON file
 function load_config_from_file(): Partial<StatuslineConfig> | null {
@@ -329,7 +181,6 @@ export function load_config(): StatuslineConfig {
 	// Start with default configuration
 	let config: StatuslineConfig = {
 		...DEFAULT_CONFIG,
-		segments: get_default_segment_visibility(),
 		color_theme: 'dark',
 		font_profile: 'powerline',
 		current_theme: get_theme('dark'),
