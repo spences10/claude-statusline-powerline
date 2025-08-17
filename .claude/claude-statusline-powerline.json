@@ -1,5 +1,5 @@
 {
-	"$schema": "https://raw.githubusercontent.com/spences10/claude-statusline-powerline/main/statusline.schema.json",
+	"$schema": "../statusline.schema.json",
 	"color_theme": "night-owl",
 	"display": {
 		"lines": [
@@ -29,11 +29,9 @@
 				"enabled": true,
 				"order": 1,
 				"style": {
-					"bg_color": "#1e40af",
 					"fg_color": "#000000",
 					"separator": {
-						"style": "double_chevron",
-						"color": "#1e40af"
+						"style": "double_chevron"
 					},
 					"icons": {
 						"ai": "🤖"
@@ -80,7 +78,6 @@
 				"enabled": true,
 				"order": 5,
 				"style": {
-					"fg_color": "#000000",
 					"separator": {
 						"style": "curvy"
 					}

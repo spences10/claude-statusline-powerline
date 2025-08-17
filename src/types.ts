@@ -101,7 +101,19 @@ export type ThemeType =
  * - `electric`: High-contrast electric colors
  * - `night-owl`: Night Owl inspired color scheme
  */
-export type ColorTheme = 'dark' | 'electric' | 'night-owl';
+export type ColorTheme =
+	| 'dark'
+	| 'electric'
+	| 'night-owl'
+	| 'dracula'
+	| 'gruvbox'
+	| 'one-dark'
+	| 'monokai'
+	| 'nord'
+	| 'tokyo-night'
+	| 'solarized-light'
+	| 'gruvbox-light'
+	| 'alucard';
 
 /**
  * Font profiles that determine available separator characters
