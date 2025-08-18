@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.17
+
+### Patch Changes
+
+- readme demo image
+
 ## 0.0.16
 
 ### Patch Changes
