@@ -9,10 +9,10 @@ importers:
   .:
     devDependencies:
       '@changesets/cli':
-        specifier: ^2.29.5
+        specifier: ^2.29.6
         version: 2.29.6(@types/node@24.3.0)
       '@types/node':
-        specifier: ^24.2.1
+        specifier: ^24.3.0
         version: 24.3.0
       prettier:
         specifier: ^3.6.2
