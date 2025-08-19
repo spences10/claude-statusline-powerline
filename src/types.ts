@@ -413,7 +413,6 @@ export interface SegmentData {
  */
 export interface SegmentBuilder {
 	name: string;
-	priority: number; // Lower numbers appear first
 	build(
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,

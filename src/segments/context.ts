@@ -13,7 +13,6 @@ interface ContextInfo {
 
 export class ContextSegment extends BaseSegment {
 	name = 'context';
-	priority = 45;
 
 	build(
 		data: ClaudeStatusInput,

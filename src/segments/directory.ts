@@ -4,7 +4,6 @@ import { BaseSegment, SegmentData } from './base';
 
 export class DirectorySegment extends BaseSegment {
 	name = 'directory';
-	priority = 20;
 
 	build(
 		data: ClaudeStatusInput,
