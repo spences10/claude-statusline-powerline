@@ -2,7 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/claude-statusline-powerline.svg)](https://badge.fury.io/js/claude-statusline-powerline)
 [![npm downloads](https://img.shields.io/npm/dm/claude-statusline-powerline.svg)](https://www.npmjs.com/package/claude-statusline-powerline)
-[![install size](https://packagephobia.com/badge?p=claude-statusline-powerline)](https://packagephobia.com/result?p=claude-statusline-powerline)
 [![license](https://img.shields.io/npm/l/claude-statusline-powerline.svg)](https://github.com/spences10/claude-statusline-powerline/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 

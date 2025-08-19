@@ -22,6 +22,7 @@ import {
 	show_daily_stats,
 	show_project_stats,
 	show_stats,
+	show_tool_stats,
 } from './commands/stats';
 import {
 	list_separators,
@@ -142,6 +143,10 @@ export function run_cli(): void {
 
 		case '--stats-cache':
 			show_cache_stats();
+			break;
+
+		case '--stats-tools':
+			show_tool_stats();
 			break;
 
 		case '--export-data':

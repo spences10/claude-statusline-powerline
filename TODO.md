@@ -1,16 +1,12 @@
 # Usage Analytics Enhancement Ideas
 
-## 1. Tool Usage Dashboard 🚧
+## 1. Tool Usage Enhancements 🚧
 
-**Status**: Ready to Implement (Foundation Complete) **Description**:
-Track which tools are used most frequently, success rates, and
-patterns
+**Status**: Partial Implementation (Core Complete)  
+**Description**: Remaining tool usage analytics features
 
-- [ ] Tool call frequency analytics
-- [ ] Success/failure rates per tool
-- [ ] Tool usage patterns and combinations
+- [ ] Success/failure rates per tool (needs refinement)
 - [ ] Performance metrics (execution time)
-- [ ] CLI command: `--stats-tools`
 - [ ] Add tool tracking to usage database schema
 
 ## 2. Session Quality Metrics 🤔
@@ -30,7 +26,6 @@ different projects
 
 - ✅ Cross-project usage analysis (`--stats-project`)
 - ✅ Cost allocation by project
-- [ ] Project-specific tool preferences (needs tool tracking)
 - [ ] Enhanced project insights
 
 ## 4. Time-based Analysis 🚧
