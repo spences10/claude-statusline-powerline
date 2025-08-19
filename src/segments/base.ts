@@ -14,7 +14,6 @@ export { SegmentBuilder, SegmentData } from '../types';
 
 export abstract class BaseSegment implements SegmentBuilder {
 	abstract name: string;
-	abstract priority: number;
 
 	abstract build(
 		data: ClaudeStatusInput,

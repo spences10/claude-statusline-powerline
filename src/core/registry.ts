@@ -33,10 +33,8 @@ export class SegmentRegistry {
 			return segments;
 		}
 
-		// Fallback: show all segments sorted by priority
-		return this.get_all_segments().sort(
-			(a, b) => a.priority - b.priority,
-		);
+		// Fallback: show all segments in registration order
+		return this.get_all_segments();
 	}
 
 	get_segment_names(): string[] {

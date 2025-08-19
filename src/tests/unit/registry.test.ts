@@ -18,8 +18,8 @@ function run_registry_tests() {
 	// Test 2: Segments have required properties
 	console.log('\nTest 2: Segment properties');
 	for (const segment of all_segments) {
-		if (!segment.name || typeof segment.priority !== 'number') {
-			console.log('❌ FAIL: Segment missing name or priority');
+		if (!segment.name) {
+			console.log('❌ FAIL: Segment missing name');
 			return false;
 		}
 
@@ -29,16 +29,6 @@ function run_registry_tests() {
 		}
 	}
 	console.log('✅ PASS: All segments have required properties');
-
-	// Test 3: Priority ordering
-	console.log('\nTest 3: Priority ordering');
-	for (let i = 0; i < all_segments.length - 1; i++) {
-		if (all_segments[i].priority > all_segments[i + 1].priority) {
-			console.log('❌ FAIL: Segments not ordered by priority');
-			return false;
-		}
-	}
-	console.log('✅ PASS: Segments ordered by priority');
 
 	// Test 4: Segment configuration handling
 	console.log('\nTest 4: Segment configuration handling');

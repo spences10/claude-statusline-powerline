@@ -10,7 +10,6 @@ import { BaseSegment, SegmentData } from './base';
 
 export class UsageSegment extends BaseSegment {
 	name = 'usage';
-	priority = 35; // Between session (40) and git (30)
 
 	build(
 		data: ClaudeStatusInput,

@@ -3,7 +3,6 @@ import { BaseSegment, SegmentData } from './base';
 
 export class ModelSegment extends BaseSegment {
 	name = 'model';
-	priority = 10;
 
 	build(
 		data: ClaudeStatusInput,

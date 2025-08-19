@@ -4,7 +4,6 @@ import { BaseSegment, SegmentData } from './base';
 
 export class GitSegment extends BaseSegment {
 	name = 'git';
-	priority = 30;
 
 	build(
 		data: ClaudeStatusInput,
