@@ -1,28 +1,19 @@
 # Usage Analytics Enhancement Ideas
 
-## 1. Tool Usage Dashboard ✅
+## 1. Tool Usage Dashboard 🚧
 
-**Status**: High Priority  
-**Description**: Track which tools are used most frequently, success
-rates, and patterns
+**Status**: Ready to Implement (Foundation Complete) **Description**:
+Track which tools are used most frequently, success rates, and
+patterns
 
-- Tool call frequency analytics
-- Success/failure rates per tool
-- Tool usage patterns and combinations
-- Performance metrics (execution time)
+- [ ] Tool call frequency analytics
+- [ ] Success/failure rates per tool
+- [ ] Tool usage patterns and combinations
+- [ ] Performance metrics (execution time)
+- [ ] CLI command: `--stats-tools`
+- [ ] Add tool tracking to usage database schema
 
-## 2. Git Branch Analytics ❓
-
-**Status**: Needs Clarification  
-**Description**: Cost/usage breakdown by git branch
-
-- **Question**: How is this useful? What insights would this provide?
-- Potential use cases:
-  - Feature branch cost tracking?
-  - Development vs production branch analysis?
-  - Team collaboration patterns?
-
-## 3. Session Quality Metrics 🤔
+## 2. Session Quality Metrics 🤔
 
 **Status**: Maybe  
 **Description**: Analyze conversation quality and patterns
@@ -32,35 +23,37 @@ rates, and patterns
 - User vs assistant message ratios
 - Session duration trends
 
-## 4. Cache Efficiency Tracking 🔄
+## 3. Cache Efficiency Tracking 🚧
 
-**Status**: Session Extension  
-**Description**: Enhanced cache analytics beyond current basic
-tracking
+**Status**: Ready to Implement (Data Available) **Description**:
+Enhanced cache analytics beyond current basic tracking
 
-- Cache hit rates and miss patterns
-- Cache savings calculations
-- Cache efficiency by project/model
-- Context window utilization
+- ✅ Cache token tracking (already in database)
+- [ ] Cache hit rate calculations
+- [ ] Cache savings by project/model
+- [ ] Context window utilization analysis
+- [ ] CLI command: `--stats-cache`
 
-## 5. Project Comparison 🤔
+## 5. Project Comparison ✅
 
-**Status**: Maybe  
-**Description**: Usage patterns across different projects
+**Status**: Basic Implementation Complete **Description**: Usage
+patterns across different projects
 
-- Cross-project usage analysis
-- Project-specific tool preferences
-- Cost allocation by project
+- ✅ Cross-project usage analysis (`--stats-project`)
+- ✅ Cost allocation by project
+- [ ] Project-specific tool preferences (needs tool tracking)
+- [ ] Enhanced project insights
 
-## 6. Time-based Analysis 🤔
+## 6. Time-based Analysis 🚧
 
-**Status**: Maybe  
-**Description**: Temporal usage patterns
+**Status**: Ready to Implement (Data Available) **Description**:
+Temporal usage patterns
 
-- Peak usage hours identification
-- Session duration trends
-- Daily/weekly usage patterns
-- Productivity insights
+- ✅ Daily usage patterns (basic via `--stats-daily`)
+- [ ] Peak usage hours identification
+- [ ] Session duration trends analysis
+- [ ] Weekly/monthly productivity insights
+- [ ] CLI command: `--stats-time`
 
 ---
 
@@ -108,21 +101,14 @@ different insights.
 
 ---
 
-## CLI Enhancement & Refactoring
+## CLI Enhancement & Refactoring ✅
 
-### Current CLI Structure Issues
+### Status: **COMPLETED**
 
-- CLI logic scattered across multiple files: `src/statusline.ts`,
-  `src/cli-config.ts`, `src/install.ts`
-- Limited CLI functionality compared to potential
-- No consistent command structure or help system
+The CLI has been successfully refactored with a modular structure and
+comprehensive commands.
 
-### Proposed CLI Refactoring
-
-**Goal**: Consolidate all CLI functionality into a dedicated `/cli`
-folder with modular commands
-
-#### New CLI Structure
+#### Implemented CLI Structure ✅
 
 ```
 src/cli/
@@ -136,67 +122,109 @@ src/cli/
 │   └── install.ts    # Installation command
 └── utils/
     ├── help.ts       # Help system utilities
-    └── validation.ts # Config validation utilities
 ```
 
-#### New CLI Commands to Implement
+#### Implemented CLI Commands ✅
 
 **Version & Info**
 
-- [ ] `--version/-v` - Show package version
-- [ ] `--help/-h` - Enhanced help system
+- ✅ `--version/-v` - Show package version
+- ✅ `--help/-h` - Enhanced help system
 
 **Configuration Management**
 
-- [ ] `--config` - Open config in editor (existing, move to cli/)
-- [ ] `--config-create` - Create default config (existing, move to
-      cli/)
-- [ ] `--config-path` - Show config location (existing, move to cli/)
-- [ ] `--config-info` - Show config info (existing, move to cli/)
-- [ ] `--reset-config` - Reset config to defaults
-- [ ] `--validate-config` - Validate current config file
+- ✅ `--config` - Open config in editor
+- ✅ `--config-create` - Create default config
+- ✅ `--config-path` - Show config location
+- ✅ `--config-info` - Show config info
+- ✅ `--reset-config` - Reset config to defaults
+- ✅ `--validate-config` - Validate current config file
 
 **Theme Management**
 
-- [ ] `--list-themes` - Show available color themes with previews
-- [ ] `--preview-theme <theme>` - Preview specific theme
-- [ ] `--list-separators` - Show available separator styles
+- ✅ `--list-themes` - Show available color themes
+- ✅ `--preview-theme <theme>` - Preview specific theme
+- ✅ `--list-separators` - Show available separator styles
 
 **Demo & Testing**
 
-- [ ] `--demo` - Run demo mode (move from npm script)
-- [ ] `--demo-theme <theme>` - Demo specific theme
-- [ ] `--test-segments` - Test all segments with current config
+- ✅ `--demo` - Run demo mode
+- ✅ `--demo-theme <theme>` - Demo specific theme
+- ✅ `--test-segments` - Test all segments with current config
 
 **Usage Analytics**
 
-- [ ] `--stats` - Show usage statistics from database
-- [ ] `--stats-daily` - Show daily usage breakdown
-- [ ] `--stats-project` - Show per-project usage
-- [ ] `--export-data <format>` - Export usage data (JSON/CSV)
+- ✅ `--stats` - Show usage statistics from database
+- ✅ `--stats-daily` - Show daily usage breakdown
+- ✅ `--stats-project` - Show per-project usage
+- ✅ `--export-data <format>` - Export usage data (JSON/CSV)
 
 **Database Management**
 
-- [ ] `--clean-database` - Clean old database entries
-- [ ] `--database-info` - Show database statistics
-- [ ] `--reset-database` - Reset/recreate database
+- ✅ `--clean-database` - Clean old database entries
+- ✅ `--database-info` - Show database statistics
+- ✅ `--reset-database` - Reset/recreate database
 
 **Installation**
 
-- [ ] Move `src/install.ts` to `src/cli/commands/install.ts`
-- [ ] `--install` - Manual installation trigger
-- [ ] `--uninstall` - Remove statusline from Claude settings
+- ✅ `--install` - Manual installation trigger
+- ✅ `--uninstall` - Remove statusline from Claude settings
 
-### Implementation Priority
-
-1. **High**: CLI structure refactoring, --version, --demo
-2. **Medium**: Enhanced config commands, theme management
-3. **Low**: Advanced stats, database management commands
-
-### Benefits of Refactoring
+### Foundation Benefits Achieved ✅
 
 - **Modular**: Each command in separate file
 - **Maintainable**: Clear separation of concerns
 - **Extensible**: Easy to add new commands
 - **User-friendly**: Consistent help and error handling
-- **Professional**: More complete CLI experience
+- **Professional**: Complete CLI experience
+
+**The CLI now acts like an MCP tool** - you can run commands like
+`--stats`, `--database-info`, etc. directly.
+
+---
+
+## New Features Ready to Implement (Foundation Complete)
+
+### 7. Enhanced Usage Segment Display 🚧
+
+**Status**: Ready to Implement **Description**: Improve the statusline
+usage segment beyond basic cost display
+
+- [ ] Configurable display modes (cost/tokens/sessions/cache
+      efficiency)
+- [ ] Rotating metrics that cycle through different insights
+- [ ] Context-aware display (show relevant metric based on recent
+      activity)
+- [ ] Compact multi-line display option
+- [ ] CLI preview: `--preview-usage-segment`
+
+### 8. Advanced Export Formats 🚧
+
+**Status**: Ready to Implement (CLI foundation exists)
+**Description**: Rich data export capabilities
+
+- ✅ Basic JSON/CSV export (`--export-data`)
+- [ ] Excel/XLSX export with charts
+- [ ] Markdown reports with analytics
+- [ ] Time-series CSV for external analysis
+- [ ] CLI commands: `--export-excel`, `--export-report`
+
+### 9. Configuration Profiles 🚧
+
+**Status**: Ready to Implement (CLI structure ready) **Description**:
+Multiple named configurations for different use cases
+
+- [ ] Save/load named configuration profiles
+- [ ] Project-specific auto-config switching
+- [ ] Quick theme/segment switching
+- [ ] CLI commands: `--profile save <name>`, `--profile load <name>`
+
+### 10. Real-time Monitoring 🚧
+
+**Status**: Ready to Implement **Description**: Live monitoring
+capabilities
+
+- [ ] Watch mode for real-time stats (`--stats --watch`)
+- [ ] Live usage tracking during sessions
+- [ ] Cost threshold alerts
+- [ ] Performance monitoring dashboard

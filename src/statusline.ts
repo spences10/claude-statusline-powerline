@@ -1,54 +1,11 @@
 #!/usr/bin/env node
 
+import { run_cli } from './cli';
 import { build_statusline } from './core/statusline';
 import './segments'; // Auto-register segments
 import { ClaudeStatusInput } from './types';
 
-function show_help(): void {
-	console.log('Claude Statusline Powerline');
-	console.log('==========================');
-	console.log('');
-	console.log('Usage:');
-	console.log(
-		'  claude-statusline                    Run statusline (reads JSON from stdin)',
-	);
-	console.log(
-		'  claude-statusline --config           Open config file in editor',
-	);
-	console.log(
-		'  claude-statusline --config-create    Create default config file',
-	);
-	console.log(
-		'  claude-statusline --config-path      Show config file location',
-	);
-	console.log(
-		'  claude-statusline --help             Show this help',
-	);
-	console.log('');
-	console.log(
-		'Config file: ~/.claude/claude-statusline-powerline.json',
-	);
-}
-
-function main() {
-	// Check for CLI flags first
-	const args = process.argv.slice(2);
-
-	if (args.includes('--help') || args.includes('-h')) {
-		show_help();
-		return;
-	}
-
-	if (
-		args.includes('--config') ||
-		args.includes('--config-create') ||
-		args.includes('--config-path')
-	) {
-		// Delegate to config CLI
-		require('./cli-config');
-		return;
-	}
-
+export function main() {
 	let input = '';
 
 	// Read from stdin
@@ -77,5 +34,5 @@ function main() {
 }
 
 if (require.main === module) {
-	main();
+	run_cli();
 }
