@@ -18,6 +18,7 @@ import {
 } from './commands/install';
 import {
 	export_data,
+	show_cache_stats,
 	show_daily_stats,
 	show_project_stats,
 	show_stats,
@@ -137,6 +138,10 @@ export function run_cli(): void {
 
 		case '--stats-project':
 			show_project_stats();
+			break;
+
+		case '--stats-cache':
+			show_cache_stats();
 			break;
 
 		case '--export-data':

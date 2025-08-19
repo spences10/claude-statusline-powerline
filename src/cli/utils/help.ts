@@ -61,6 +61,9 @@ export function show_help(): void {
 		'  --stats-project              Show per-project usage',
 	);
 	console.log(
+		'  --stats-cache                Show cache efficiency analysis',
+	);
+	console.log(
 		'  --export-data <format>       Export usage data (json/csv)\n',
 	);
 
