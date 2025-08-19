@@ -25,6 +25,7 @@ const DEFAULT_SEPARATORS: SeparatorConfig = {
 	},
 	session: 'thick',
 	context: 'thick',
+	usage: 'thick',
 };
 
 // Default segments configuration with basic styling

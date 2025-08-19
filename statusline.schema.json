@@ -47,6 +47,9 @@
         },
         "session": {
           "type": "boolean"
+        },
+        "usage": {
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -222,13 +225,14 @@
       "type": "object"
     },
     "SegmentType": {
-      "description": "Types of segments that can be displayed in the statusline\n- `model`: Shows current AI model information\n- `directory`: Shows current directory/path\n- `git`: Shows git repository status\n- `session`: Shows session usage/cost information\n- `context`: Shows cache hit rate and context usage",
+      "description": "Types of segments that can be displayed in the statusline\n- `model`: Shows current AI model information\n- `directory`: Shows current directory/path\n- `git`: Shows git repository status\n- `session`: Shows session usage/cost information\n- `context`: Shows cache hit rate and context usage\n- `usage`: Shows usage statistics from SQLite database",
       "enum": [
         "context",
         "directory",
         "git",
         "model",
-        "session"
+        "session",
+        "usage"
       ],
       "type": "string"
     },
@@ -277,6 +281,10 @@
         "session": {
           "$ref": "#/definitions/SeparatorStyle",
           "description": "Separator style for the session segment"
+        },
+        "usage": {
+          "$ref": "#/definitions/SeparatorStyle",
+          "description": "Separator style for the usage segment"
         }
       },
       "required": [

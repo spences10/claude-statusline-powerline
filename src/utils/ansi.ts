@@ -64,6 +64,11 @@ export const FALLBACK_COLORS = {
 		fg: ANSI_FG.bright_white,
 		separator: ANSI_FG.cyan,
 	},
+	usage: {
+		bg: ANSI_BG.purple,
+		fg: ANSI_FG.bright_white,
+		separator: ANSI_FG.purple,
+	},
 	error: {
 		bg: ANSI_BG.red,
 		fg: ANSI_FG.bright_white,

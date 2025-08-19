@@ -124,6 +124,7 @@ export abstract class BaseSegment implements SegmentBuilder {
 			| 'git_dirty'
 			| 'session'
 			| 'context'
+			| 'usage'
 			| 'error',
 		separator_style?: string,
 		style_override?: SegmentStyleConfig,

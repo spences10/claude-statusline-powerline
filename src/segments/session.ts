@@ -1,17 +1,12 @@
 import * as fs from 'fs';
 import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
-import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import {
+	ClaudeStatusInput,
+	SessionUsage,
+	StatuslineConfig,
+} from '../types';
 import { format_tokens } from '../utils/token-formatting';
 import { BaseSegment, SegmentData } from './base';
-
-interface SessionUsage {
-	totalInputTokens: number;
-	totalOutputTokens: number;
-	totalCacheTokens: number;
-	totalCost: number;
-	modelUsed?: string;
-	sessionDuration?: number;
-}
 
 export class SessionSegment extends BaseSegment {
 	name = 'session';
