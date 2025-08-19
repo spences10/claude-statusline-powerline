@@ -34,6 +34,7 @@ support.
 | **Directory** | 📁   | Current working directory name            | `📁 my-project`                |
 | **Git**       | 🌿   | Git branch and status with superscript    | `🌿 main ⁺3 ˜1 ᵘ2`             |
 | **Session**   | 💰   | Token usage, cost, and context monitoring | `💰 1.2k • $0.01 999k left`    |
+| **Usage**     | 📊   | Aggregated usage statistics from database | `📊 29.9k • $8.83 7d`          |
 | **Context**   | 🧠   | Cache performance and session state       | `🧠 10.5k cached (70% reused)` |
 
 All segments can be **shown/hidden** (via `lines` configuration),
@@ -106,6 +107,9 @@ Claude Statusline Powerline uses JSON configuration files with
 			},
 			{
 				"type": "session"
+			},
+			{
+				"type": "usage"
 			},
 			{
 				"type": "context"
@@ -390,7 +394,9 @@ powerline-style status.
 ## 🗃️ Local Usage Database
 
 Claude Statusline Powerline maintains a local SQLite database at
-`~/.claude/statusline-usage.db` to track usage analytics:
+`~/.claude/statusline-usage.db` to track usage analytics and power
+both the **Session** and **Usage** segments with high-performance data
+access.
 
 **Stored Data:**
 
@@ -399,19 +405,47 @@ Claude Statusline Powerline maintains a local SQLite database at
 - **Project mapping** linking sessions to directory paths
 - **Cache performance** metrics for optimization insights
 
-The database powers both the session and usage segments, providing
-real-time insights without impacting statusline performance.
+**Performance Benefits:**
+
+- **Session segment**: 31x faster than file parsing (0.11ms vs 3.44ms)
+- **Usage segment**: Pre-aggregated daily/weekly/monthly summaries
+- **Real-time insights** without impacting statusline responsiveness
+- **Efficient SQLite queries** for instant data access
+
+**These segments are database-only** and require the SQLite database
+to function. They are not included in the default configuration but
+can be enabled by adding them to your config:
+
+```json
+{
+	"segment_config": {
+		"segments": [{ "type": "session" }, { "type": "usage" }]
+	}
+}
+```
+
+The database automatically tracks usage data as you use Claude Code.
+If the database is unavailable, these segments simply won't appear.
 
 ## Segments
 
 1. **Model** - Shows the Claude model name
 2. **Directory** - Shows current directory name
 3. **Git** - Enhanced status with superscript symbols
-4. **Session** - Token usage, cost, and context monitoring
+4. **Session** - Current session token usage, cost, and context
+   monitoring
+   - **Powered by SQLite database**
    - Format: `💰 {tokens}k • ${cost} {context}`
    - Context shows: remaining tokens (< 75%), percentage (75-89%), or
      warning (!90%+)
-5. **Context** - Cache performance and session state
+   - Must be manually enabled in configuration
+5. **Usage** - Aggregated usage statistics across time periods
+   - **Powered by SQLite database** with pre-calculated summaries
+   - Format: `📊 {tokens}k • ${cost} {period}`
+   - Shows daily/weekly/monthly aggregated data
+   - Must be manually enabled in configuration
+
+6. **Context** - Cache performance and session state
    - Shows cache hit rate and total cached tokens for warm sessions
    - Displays "Cold" for new sessions without significant cache usage
 
