@@ -46,9 +46,6 @@ function create_default_config(): void {
 					{
 						type: 'git',
 					},
-					{
-						type: 'session',
-					},
 				],
 			},
 		};
@@ -116,6 +113,9 @@ function main(): void {
 		console.log('💡 Your Claude Code statusline should now show:');
 		console.log(
 			'   📱 Model name  📁 Directory  🌿 Git branch & status',
+		);
+		console.log(
+			'💰 Add "session" and "usage" segments to your config to track token usage and costs',
 		);
 		console.log('\n🔄 Restart Claude Code to see the changes.');
 		console.log(

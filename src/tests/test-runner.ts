@@ -2,6 +2,7 @@ import { run_statusline_integration_tests } from './integration/statusline.test'
 import { run_base_segment_tests } from './unit/base-segment.test';
 import { run_config_tests } from './unit/config.test';
 import { run_registry_tests } from './unit/registry.test';
+import { run_session_segment_tests } from './unit/session-segment.test';
 
 async function run_all_tests() {
 	console.log('🚀 Running All Tests\n');
@@ -11,6 +12,7 @@ async function run_all_tests() {
 		{ name: 'Base Segment', fn: run_base_segment_tests },
 		{ name: 'Config', fn: run_config_tests },
 		{ name: 'Registry', fn: run_registry_tests },
+		{ name: 'Session Segment', fn: run_session_segment_tests },
 		{
 			name: 'Statusline Integration',
 			fn: run_statusline_integration_tests,

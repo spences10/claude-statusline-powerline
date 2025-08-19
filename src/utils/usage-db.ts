@@ -222,6 +222,18 @@ class UsageDatabase {
 		};
 	}
 
+	get_session(session_id: string): SessionRecord | null {
+		try {
+			const session = this.db
+				.prepare(`SELECT * FROM sessions WHERE session_id = ?`)
+				.get(session_id) as SessionRecord | undefined;
+
+			return session || null;
+		} catch (error) {
+			return null;
+		}
+	}
+
 	close() {
 		this.db.close();
 	}

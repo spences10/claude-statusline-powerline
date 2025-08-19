@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { DEFAULT_PRICING, MODEL_PRICING } from '../config';
 import {
 	ClaudeStatusInput,
@@ -6,6 +5,7 @@ import {
 	StatuslineConfig,
 } from '../types';
 import { format_tokens } from '../utils/token-formatting';
+import { get_usage_db } from '../utils/usage-db';
 import { BaseSegment, SegmentData } from './base';
 
 export class SessionSegment extends BaseSegment {
@@ -15,13 +15,10 @@ export class SessionSegment extends BaseSegment {
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,
 	): SegmentData | null {
-		if (!data.transcript_path) {
-			return null; // Hide segment if no session data
-		}
-
-		const usage = this.parseSessionUsage(data.transcript_path);
+		// First try to get session data from database
+		const usage = this.get_session_usage(data);
 		if (!usage) {
-			return null; // Hide segment if parsing fails
+			return null; // Hide segment if no session data available
 		}
 
 		const total_tokens =
@@ -64,89 +61,49 @@ export class SessionSegment extends BaseSegment {
 		);
 	}
 
-	private parseSessionUsage(
-		transcript_path: string,
+	private get_session_usage(
+		data: ClaudeStatusInput,
 	): SessionUsage | null {
 		try {
-			if (!fs.existsSync(transcript_path)) {
-				return null;
+			// Query database for session data
+			const db = get_usage_db();
+			const session = db.get_session(data.session_id);
+
+			if (session) {
+				// Convert database record to SessionUsage format
+				return {
+					totalInputTokens: session.input_tokens,
+					totalOutputTokens: session.output_tokens,
+					totalCacheTokens: session.cache_tokens,
+					totalCost: session.cost,
+					modelUsed: session.model,
+					sessionDuration: this.calculate_session_duration(
+						session.start_time,
+						session.end_time,
+					),
+				};
 			}
 
-			const content = fs.readFileSync(transcript_path, 'utf8');
-			const lines = content.trim().split('\n');
-
-			let total_input_tokens = 0;
-			let total_output_tokens = 0;
-			let total_cache_tokens = 0;
-			let model_used = '';
-			let first_timestamp: Date | null = null;
-			let last_timestamp: Date | null = null;
-
-			for (const line of lines) {
-				try {
-					const entry = JSON.parse(line);
-
-					// Track session timing
-					if (entry.timestamp) {
-						const timestamp = new Date(entry.timestamp);
-						if (!first_timestamp || timestamp < first_timestamp) {
-							first_timestamp = timestamp;
-						}
-						if (!last_timestamp || timestamp > last_timestamp) {
-							last_timestamp = timestamp;
-						}
-					}
-
-					if (entry.type === 'assistant' && entry.message?.usage) {
-						const usage = entry.message.usage;
-						total_input_tokens += usage.input_tokens || 0;
-						total_output_tokens += usage.output_tokens || 0;
-						total_cache_tokens +=
-							(usage.cache_creation_input_tokens || 0) +
-							(usage.cache_read_input_tokens || 0);
-
-						// Extract model info
-						if (entry.message.model && !model_used) {
-							model_used = entry.message.model;
-						}
-					}
-				} catch (parseError) {
-					// Skip malformed lines
-					continue;
-				}
-			}
-
-			// Get pricing for the model used
-			const pricing = MODEL_PRICING[model_used] || DEFAULT_PRICING;
-
-			// Calculate cost using model-specific pricing
-			const input_cost =
-				(total_input_tokens / 1000000) * pricing.input_tokens;
-			const output_cost =
-				(total_output_tokens / 1000000) * pricing.output_tokens;
-			const cache_cost =
-				(total_cache_tokens / 1000000) * pricing.cache_tokens;
-			const total_cost = input_cost + output_cost + cache_cost;
-
-			// Calculate session duration in minutes
-			let session_duration = 0;
-			if (first_timestamp && last_timestamp) {
-				session_duration = Math.round(
-					(last_timestamp.getTime() - first_timestamp.getTime()) /
-						(1000 * 60),
-				);
-			}
-
-			return {
-				totalInputTokens: total_input_tokens,
-				totalOutputTokens: total_output_tokens,
-				totalCacheTokens: total_cache_tokens,
-				totalCost: total_cost,
-				modelUsed: model_used,
-				sessionDuration: session_duration,
-			};
+			// No session found in database
+			return null;
 		} catch (error) {
+			// Database error - don't show segment
 			return null;
 		}
+	}
+
+	private calculate_session_duration(
+		start_time: string,
+		end_time?: string,
+	): number {
+		if (!start_time || !end_time) {
+			return 0;
+		}
+
+		const start = new Date(start_time);
+		const end = new Date(end_time);
+		return Math.round(
+			(end.getTime() - start.getTime()) / (1000 * 60),
+		); // duration in minutes
 	}
 }

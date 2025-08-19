@@ -108,48 +108,6 @@ different insights.
 
 ---
 
-## Session Segment Database Migration
-
-### Current Status
-
-The session segment (`src/segments/session.ts`) currently parses
-transcript files on every statusline render:
-
-- Reads entire transcript file (~several hundred lines)
-- Parses every JSON line looking for assistant messages
-- Calculates totals from scratch each time
-- **Performance**: ~66ms execution time
-
-### Database Approach Benefits
-
-- Single SQL query: `SELECT * FROM sessions WHERE session_id = ?`
-- Pre-calculated totals, no parsing needed
-- **Performance**: <1ms query time
-- Consistent with usage segment approach
-- Data already available in `statusline-usage.db`
-
-### Migration Tasks
-
-- [ ] Update `SessionSegment.build()` to query database instead of
-      parsing files
-- [ ] Add fallback to file parsing if session not in database
-- [ ] Test session segment with database queries
-- [ ] Verify performance improvements
-- [ ] Update session segment tests
-
-### Implementation Notes
-
-The database already contains all needed session data:
-
-- `session_id`, `model`, `start_time`, `end_time`
-- `input_tokens`, `output_tokens`, `cache_tokens`
-- `cost`, `project_dir`
-
-Context window calculations can still use the same logic with
-pre-calculated totals.
-
----
-
 ## CLI Enhancement & Refactoring
 
 ### Current CLI Structure Issues
