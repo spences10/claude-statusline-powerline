@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.18
+
+### Patch Changes
+
+- 15de6dd: add in sqlite db for local session information stats
+
 ## 0.0.17
 
 ### Patch Changes
