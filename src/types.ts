@@ -68,13 +68,15 @@ export type SeparatorStyle =
  * - `git`: Shows git repository status
  * - `session`: Shows session usage/cost information
  * - `context`: Shows cache hit rate and context usage
+ * - `usage`: Shows usage statistics from SQLite database
  */
 export type SegmentType =
 	| 'model'
 	| 'directory'
 	| 'git'
 	| 'session'
-	| 'context';
+	| 'context'
+	| 'usage';
 
 /**
  * Available themes that define separator and styling patterns
@@ -156,6 +158,8 @@ export interface SeparatorConfig {
 	session: SeparatorStyle;
 	/** Separator style for the context segment */
 	context: SeparatorStyle;
+	/** Separator style for the usage segment */
+	usage?: SeparatorStyle;
 }
 
 /**
@@ -315,6 +319,7 @@ export interface StatuslineTheme {
 		};
 		session: SegmentTheme;
 		context: SegmentTheme;
+		usage?: SegmentTheme;
 	};
 }
 
@@ -413,4 +418,68 @@ export interface SegmentBuilder {
 		data: ClaudeStatusInput,
 		config: StatuslineConfig,
 	): SegmentData | null;
+}
+
+// =============================================================================
+// DATABASE INTERFACES
+// =============================================================================
+
+/**
+ * Database record for individual sessions
+ */
+export interface SessionRecord {
+	/** Database primary key */
+	id?: number;
+	/** Unique session identifier */
+	session_id: string;
+	/** Model name used in session */
+	model: string;
+	/** Session start timestamp (ISO string) */
+	start_time: string;
+	/** Session end timestamp (ISO string) */
+	end_time?: string;
+	/** Total input tokens used */
+	input_tokens: number;
+	/** Total output tokens generated */
+	output_tokens: number;
+	/** Total cache tokens used */
+	cache_tokens: number;
+	/** Total estimated cost in USD */
+	cost: number;
+	/** Project directory path */
+	project_dir?: string;
+}
+
+/**
+ * Aggregated daily usage statistics
+ */
+export interface DailySummary {
+	/** Date in YYYY-MM-DD format */
+	date: string;
+	/** Total number of sessions */
+	total_sessions: number;
+	/** Total input tokens across all sessions */
+	total_input_tokens: number;
+	/** Total output tokens across all sessions */
+	total_output_tokens: number;
+	/** Total cache tokens across all sessions */
+	total_cache_tokens: number;
+	/** Total cost across all sessions */
+	total_cost: number;
+	/** JSON string array of models used */
+	models_used: string;
+}
+
+/**
+ * Complete usage summary with time-based aggregations
+ */
+export interface UsageSummary {
+	/** Today's usage summary */
+	today: DailySummary;
+	/** Past week's usage summary */
+	week: DailySummary;
+	/** Past month's usage summary */
+	month: DailySummary;
+	/** Recent session records */
+	recent_sessions: SessionRecord[];
 }

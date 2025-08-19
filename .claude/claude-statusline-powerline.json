@@ -13,12 +13,16 @@
 			},
 			{
 				"context": true
+			},
+			{
+				"usage": true
 			}
 		],
 		"segments": [
 			{
 				"type": "model",
 				"style": {
+					"fg_color": "#000000",
 					"separator": {
 						"style": "double_chevron"
 					},
@@ -51,6 +55,7 @@
 			{
 				"type": "session",
 				"style": {
+					"fg_color": "#ffffff",
 					"separator": {
 						"style": "curvy"
 					}
@@ -61,6 +66,20 @@
 				"style": {
 					"separator": {
 						"style": "curvy"
+					}
+				}
+			},
+			{
+				"type": "usage",
+				"style": {
+					"bg_color": "#1e40af",
+					"fg_color": "#ffffff",
+					"separator": {
+						"color": "#1e40af",
+						"style": "curvy"
+					},
+					"icons": {
+						"cost": "📊"
 					}
 				}
 			}
