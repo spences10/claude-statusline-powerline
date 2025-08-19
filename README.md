@@ -384,8 +384,23 @@ Claude Code sends session information via stdin as JSON:
 }
 ```
 
-The statusline script processes this and outputs a colored
+The statusline script processes this and outputs a coloured
 powerline-style status.
+
+## 🗃️ Local Usage Database
+
+Claude Statusline Powerline maintains a local SQLite database at
+`~/.claude/statusline-usage.db` to track usage analytics:
+
+**Stored Data:**
+
+- **Session records** with start/end times and token usage
+- **Daily summaries** with total costs and model usage
+- **Project mapping** linking sessions to directory paths
+- **Cache performance** metrics for optimization insights
+
+The database powers both the session and usage segments, providing
+real-time insights without impacting statusline performance.
 
 ## Segments
 
