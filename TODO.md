@@ -111,13 +111,17 @@ different insights.
 ## Session Segment Database Migration
 
 ### Current Status
-The session segment (`src/segments/session.ts`) currently parses transcript files on every statusline render:
+
+The session segment (`src/segments/session.ts`) currently parses
+transcript files on every statusline render:
+
 - Reads entire transcript file (~several hundred lines)
-- Parses every JSON line looking for assistant messages  
+- Parses every JSON line looking for assistant messages
 - Calculates totals from scratch each time
 - **Performance**: ~66ms execution time
 
 ### Database Approach Benefits
+
 - Single SQL query: `SELECT * FROM sessions WHERE session_id = ?`
 - Pre-calculated totals, no parsing needed
 - **Performance**: <1ms query time
@@ -125,16 +129,116 @@ The session segment (`src/segments/session.ts`) currently parses transcript file
 - Data already available in `statusline-usage.db`
 
 ### Migration Tasks
-- [ ] Update `SessionSegment.build()` to query database instead of parsing files
+
+- [ ] Update `SessionSegment.build()` to query database instead of
+      parsing files
 - [ ] Add fallback to file parsing if session not in database
 - [ ] Test session segment with database queries
 - [ ] Verify performance improvements
 - [ ] Update session segment tests
 
 ### Implementation Notes
+
 The database already contains all needed session data:
-- `session_id`, `model`, `start_time`, `end_time`  
+
+- `session_id`, `model`, `start_time`, `end_time`
 - `input_tokens`, `output_tokens`, `cache_tokens`
 - `cost`, `project_dir`
 
-Context window calculations can still use the same logic with pre-calculated totals.
+Context window calculations can still use the same logic with
+pre-calculated totals.
+
+---
+
+## CLI Enhancement & Refactoring
+
+### Current CLI Structure Issues
+
+- CLI logic scattered across multiple files: `src/statusline.ts`,
+  `src/cli-config.ts`, `src/install.ts`
+- Limited CLI functionality compared to potential
+- No consistent command structure or help system
+
+### Proposed CLI Refactoring
+
+**Goal**: Consolidate all CLI functionality into a dedicated `/cli`
+folder with modular commands
+
+#### New CLI Structure
+
+```
+src/cli/
+├── index.ts          # Main CLI entry point with command routing
+├── commands/
+│   ├── config.ts     # Config management commands
+│   ├── demo.ts       # Demo mode functionality
+│   ├── stats.ts      # Usage statistics display
+│   ├── themes.ts     # Theme listing and preview
+│   ├── database.ts   # Database management
+│   └── install.ts    # Installation command
+└── utils/
+    ├── help.ts       # Help system utilities
+    └── validation.ts # Config validation utilities
+```
+
+#### New CLI Commands to Implement
+
+**Version & Info**
+
+- [ ] `--version/-v` - Show package version
+- [ ] `--help/-h` - Enhanced help system
+
+**Configuration Management**
+
+- [ ] `--config` - Open config in editor (existing, move to cli/)
+- [ ] `--config-create` - Create default config (existing, move to
+      cli/)
+- [ ] `--config-path` - Show config location (existing, move to cli/)
+- [ ] `--config-info` - Show config info (existing, move to cli/)
+- [ ] `--reset-config` - Reset config to defaults
+- [ ] `--validate-config` - Validate current config file
+
+**Theme Management**
+
+- [ ] `--list-themes` - Show available color themes with previews
+- [ ] `--preview-theme <theme>` - Preview specific theme
+- [ ] `--list-separators` - Show available separator styles
+
+**Demo & Testing**
+
+- [ ] `--demo` - Run demo mode (move from npm script)
+- [ ] `--demo-theme <theme>` - Demo specific theme
+- [ ] `--test-segments` - Test all segments with current config
+
+**Usage Analytics**
+
+- [ ] `--stats` - Show usage statistics from database
+- [ ] `--stats-daily` - Show daily usage breakdown
+- [ ] `--stats-project` - Show per-project usage
+- [ ] `--export-data <format>` - Export usage data (JSON/CSV)
+
+**Database Management**
+
+- [ ] `--clean-database` - Clean old database entries
+- [ ] `--database-info` - Show database statistics
+- [ ] `--reset-database` - Reset/recreate database
+
+**Installation**
+
+- [ ] Move `src/install.ts` to `src/cli/commands/install.ts`
+- [ ] `--install` - Manual installation trigger
+- [ ] `--uninstall` - Remove statusline from Claude settings
+
+### Implementation Priority
+
+1. **High**: CLI structure refactoring, --version, --demo
+2. **Medium**: Enhanced config commands, theme management
+3. **Low**: Advanced stats, database management commands
+
+### Benefits of Refactoring
+
+- **Modular**: Each command in separate file
+- **Maintainable**: Clear separation of concerns
+- **Extensible**: Easy to add new commands
+- **User-friendly**: Consistent help and error handling
+- **Professional**: More complete CLI experience
