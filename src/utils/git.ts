@@ -12,11 +12,14 @@ export function get_git_info(cwd: string): GitInfo | null {
 			encoding: 'utf8',
 		}).trim();
 
-		// Get status with porcelain format
-		const status = execSync('git status --porcelain', {
-			cwd,
-			encoding: 'utf8',
-		});
+		// Get status with porcelain format, showing all untracked files individually
+		const status = execSync(
+			'git status --porcelain --untracked-files=all',
+			{
+				cwd,
+				encoding: 'utf8',
+			},
+		);
 
 		const is_dirty = status.trim().length > 0;
 
