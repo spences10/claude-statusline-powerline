@@ -1,5 +1,14 @@
 import { UsageDatabase } from '../../utils/usage-db';
 
+// Utility functions
+function extract_project_name(project_dir: string | null | undefined): string {
+	return project_dir?.split('/').pop() || 'unknown';
+}
+
+function calculate_cache_ratio(cache_tokens: number, total_tokens: number): number {
+	return total_tokens > 0 ? (cache_tokens / (total_tokens + cache_tokens)) * 100 : 0;
+}
+
 export function show_stats(): void {
 	console.log('📊 Usage Statistics\n');
 
@@ -75,8 +84,7 @@ export function show_project_stats(): void {
 		>();
 
 		stats.recent_sessions.forEach((session) => {
-			const project =
-				session.project_dir?.split('/').pop() || 'unknown';
+			const project = extract_project_name(session.project_dir);
 			const existing = project_stats.get(project) || {
 				sessions: 0,
 				cost: 0,
@@ -126,8 +134,7 @@ export function export_data(format: string): void {
 				'session_id,model,start_time,end_time,input_tokens,output_tokens,cache_tokens,cost,project',
 			);
 			stats.recent_sessions.forEach((session) => {
-				const project =
-					session.project_dir?.split('/').pop() || 'unknown';
+				const project = extract_project_name(session.project_dir);
 				console.log(
 					`${session.session_id},${session.model},${session.start_time},${session.end_time},${session.input_tokens},${session.output_tokens},${session.cache_tokens},${session.cost},${project}`,
 				);
@@ -153,31 +160,16 @@ export function show_cache_stats(): void {
 		const today_total_tokens =
 			stats.today.total_input_tokens +
 			stats.today.total_output_tokens;
-		const today_cache_ratio =
-			today_total_tokens > 0
-				? (stats.today.total_cache_tokens /
-						(today_total_tokens + stats.today.total_cache_tokens)) *
-					100
-				: 0;
+		const today_cache_ratio = calculate_cache_ratio(stats.today.total_cache_tokens, today_total_tokens);
 
 		const week_total_tokens =
 			stats.week.total_input_tokens + stats.week.total_output_tokens;
-		const week_cache_ratio =
-			week_total_tokens > 0
-				? (stats.week.total_cache_tokens /
-						(week_total_tokens + stats.week.total_cache_tokens)) *
-					100
-				: 0;
+		const week_cache_ratio = calculate_cache_ratio(stats.week.total_cache_tokens, week_total_tokens);
 
 		const month_total_tokens =
 			stats.month.total_input_tokens +
 			stats.month.total_output_tokens;
-		const month_cache_ratio =
-			month_total_tokens > 0
-				? (stats.month.total_cache_tokens /
-						(month_total_tokens + stats.month.total_cache_tokens)) *
-					100
-				: 0;
+		const month_cache_ratio = calculate_cache_ratio(stats.month.total_cache_tokens, month_total_tokens);
 
 		console.log('💾 Cache Utilization:');
 		console.log(
@@ -210,8 +202,7 @@ export function show_cache_stats(): void {
 		>();
 
 		stats.recent_sessions.forEach((session) => {
-			const project =
-				session.project_dir?.split('/').pop() || 'unknown';
+			const project = extract_project_name(session.project_dir);
 			const existing = project_cache_stats.get(project) || {
 				cache_tokens: 0,
 				total_tokens: 0,
@@ -235,12 +226,7 @@ export function show_cache_stats(): void {
 			.sort(([, a], [, b]) => b.cache_tokens - a.cache_tokens);
 
 		sorted_projects.forEach(([project, cache_stats]) => {
-			const total_processed =
-				cache_stats.total_tokens + cache_stats.cache_tokens;
-			const cache_ratio =
-				total_processed > 0
-					? (cache_stats.cache_tokens / total_processed) * 100
-					: 0;
+			const cache_ratio = calculate_cache_ratio(cache_stats.cache_tokens, cache_stats.total_tokens);
 			console.log(
 				`  ${project}: ${cache_ratio.toFixed(1)}% (${cache_stats.cache_tokens.toLocaleString()} cached, ${cache_stats.total_tokens.toLocaleString()} new)`,
 			);

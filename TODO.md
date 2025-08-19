@@ -23,29 +23,17 @@ patterns
 - User vs assistant message ratios
 - Session duration trends
 
-## 3. Cache Efficiency Tracking ✅
+## 3. Project Comparison 🚧
 
-**Status**: COMPLETED  
-**Description**: Enhanced cache analytics beyond current basic
-tracking
-
-- ✅ Cache token tracking (already in database)
-- ✅ Cache hit rate calculations
-- ✅ Cache savings by project/model
-- ✅ Context window utilization analysis
-- ✅ CLI command: `--stats-cache`
-
-## 5. Project Comparison ✅
-
-**Status**: Basic Implementation Complete **Description**: Usage
-patterns across different projects
+**Status**: Partially Complete **Description**: Usage patterns across
+different projects
 
 - ✅ Cross-project usage analysis (`--stats-project`)
 - ✅ Cost allocation by project
 - [ ] Project-specific tool preferences (needs tool tracking)
 - [ ] Enhanced project insights
 
-## 6. Time-based Analysis 🚧
+## 4. Time-based Analysis 🚧
 
 **Status**: Ready to Implement (Data Available) **Description**:
 Temporal usage patterns
@@ -102,91 +90,9 @@ different insights.
 
 ---
 
-## CLI Enhancement & Refactoring ✅
-
-### Status: **COMPLETED**
-
-The CLI has been successfully refactored with a modular structure and
-comprehensive commands.
-
-#### Implemented CLI Structure ✅
-
-```
-src/cli/
-├── index.ts          # Main CLI entry point with command routing
-├── commands/
-│   ├── config.ts     # Config management commands
-│   ├── demo.ts       # Demo mode functionality
-│   ├── stats.ts      # Usage statistics display
-│   ├── themes.ts     # Theme listing and preview
-│   ├── database.ts   # Database management
-│   └── install.ts    # Installation command
-└── utils/
-    ├── help.ts       # Help system utilities
-```
-
-#### Implemented CLI Commands ✅
-
-**Version & Info**
-
-- ✅ `--version/-v` - Show package version
-- ✅ `--help/-h` - Enhanced help system
-
-**Configuration Management**
-
-- ✅ `--config` - Open config in editor
-- ✅ `--config-create` - Create default config
-- ✅ `--config-path` - Show config location
-- ✅ `--config-info` - Show config info
-- ✅ `--reset-config` - Reset config to defaults
-- ✅ `--validate-config` - Validate current config file
-
-**Theme Management**
-
-- ✅ `--list-themes` - Show available color themes
-- ✅ `--preview-theme <theme>` - Preview specific theme
-- ✅ `--list-separators` - Show available separator styles
-
-**Demo & Testing**
-
-- ✅ `--demo` - Run demo mode
-- ✅ `--demo-theme <theme>` - Demo specific theme
-- ✅ `--test-segments` - Test all segments with current config
-
-**Usage Analytics**
-
-- ✅ `--stats` - Show usage statistics from database
-- ✅ `--stats-daily` - Show daily usage breakdown
-- ✅ `--stats-project` - Show per-project usage
-- ✅ `--export-data <format>` - Export usage data (JSON/CSV)
-
-**Database Management**
-
-- ✅ `--clean-database` - Clean old database entries
-- ✅ `--database-info` - Show database statistics
-- ✅ `--reset-database` - Reset/recreate database
-
-**Installation**
-
-- ✅ `--install` - Manual installation trigger
-- ✅ `--uninstall` - Remove statusline from Claude settings
-
-### Foundation Benefits Achieved ✅
-
-- **Modular**: Each command in separate file
-- **Maintainable**: Clear separation of concerns
-- **Extensible**: Easy to add new commands
-- **User-friendly**: Consistent help and error handling
-- **Professional**: Complete CLI experience
-
-**The CLI now acts like an MCP tool** - you can run commands like
-`--stats`, `--database-info`, etc. directly.
-
----
-
 ## New Features Ready to Implement (Foundation Complete)
 
-### 7. Enhanced Usage Segment Display 🚧
+### 5. Enhanced Usage Segment Display 🚧
 
 **Status**: Ready to Implement **Description**: Improve the statusline
 usage segment beyond basic cost display
@@ -199,7 +105,7 @@ usage segment beyond basic cost display
 - [ ] Compact multi-line display option
 - [ ] CLI preview: `--preview-usage-segment`
 
-### 8. Advanced Export Formats 🚧
+### 6. Advanced Export Formats 🚧
 
 **Status**: Ready to Implement (CLI foundation exists)
 **Description**: Rich data export capabilities
@@ -210,7 +116,7 @@ usage segment beyond basic cost display
 - [ ] Time-series CSV for external analysis
 - [ ] CLI commands: `--export-excel`, `--export-report`
 
-### 9. Configuration Profiles 🚧
+### 7. Configuration Profiles 🚧
 
 **Status**: Ready to Implement (CLI structure ready) **Description**:
 Multiple named configurations for different use cases
@@ -220,7 +126,7 @@ Multiple named configurations for different use cases
 - [ ] Quick theme/segment switching
 - [ ] CLI commands: `--profile save <name>`, `--profile load <name>`
 
-### 10. Real-time Monitoring 🚧
+### 8. Real-time Monitoring 🚧
 
 **Status**: Ready to Implement **Description**: Live monitoring
 capabilities
@@ -229,6 +135,23 @@ capabilities
 - [ ] Live usage tracking during sessions
 - [ ] Cost threshold alerts
 - [ ] Performance monitoring dashboard
+
+---
+
+## Missing CLI Commands (Entry Points Only) 🚧
+
+**Status**: Foundation Complete, Implementation Needed
+**Description**: CLI commands that have routing but no actual
+implementation
+
+- [ ] `--stats-time` - Time-based analysis (entry point missing)
+- [ ] `--preview-usage-segment` - Preview usage segment display modes
+- [ ] `--export-excel` - Excel/XLSX export with charts
+- [ ] `--export-report` - Markdown reports with analytics
+- [ ] `--profile save <name>` - Save configuration profile
+- [ ] `--profile load <name>` - Load configuration profile
+- [ ] `--stats --watch` - Real-time monitoring mode
+- [ ] `--add-model-pricing <model-id>` - Add custom model pricing
 
 ---
 
