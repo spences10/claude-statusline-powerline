@@ -1,5 +1,11 @@
 # claude-statusline-powerline
 
+## 0.0.19
+
+### Patch Changes
+
+- 92b575f: use slqlite db for both session and uasage
+
 ## 0.0.18
 
 ### Patch Changes
