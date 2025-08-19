@@ -12,6 +12,10 @@ tsconfig.json
 .gitignore
 renovate.json
 
+# Exclude large demo files
+demo.png
+statusline.schema.json
+
 # Test files and demos
 dist/tests/
 dist/demo/
