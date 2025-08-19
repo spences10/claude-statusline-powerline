@@ -64,6 +64,9 @@ export function show_help(): void {
 		'  --stats-cache                Show cache efficiency analysis',
 	);
 	console.log(
+		'  --stats-tools                Show tool usage analytics',
+	);
+	console.log(
 		'  --export-data <format>       Export usage data (json/csv)\n',
 	);
 
