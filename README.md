@@ -365,15 +365,21 @@ default config file!
 
 ## Font Setup
 
-For the best experience, use a powerline-compatible font:
+This statusline is **built and tested specifically with Victor Mono**
+for optimal powerline compatibility. While it should work with other
+Nerd Fonts, the focus is on providing the best experience with
+reliable powerline symbols rather than chasing extensive Nerd Font
+icon support.
 
-**Recommended fonts:**
+**Primary recommendation:**
 
-- **Victor Mono** (built and tested with this)
-- Any [Nerd Font](https://www.nerdfonts.com/)
+- **Victor Mono** - The font this project is optimized for
+- Any powerline-compatible font as a secondary option
 
-The statusline uses these symbols: `(powerline separators) and` (git
-branch)
+**Note:** This project prioritizes rock-solid powerline separator
+rendering over extensive icon support. Many Nerd Font separators don't
+render consistently across different terminals and fonts, so we focus
+on what actually works reliably.
 
 ## How It Works
 
