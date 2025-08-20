@@ -234,6 +234,64 @@ class UsageDatabase {
 		}
 	}
 
+	get_project_breakdown(): Array<{
+		project: string;
+		sessions: number;
+		cost: number;
+		tokens: number;
+	}> {
+		const projects = this.db
+			.prepare(
+				`
+				SELECT 
+					COALESCE(project_dir, 'unknown') as project,
+					COUNT(*) as sessions,
+					SUM(cost) as cost,
+					SUM(input_tokens + output_tokens) as tokens
+				FROM sessions 
+				WHERE start_time >= date('now', '-30 days')
+				GROUP BY project_dir
+				ORDER BY cost DESC
+			`,
+			)
+			.all() as Array<{
+			project: string;
+			sessions: number;
+			cost: number;
+			tokens: number;
+		}>;
+
+		return projects.map((p) => ({
+			...p,
+			project: p.project?.split('/').pop() || 'unknown',
+		}));
+	}
+
+	get_cache_stats(): {
+		total_input_tokens: number;
+		total_output_tokens: number;
+		total_cache_tokens: number;
+	} {
+		const stats = this.db
+			.prepare(
+				`
+				SELECT 
+					SUM(input_tokens) as total_input_tokens,
+					SUM(output_tokens) as total_output_tokens,
+					SUM(cache_tokens) as total_cache_tokens
+				FROM sessions 
+				WHERE start_time >= date('now', '-30 days')
+			`,
+			)
+			.get() as any;
+
+		return {
+			total_input_tokens: stats?.total_input_tokens || 0,
+			total_output_tokens: stats?.total_output_tokens || 0,
+			total_cache_tokens: stats?.total_cache_tokens || 0,
+		};
+	}
+
 	close() {
 		this.db.close();
 	}
