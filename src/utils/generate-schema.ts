@@ -217,7 +217,7 @@ function generate_schema(): void {
 	// Write the enhanced schema
 	fs.writeFileSync(
 		'statusline.schema.json',
-		JSON.stringify(enhanced_schema, null, 2),
+		JSON.stringify(enhanced_schema, null, '\t'),
 	);
 
 	// Clean up temporary file
