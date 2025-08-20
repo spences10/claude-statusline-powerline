@@ -254,3 +254,154 @@ Update `statusline.schema.json` to include:
 	}
 }
 ```
+
+---
+
+## Font Installation & Management 🔤
+
+**Status**: User Experience Enhancement  
+**Description**: CLI-based font installation and management for
+optimal statusline display
+
+### Current Font Support
+
+The project currently supports different `font_profile` options:
+
+- `powerline` - Basic powerline symbols (works with Victor Mono,
+  Source Code Pro)
+- `nerd-font` - Full Nerd Font symbol set
+
+### Proposed Font Installation Features
+
+#### Core Font Installation
+
+- [ ] `--install-fonts` - Interactive font installer
+- [ ] `--list-fonts` - Show installed fonts with powerline/nerd-font
+      compatibility
+- [ ] `--test-fonts` - Test current font rendering with sample
+      statusline
+- [ ] `--recommend-fonts` - Recommend fonts based on system/terminal
+
+#### Supported Font Categories
+
+**Powerline-Compatible Fonts** (basic symbols):
+
+- [ ] Victor Mono (already mentioned by user)
+- [ ] Source Code Pro for Powerline
+- [ ] Inconsolata for Powerline
+- [ ] DejaVu Sans Mono for Powerline
+
+**Full Nerd Fonts** (complete symbol set):
+
+- [ ] FiraCode Nerd Font
+- [ ] JetBrains Mono Nerd Font
+- [ ] Hack Nerd Font
+- [ ] CascadiaCode Nerd Font
+
+#### Installation Methods
+
+**Cross-Platform Font Installation**:
+
+- [ ] **Linux**: Download to `~/.local/share/fonts/` and run
+      `fc-cache`
+- [ ] **macOS**: Download to `~/Library/Fonts/`
+- [ ] **Windows**: Download to
+      `%LOCALAPPDATA%\Microsoft\Windows\Fonts\`
+
+**Package Manager Integration**:
+
+- [ ] **Homebrew** (macOS):
+      `brew install --cask font-fira-code-nerd-font`
+- [ ] **Chocolatey** (Windows): `choco install firacodenerd`
+- [ ] **APT** (Ubuntu/Debian): `apt install fonts-firacode`
+
+#### CLI Commands
+
+```bash
+# Font installation
+--install-fonts                    # Interactive installer
+--install-fonts nerd               # Install recommended Nerd Font
+--install-fonts powerline          # Install powerline-compatible font
+--install-fonts fira-code          # Install specific font
+
+# Font management
+--list-fonts                       # Show available fonts
+--test-fonts                       # Test current font rendering
+--recommend-fonts                  # Get font recommendations
+--font-info                        # Show current font compatibility
+```
+
+#### Implementation Architecture
+
+**Font Detection System**:
+
+- [ ] Detect terminal type (iTerm2, Windows Terminal, GNOME Terminal,
+      etc.)
+- [ ] Test font rendering capabilities
+- [ ] Recommend optimal fonts based on environment
+
+**Download & Installation**:
+
+- [ ] GitHub releases API integration for Nerd Fonts
+- [ ] Font file validation (TTF/OTF format checking)
+- [ ] Cross-platform installation paths
+- [ ] System font cache refresh
+
+**Font Testing**:
+
+- [ ] Render sample statusline with various symbols
+- [ ] Test powerline separators (, , , etc.)
+- [ ] Test Nerd Font icons (, , , etc.)
+- [ ] Validate separator alignment and spacing
+
+#### Interactive Installation Flow
+
+```
+$ statusline --install-fonts
+
+🔤 Font Installation for Claude Statusline Powerline
+
+Current font compatibility: ⚠️  Partial (powerline symbols work, nerd-font symbols missing)
+Terminal detected: iTerm2 on macOS
+
+Recommended fonts for your setup:
+  1. FiraCode Nerd Font (complete symbol set) ⭐ RECOMMENDED
+  2. JetBrains Mono Nerd Font (popular choice)
+  3. Victor Mono Nerd Font (upgrade your current Victor Mono)
+
+Install FiraCode Nerd Font? [y/N]: y
+
+📥 Downloading FiraCode Nerd Font...
+✅ Downloaded 12 font files (6.2 MB)
+📁 Installing to ~/Library/Fonts/...
+🔄 Refreshing font cache...
+✅ Installation complete!
+
+Next steps:
+  1. Restart your terminal
+  2. Set terminal font to "FiraCodeNerdFont-Regular"
+  3. Run: statusline --test-fonts
+```
+
+#### Font Profile Auto-Detection
+
+- [ ] Automatically detect if user has Nerd Fonts installed
+- [ ] Switch font profile based on detected capabilities
+- [ ] Graceful fallback from nerd-font to powerline symbols
+
+#### Benefits
+
+- **User-Friendly**: No manual font hunting and installation
+- **Optimal Display**: Ensures best visual experience
+- **Cross-Platform**: Works on Linux, macOS, Windows
+- **Smart Detection**: Automatic font capability detection
+- **Terminal Integration**: Terminal-specific recommendations
+
+#### Implementation Files
+
+```
+src/cli/commands/fonts.ts          # Font management commands
+src/utils/font-detection.ts        # Font capability detection
+src/utils/font-installer.ts        # Cross-platform installation
+src/data/recommended-fonts.json    # Font database with download URLs
+```
