@@ -1,55 +1,53 @@
-import { UsageDatabase } from '../../../utils/usage-db';
-
-// Utility function for extracting project names
-function extract_project_name(
-	project_dir: string | null | undefined,
-): string {
-	return project_dir?.split('/').pop() || 'unknown';
-}
+import { DefaultAnalyticsService } from '../../../services/analytics-service';
+import { DefaultStatsFormatter } from '../../../utils/formatters/stats-formatter';
 
 export function show_project_stats(): void {
-	console.log('📊 Project Usage Breakdown\n');
-
 	try {
-		const db = new UsageDatabase();
-		const stats = db.get_usage_summary();
+		const analytics_service = new DefaultAnalyticsService();
+		const stats_formatter = new DefaultStatsFormatter();
 
-		// Group sessions by project
-		const project_stats = new Map<
-			string,
-			{ sessions: number; cost: number; tokens: number }
-		>();
+		const projects = analytics_service.get_project_breakdown();
+		stats_formatter.format_project_breakdown(projects);
 
-		stats.recent_sessions.forEach((session) => {
-			const project = extract_project_name(session.project_dir);
-			const existing = project_stats.get(project) || {
-				sessions: 0,
-				cost: 0,
-				tokens: 0,
-			};
+		if (projects.length === 0) {
+			return;
+		}
 
-			project_stats.set(project, {
-				sessions: existing.sessions + 1,
-				cost: existing.cost + session.cost,
-				tokens:
-					existing.tokens +
-					session.input_tokens +
-					session.output_tokens,
-			});
-		});
-
-		// Sort by cost
-		const sorted_projects = Array.from(project_stats.entries()).sort(
-			([, a], [, b]) => b.cost - a.cost,
+		// Additional detailed breakdown
+		const sorted_projects = projects.sort(
+			(a: any, b: any) => b.cost - a.cost,
+		);
+		const total_cost = sorted_projects.reduce(
+			(sum: number, project: any) => sum + project.cost,
+			0,
+		);
+		const total_sessions = sorted_projects.reduce(
+			(sum: number, project: any) => sum + project.sessions,
+			0,
+		);
+		const total_tokens = sorted_projects.reduce(
+			(sum: number, project: any) => sum + project.tokens,
+			0,
 		);
 
-		sorted_projects.forEach(([project, stats]) => {
-			console.log(`📁 ${project}:`);
-			console.log(`  Sessions: ${stats.sessions}`);
-			console.log(`  Tokens: ${stats.tokens}`);
-			console.log(`  Cost: $${stats.cost.toFixed(2)}`);
-			console.log();
-		});
+		console.log('\n📊 Summary:');
+		console.log(`  Total projects: ${sorted_projects.length}`);
+		console.log(`  Total cost: $${total_cost.toFixed(2)}`);
+		console.log(`  Total sessions: ${total_sessions}`);
+		console.log(
+			`  Total tokens: ${(total_tokens / 1000).toFixed(1)}k`,
+		);
+
+		console.log('\n🥧 Distribution (Top 5):');
+		for (let i = 0; i < Math.min(5, sorted_projects.length); i++) {
+			const project = sorted_projects[i];
+			const percentage = ((project.cost / total_cost) * 100).toFixed(
+				1,
+			);
+			console.log(
+				`  ${project.project}: ${percentage}% ($${project.cost.toFixed(2)})`,
+			);
+		}
 	} catch (error) {
 		console.error('❌ Failed to retrieve project stats:', error);
 		process.exit(1);
