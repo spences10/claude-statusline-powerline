@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { get_font_profile, get_symbol } from '../font-profiles';
 import { ClaudeStatusInput, StatuslineConfig } from '../types';
+import { get_symbol } from '../utils/symbols';
 import { format_tokens } from '../utils/token-formatting';
 import { BaseSegment, SegmentData } from './base';
 
@@ -22,12 +22,7 @@ export class ContextSegment extends BaseSegment {
 		if (!context_info) return null;
 
 		const style_override = this.getSegmentConfig(config);
-		const font_profile = get_font_profile(config.font_profile);
-		const brain_icon = get_symbol(
-			font_profile,
-			'brain',
-			style_override?.icons,
-		);
+		const brain_icon = get_symbol('brain', style_override?.icons);
 
 		let display = '';
 		if (context_info.session_type === 'cold') {

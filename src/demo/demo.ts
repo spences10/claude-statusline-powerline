@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { ClaudeStatusInput, FontProfile } from '../types';
+import { ClaudeStatusInput } from '../types';
 import { DEMO_CONFIGS } from './demo-configs';
 import {
 	MOCK_USAGE_SCENARIOS,
@@ -84,11 +84,7 @@ function run_statusline_with_config(
 	});
 }
 
-async function run_demo(
-	font_profile: FontProfile,
-	title: string,
-	icon: string,
-): Promise<void> {
+async function run_demo(title: string, icon: string): Promise<void> {
 	console.log('==================================================');
 	console.log(`${icon} ${title}`);
 	console.log('==================================================\n');
@@ -132,15 +128,12 @@ async function run_demo(
 			transcript_path: temp_transcript_path,
 		};
 
-		const config_with_font = {
-			...config,
-			font_profile: font_profile,
-		};
+		// Use the config as-is (powerline is the default)
 
 		try {
 			const output = await run_statusline_with_config(
 				demo_data,
-				config_with_font,
+				config,
 			);
 			console.log(output);
 		} catch (error) {
@@ -158,36 +151,25 @@ async function run_demo(
 }
 
 async function demo_powerline() {
-	return run_demo('powerline', 'Powerline Font Demo', '🎨');
-}
-
-async function demo_nerd_font() {
-	return run_demo('nerd-font', 'Nerd Font Demo', '⚡');
+	return run_demo('Powerline Font Demo', '🎨');
 }
 
 async function main() {
 	const args = process.argv.slice(2);
-	const show_powerline = args.includes('--powerline');
-	const show_nerd_font = args.includes('--nerd-font');
+	const show_powerline =
+		args.includes('--powerline') || args.length === 0;
 
-	if (!show_powerline && !show_nerd_font) {
+	if (args.length > 0 && !show_powerline) {
 		console.log('🎨 Claude Statusline Powerline Demo');
-		console.log('Usage: node demo.js [--powerline] [--nerd-font]\n');
+		console.log('Usage: node demo.js [--powerline]\n');
 		console.log('Options:');
 		console.log('  --powerline   Show powerline font combinations');
-		console.log('  --nerd-font   Show nerd font combinations');
-		console.log('  (both flags)  Show both demos\n');
+		console.log('  (no args)     Show powerline demo by default\n');
 		return;
 	}
 
 	try {
-		if (show_powerline) {
-			await demo_powerline();
-		}
-
-		if (show_nerd_font) {
-			await demo_nerd_font();
-		}
+		await demo_powerline();
 	} catch (error) {
 		console.error('Demo failed:', error);
 		process.exit(1);
@@ -200,4 +182,4 @@ if (require.main === module) {
 	main().catch(console.error);
 }
 
-export { demo_nerd_font, demo_powerline };
+export { demo_powerline };

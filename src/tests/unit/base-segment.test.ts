@@ -34,7 +34,6 @@ function run_base_segment_tests() {
 	};
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
-		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
 			directory: 'thick',

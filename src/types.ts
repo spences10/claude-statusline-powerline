@@ -52,9 +52,6 @@ export interface StatusSegment {
 export type SeparatorStyle =
 	| 'thick'
 	| 'thin'
-	| 'flame'
-	| 'wave'
-	| 'lightning'
 	| 'curvy'
 	| 'angly'
 	| 'angly2'
@@ -118,13 +115,6 @@ export type ColorTheme =
 	| 'alucard';
 
 /**
- * Font profiles that determine available separator characters
- * - `powerline`: Uses Powerline font symbols
- * - `nerd-font`: Uses Nerd Font symbols with more variety
- */
-export type FontProfile = 'powerline' | 'nerd-font';
-
-/**
  * Git repository states that can have different separator styles
  * - `clean`: Repository has no changes
  * - `dirty`: Repository has uncommitted changes
@@ -184,8 +174,6 @@ export interface StatuslineConfig {
 	color_theme?: ColorTheme;
 	/** Runtime theme object (populated automatically) */
 	current_theme?: any;
-	/** Font profile determining available separator characters */
-	font_profile?: FontProfile;
 	/** Advanced segment configuration with styling */
 	segment_config?: SegmentsConfiguration;
 }
@@ -353,24 +341,24 @@ export interface FontProfileData {
 		brain: string;
 	};
 	separators: {
-		basic: {
-			left: string;
-			right: string;
-			left_thin: string;
-			right_thin: string;
-		};
-		extra: {
-			curvy?: string;
-			curvy_left?: string;
-			angly?: string;
-			angly_left?: string;
-			angly2?: string;
-			angly2_left?: string;
-			flame?: string;
-			flame_left?: string;
-			double_chevron?: string;
-			double_chevron_left?: string;
-		};
+		left: string;
+		right: string;
+		left_thin: string;
+		right_thin: string;
+		curvy: string;
+		curvy_left: string;
+		curvy_thin: string;
+		curvy_thin_left: string;
+		angly: string;
+		angly_left: string;
+		angly2: string;
+		angly2_left: string;
+		double_chevron: string;
+		double_chevron_left: string;
+		extra_ba: string;
+		extra_bb: string;
+		extra_be: string;
+		extra_bf: string;
 	};
 }
 

@@ -33,13 +33,10 @@ export abstract class BaseTheme implements StatuslineTheme {
 				this.palette.text_light,
 			),
 			context: create_segment_theme(
-				'#0891b2', 
+				'#0891b2',
 				this.palette.text_dark,
 			),
-			usage: create_segment_theme(
-				'#8b5cf6', 
-				this.palette.text_light,
-			),
+			usage: create_segment_theme('#8b5cf6', this.palette.text_light),
 		};
 	}
 }

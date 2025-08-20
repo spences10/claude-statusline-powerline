@@ -34,7 +34,6 @@ function run_registry_tests() {
 	console.log('\nTest 4: Segment configuration handling');
 	const mock_config: StatuslineConfig = {
 		color_theme: 'dark',
-		font_profile: 'powerline',
 		separators: {
 			model: 'thick',
 			directory: 'thick',
