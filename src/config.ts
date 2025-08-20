@@ -129,7 +129,6 @@ export function get_config_path(): string {
 // Create default config template
 export const DEFAULT_CONFIG_TEMPLATE = {
 	color_theme: 'dark',
-	font_profile: 'powerline',
 	segment_config: {
 		segments: [
 			{
@@ -165,7 +164,6 @@ export function load_config(): StatuslineConfig {
 	let config: StatuslineConfig = {
 		...DEFAULT_CONFIG,
 		color_theme: 'dark',
-		font_profile: 'powerline',
 		current_theme: get_theme('dark'),
 	};
 

@@ -12,7 +12,7 @@ function run_config_tests() {
 		return false;
 	}
 
-	if (!config.color_theme || !config.font_profile) {
+	if (!config.color_theme) {
 		console.log('❌ FAIL: Config missing required properties');
 		return false;
 	}
@@ -42,7 +42,11 @@ function run_config_tests() {
 		return false;
 	}
 
-	if (!config.separators.model || !config.separators.directory || !config.separators.git) {
+	if (
+		!config.separators.model ||
+		!config.separators.directory ||
+		!config.separators.git
+	) {
 		console.log('❌ FAIL: Separators missing required segments');
 		return false;
 	}

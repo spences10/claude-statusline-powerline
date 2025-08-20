@@ -171,7 +171,7 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 					type: 'model',
 					style: {
 						separator: {
-							style: 'wave',
+							style: 'curvy',
 						},
 					},
 				},
@@ -187,7 +187,7 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 					type: 'git',
 					style: {
 						separator: {
-							style: 'lightning',
+							style: 'angly',
 						},
 					},
 				},
@@ -195,7 +195,7 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 					type: 'session',
 					style: {
 						separator: {
-							style: 'wave',
+							style: 'curvy',
 						},
 					},
 				},
@@ -203,7 +203,7 @@ export const DEMO_CONFIGS: DemoConfigEntry[] = [
 					type: 'context',
 					style: {
 						separator: {
-							style: 'flame',
+							style: 'angly2',
 						},
 					},
 				},

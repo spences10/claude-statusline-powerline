@@ -1,4 +1,3 @@
-import { get_font_profile, get_symbol } from '../font-profiles';
 import {
 	ClaudeStatusInput,
 	SegmentBuilder,
@@ -8,6 +7,7 @@ import {
 } from '../types';
 import { get_fallback_colors } from '../utils/ansi';
 import { hex_to_ansi } from '../utils/colors';
+import { get_symbol } from '../utils/symbols';
 import { truncate_segment_text } from '../utils/text';
 
 export { SegmentBuilder, SegmentData } from '../types';
@@ -65,25 +65,17 @@ export abstract class BaseSegment implements SegmentBuilder {
 
 	/**
 	 * Common setup pattern used by all segments
-	 * Returns font profile, style override, and icon getter function
+	 * Returns style override and icon getter function
 	 */
 	protected setup_segment(config: StatuslineConfig) {
 		const style_override = this.getSegmentConfig(config);
-		const font_profile = get_font_profile(config.font_profile);
 
-		const get_icon = (
-			icon_name: keyof typeof font_profile.symbols,
-		) => {
-			return get_symbol(
-				font_profile,
-				icon_name,
-				style_override?.icons,
-			);
+		const get_icon = (icon_name: string) => {
+			return get_symbol(icon_name, style_override?.icons);
 		};
 
 		return {
 			style_override,
-			font_profile,
 			get_icon,
 		};
 	}

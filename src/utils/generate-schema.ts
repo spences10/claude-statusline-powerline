@@ -1,7 +1,6 @@
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 
-import { FONT_PROFILES } from '../font-profiles';
 import { THEMES } from '../themes';
 
 interface JsonSchema {
@@ -73,8 +72,7 @@ function generate_schema(): void {
 		if (enhanced_schema.properties.font_profile) {
 			enhanced_schema.properties.font_profile.description =
 				'Font compatibility profile determining available separator symbols';
-			enhanced_schema.properties.font_profile.enum =
-				Object.keys(FONT_PROFILES);
+			enhanced_schema.properties.font_profile.enum = ['powerline'];
 			enhanced_schema.properties.font_profile.default = 'powerline';
 		}
 		if (enhanced_schema.properties.segment_config) {

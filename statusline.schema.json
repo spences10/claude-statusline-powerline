@@ -22,14 +22,6 @@
       ],
       "type": "string"
     },
-    "FontProfile": {
-      "description": "Font profiles that determine available separator characters\n- `powerline`: Uses Powerline font symbols\n- `nerd-font`: Uses Nerd Font symbols with more variety",
-      "enum": [
-        "nerd-font",
-        "powerline"
-      ],
-      "type": "string"
-    },
     "LineSegments": {
       "description": "Defines which segments appear on a specific line\nSegments are optional (can be omitted from a line)",
       "properties": {
@@ -303,12 +295,9 @@
         "angly2",
         "curvy",
         "double_chevron",
-        "flame",
-        "lightning",
         "none",
         "thick",
-        "thin",
-        "wave"
+        "thin"
       ],
       "type": "string"
     }
@@ -339,15 +328,6 @@
     },
     "current_theme": {
       "description": "Internal property populated with actual theme object - not for user configuration"
-    },
-    "font_profile": {
-      "$ref": "#/definitions/FontProfile",
-      "description": "Font compatibility profile determining available separator symbols",
-      "enum": [
-        "powerline",
-        "nerd-font"
-      ],
-      "default": "powerline"
     },
     "segment_config": {
       "$ref": "#/definitions/SegmentsConfiguration",
