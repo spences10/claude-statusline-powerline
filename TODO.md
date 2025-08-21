@@ -254,3 +254,29 @@ Update `statusline.schema.json` to include:
 	}
 }
 ```
+
+## 9. Context Segment Database Integration 🚧
+
+**Status**: Performance Enhancement Needed **Description**: Make
+context segment use usage database instead of direct file parsing
+
+### Current Problem:
+
+- Context segment reads/parses entire transcript files on every
+  statusline refresh
+- Duplicates cache token calculations already stored in usage database
+- File I/O overhead impacts statusline performance
+
+### Implementation:
+
+- [ ] Modify context segment to use `get_usage_db().get_cache_stats()`
+- [ ] Add cache hit rate calculation to usage database
+- [ ] Show historical cache trends (today/week/month averages)
+- [ ] Fall back to file parsing only for real-time session data
+- [ ] Add cache efficiency metrics to `UsageSummary` type
+
+### Benefits:
+
+- Faster statusline rendering (SQL query vs file parsing)
+- Historical cache trends vs current session only
+- Consistent data source across segments
