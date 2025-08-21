@@ -3,7 +3,7 @@ export function show_help(): void {
 	console.log('==========================\n');
 
 	console.log('Usage:');
-	console.log('  claude-statusline [command] [options]\n');
+	console.log('  claude-statusline-powerline [command] [options]\n');
 
 	console.log('Commands:');
 	console.log(
@@ -90,10 +90,14 @@ export function show_help(): void {
 	);
 
 	console.log('Examples:');
-	console.log('  claude-statusline --demo');
-	console.log('  claude-statusline --stats');
-	console.log('  claude-statusline --preview-theme electric');
-	console.log('  claude-statusline --export-data json > usage.json');
+	console.log('  claude-statusline-powerline --demo');
+	console.log('  claude-statusline-powerline --stats');
+	console.log(
+		'  claude-statusline-powerline --preview-theme electric',
+	);
+	console.log(
+		'  claude-statusline-powerline --export-data json > usage.json',
+	);
 }
 
 export function show_version(): void {
