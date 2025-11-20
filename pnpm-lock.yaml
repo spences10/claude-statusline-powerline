@@ -31,8 +31,8 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       typescript-json-schema:
-        specifier: ^0.65.1
-        version: 0.65.1
+        specifier: ^0.66.0
+        version: 0.66.0
 
 packages:
 
@@ -664,8 +664,8 @@ packages:
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
-  typescript-json-schema@0.65.1:
-    resolution: {integrity: sha512-tuGH7ff2jPaUYi6as3lHyHcKpSmXIqN7/mu50x3HlYn0EHzLpmt3nplZ7EuhUkO0eqDRc9GqWNkfjgBPIS9kxg==}
+  typescript-json-schema@0.66.0:
+    resolution: {integrity: sha512-+D7Lsr9Y7tfp+Uuc1qggl709OHdqswo58PV62OZGWcT+zT0R2wG9GnygJIlUAjpL5yjmYaxP7ofJ/9ZZLD5LpQ==}
     hasBin: true
 
   typescript@5.5.4:
@@ -1422,7 +1422,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  typescript-json-schema@0.65.1:
+  typescript-json-schema@0.66.0:
     dependencies:
       '@types/json-schema': 7.0.15
       '@types/node': 18.19.124
