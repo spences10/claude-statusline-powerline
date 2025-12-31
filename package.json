@@ -62,7 +62,7 @@
 		"prettier": "^3.6.2",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.9.2",
-		"typescript-json-schema": "^0.66.0"
+		"typescript-json-schema": "^0.67.0"
 	},
 	"dependencies": {
 		"better-sqlite3": "^12.2.0"
