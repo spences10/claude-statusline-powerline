@@ -35,6 +35,8 @@ support.
 | **Session**   | 💰   | Token usage, cost, and context monitoring | `💰 1.2k • $0.01 999k left`    |
 | **Usage**     | 📊   | Aggregated usage statistics from database | `📊 29.9k • $8.83 7d`          |
 | **Context**   | 🧠   | Cache performance and session state       | `🧠 10.5k cached (70% reused)` |
+| **Session ID**| ℹ    | Current session identifier                | `ℹ abc123-def456`              |
+| **Rate Limits** | ⚠  | Claude.ai subscription rate limit usage   | `⚠ 5h: 24% \| 7d: 41%`        |
 
 All segments can be **shown/hidden** (via `lines` configuration),
 **reordered**, and **customized** through the configuration file.
@@ -112,6 +114,12 @@ Claude Statusline Powerline uses JSON configuration files with
 			},
 			{
 				"type": "context"
+			},
+			{
+				"type": "session_id"
+			},
+			{
+				"type": "rate_limits"
 			}
 		]
 	}
@@ -342,6 +350,26 @@ maximum length per segment:
 }
 ```
 
+### Minimum Width
+
+You can set a minimum width for any segment to ensure consistent sizing.
+Content shorter than the minimum is right-padded with spaces:
+
+```json
+{
+	"segment_config": {
+		"segments": [
+			{
+				"type": "model",
+				"style": {
+					"minimum_width": 20
+				}
+			}
+		]
+	}
+}
+```
+
 ## 📦 Installation
 
 Install globally with your preferred package manager:
@@ -387,9 +415,13 @@ Claude Code sends session information via stdin as JSON:
 
 ```json
 {
-	"session_id": "...",
+	"session_id": "abc123-def456",
 	"model": { "display_name": "Claude Sonnet 4" },
-	"workspace": { "current_dir": "/path/to/project" }
+	"workspace": { "current_dir": "/path/to/project" },
+	"rate_limits": {
+		"five_hour": { "used_percentage": 23.5, "resets_at": 1738425600 },
+		"seven_day": { "used_percentage": 41.2, "resets_at": 1738857600 }
+	}
 }
 ```
 
@@ -453,6 +485,14 @@ If the database is unavailable, these segments simply won't appear.
 6. **Context** - Cache performance and session state
    - Shows cache hit rate and total cached tokens for warm sessions
    - Displays "Cold" for new sessions without significant cache usage
+7. **Session ID** - Displays the current session identifier
+   - Useful for distinguishing between multiple concurrent sessions
+   - Supports truncation for long IDs (default max 20 chars)
+8. **Rate Limits** - Shows Claude.ai subscription rate limit usage
+   - Displays 5-hour and 7-day rolling window percentages
+   - Only appears for Claude.ai subscribers (Pro/Max) after the first
+     API response
+   - Gracefully hides when rate limit data is not available
 
 ## Credits
 
