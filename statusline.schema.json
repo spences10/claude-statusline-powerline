@@ -212,6 +212,10 @@
 				"truncation_length": {
 					"description": "Maximum length before truncation",
 					"type": "number"
+				},
+				"minimum_width": {
+					"description": "Minimum width - content will be padded with spaces if shorter",
+					"type": "number"
 				}
 			},
 			"type": "object"

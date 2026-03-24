@@ -234,6 +234,8 @@ export interface SegmentStyleConfig {
 	};
 	/** Maximum length before truncation */
 	truncation_length?: number;
+	/** Minimum width - content will be padded with spaces if shorter */
+	minimum_width?: number;
 }
 
 /**

@@ -81,6 +81,20 @@ export abstract class BaseSegment implements SegmentBuilder {
 	}
 
 	/**
+	 * Pad content to minimum_width if configured
+	 */
+	protected apply_minimum_width(
+		content: string,
+		style_override?: SegmentStyleConfig,
+	): string {
+		const min_width = style_override?.minimum_width;
+		if (min_width && content.length < min_width) {
+			return content + ' '.repeat(min_width - content.length);
+		}
+		return content;
+	}
+
+	/**
 	 * Truncate text for this segment using config
 	 */
 	protected truncate_text(
