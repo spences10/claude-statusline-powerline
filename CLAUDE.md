@@ -58,8 +58,8 @@ pnpm run release      # Build and publish
   segments
 - **Auto-registration**: Segments auto-register on import via
   `src/segments/index.ts`
-- **Built-in segments**: model, directory, git, session (in
-  `src/segments/`)
+- **Built-in segments**: model, directory, git, session, context,
+  usage, session_id, rate_limits (in `src/segments/`)
 - Each segment implements `build()` method returning styled segment
   with separator info
 
