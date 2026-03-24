@@ -73,7 +73,8 @@ export type SegmentType =
 	| 'git'
 	| 'session'
 	| 'context'
-	| 'usage';
+	| 'usage'
+	| 'session_id';
 
 /**
  * Available themes that define separator and styling patterns
@@ -150,6 +151,8 @@ export interface SeparatorConfig {
 	context: SeparatorStyle;
 	/** Separator style for the usage segment */
 	usage?: SeparatorStyle;
+	/** Separator style for the session_id segment */
+	session_id?: SeparatorStyle;
 }
 
 /**
@@ -310,6 +313,7 @@ export interface StatuslineTheme {
 		session: SegmentTheme;
 		context: SegmentTheme;
 		usage?: SegmentTheme;
+		session_id?: SegmentTheme;
 	};
 }
 

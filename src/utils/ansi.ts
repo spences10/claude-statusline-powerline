@@ -69,6 +69,11 @@ export const FALLBACK_COLORS = {
 		fg: ANSI_FG.bright_white,
 		separator: ANSI_FG.purple,
 	},
+	session_id: {
+		bg: ANSI_BG.blue,
+		fg: ANSI_FG.bright_white,
+		separator: ANSI_FG.blue,
+	},
 	error: {
 		bg: ANSI_BG.red,
 		fg: ANSI_FG.bright_white,

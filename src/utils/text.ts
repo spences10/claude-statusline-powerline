@@ -24,7 +24,7 @@ export function truncate_text(
  * Get the maximum length for a segment from config with fallbacks
  */
 export function get_segment_max_length(
-	segment_type: 'model' | 'directory' | 'git' | 'session' | 'context',
+	segment_type: string,
 	style_override: SegmentStyleConfig | undefined,
 	config: StatuslineConfig,
 ): number {
@@ -45,6 +45,10 @@ export function get_segment_max_length(
 			return 30;
 		case 'context':
 			return 20;
+		case 'session_id':
+			return 20;
+		case 'rate_limits':
+			return 30;
 		default:
 			return 20;
 	}
@@ -55,7 +59,7 @@ export function get_segment_max_length(
  */
 export function truncate_segment_text(
 	text: string,
-	segment_type: 'model' | 'directory' | 'git',
+	segment_type: string,
 	style_override: SegmentStyleConfig | undefined,
 	config: StatuslineConfig,
 ): string {

@@ -102,15 +102,23 @@ export abstract class BaseSegment implements SegmentBuilder {
 		config: StatuslineConfig,
 		style_override?: SegmentStyleConfig,
 	): string {
-		// Only support truncation for segments that have standardized truncation
-		const segment_type = this.name as 'model' | 'directory' | 'git';
-		if (!['model', 'directory', 'git'].includes(segment_type)) {
+		const supported_types = [
+			'model',
+			'directory',
+			'git',
+			'session',
+			'context',
+			'session_id',
+			'rate_limits',
+		];
+		const segment_type = this.name;
+		if (!supported_types.includes(segment_type)) {
 			return text;
 		}
 
 		return truncate_segment_text(
 			text,
-			segment_type,
+			segment_type as any,
 			style_override,
 			config,
 		);

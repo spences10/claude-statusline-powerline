@@ -40,6 +40,9 @@
 				"session": {
 					"type": "boolean"
 				},
+				"session_id": {
+					"type": "boolean"
+				},
 				"usage": {
 					"type": "boolean"
 				}
@@ -228,6 +231,7 @@
 				"git",
 				"model",
 				"session",
+				"session_id",
 				"usage"
 			],
 			"type": "string"
@@ -277,6 +281,10 @@
 				"session": {
 					"$ref": "#/definitions/SeparatorStyle",
 					"description": "Separator style for the session segment"
+				},
+				"session_id": {
+					"$ref": "#/definitions/SeparatorStyle",
+					"description": "Separator style for the session_id segment"
 				},
 				"usage": {
 					"$ref": "#/definitions/SeparatorStyle",
