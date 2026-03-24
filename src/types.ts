@@ -15,6 +15,17 @@ export interface ClaudeStatusInput {
 		/** Display name for the model */
 		display_name: string;
 	};
+	/** Rate limit usage information (Claude.ai subscribers only) */
+	rate_limits?: {
+		five_hour?: {
+			used_percentage: number;
+			resets_at: number;
+		};
+		seven_day?: {
+			used_percentage: number;
+			resets_at: number;
+		};
+	};
 	/** Workspace information */
 	workspace: {
 		/** Current working directory */
@@ -74,7 +85,8 @@ export type SegmentType =
 	| 'session'
 	| 'context'
 	| 'usage'
-	| 'session_id';
+	| 'session_id'
+	| 'rate_limits';
 
 /**
  * Available themes that define separator and styling patterns
@@ -153,6 +165,8 @@ export interface SeparatorConfig {
 	usage?: SeparatorStyle;
 	/** Separator style for the session_id segment */
 	session_id?: SeparatorStyle;
+	/** Separator style for the rate_limits segment */
+	rate_limits?: SeparatorStyle;
 }
 
 /**
@@ -314,6 +328,7 @@ export interface StatuslineTheme {
 		context: SegmentTheme;
 		usage?: SegmentTheme;
 		session_id?: SegmentTheme;
+		rate_limits?: SegmentTheme;
 	};
 }
 

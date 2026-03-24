@@ -3,6 +3,7 @@ import { run_base_segment_tests } from './unit/base-segment.test';
 import { run_config_tests } from './unit/config.test';
 import { run_registry_tests } from './unit/registry.test';
 import { run_minimum_width_tests } from './unit/minimum-width.test';
+import { run_rate_limits_segment_tests } from './unit/rate-limits-segment.test';
 import { run_session_id_segment_tests } from './unit/session-id-segment.test';
 import { run_session_segment_tests } from './unit/session-segment.test';
 
@@ -15,6 +16,7 @@ async function run_all_tests() {
 		{ name: 'Config', fn: run_config_tests },
 		{ name: 'Registry', fn: run_registry_tests },
 		{ name: 'Minimum Width', fn: run_minimum_width_tests },
+		{ name: 'Rate Limits Segment', fn: run_rate_limits_segment_tests },
 		{ name: 'Session ID Segment', fn: run_session_id_segment_tests },
 		{ name: 'Session Segment', fn: run_session_segment_tests },
 		{

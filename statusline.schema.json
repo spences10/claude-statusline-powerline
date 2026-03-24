@@ -43,6 +43,9 @@
 				"session_id": {
 					"type": "boolean"
 				},
+				"rate_limits": {
+					"type": "boolean"
+				},
 				"usage": {
 					"type": "boolean"
 				}
@@ -232,6 +235,7 @@
 				"model",
 				"session",
 				"session_id",
+				"rate_limits",
 				"usage"
 			],
 			"type": "string"
@@ -285,6 +289,10 @@
 				"session_id": {
 					"$ref": "#/definitions/SeparatorStyle",
 					"description": "Separator style for the session_id segment"
+				},
+				"rate_limits": {
+					"$ref": "#/definitions/SeparatorStyle",
+					"description": "Separator style for the rate_limits segment"
 				},
 				"usage": {
 					"$ref": "#/definitions/SeparatorStyle",
