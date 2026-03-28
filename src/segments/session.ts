@@ -50,7 +50,12 @@ export class SessionSegment extends BaseSegment {
 		const { style_override, get_icon } = this.setup_segment(config);
 		const theme = config.current_theme?.segments.session;
 		const cost_icon = get_icon('cost');
-		const content = `${cost_icon} ${format_tokens(total_tokens)} • ${cost_str}${context_display}`;
+		const raw_content = `${cost_icon} ${format_tokens(total_tokens)} • ${cost_str}${context_display}`;
+		const content = this.finalize_content(
+			raw_content,
+			config,
+			style_override,
+		);
 
 		return this.create_segment_with_fallback(
 			content,

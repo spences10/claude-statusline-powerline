@@ -13,16 +13,16 @@ export class DirectorySegment extends BaseSegment {
 
 		const cwd = data.workspace?.current_dir || process.cwd();
 		const full_dir_name = path.basename(cwd) || '~';
-		const dir_name = this.truncate_text(
-			full_dir_name,
+		const folder_icon = get_icon('folder');
+		const content = this.finalize_content(
+			`${folder_icon} ${full_dir_name}`,
 			config,
 			style_override,
 		);
-		const folder_icon = get_icon('folder');
 		const theme = config.current_theme?.segments.directory;
 
 		return this.create_segment_with_fallback(
-			`${folder_icon} ${dir_name}`,
+			content,
 			theme,
 			'directory',
 			config.separators.directory,

@@ -15,11 +15,6 @@ export class GitSegment extends BaseSegment {
 		if (git_info) {
 			const { style_override, get_icon } = this.setup_segment(config);
 
-			const branch_name = this.truncate_text(
-				git_info.branch,
-				config,
-				style_override,
-			);
 			const branch_icon = get_icon('branch');
 
 			// Build status indicators
@@ -83,8 +78,13 @@ export class GitSegment extends BaseSegment {
 			const fallback_type = git_info.is_dirty
 				? 'git_dirty'
 				: 'git_clean';
-			const content =
-				`${branch_icon} ${branch_name} ${status_display}`.trimEnd();
+			const raw_content =
+				`${branch_icon} ${git_info.branch} ${status_display}`.trimEnd();
+			const content = this.finalize_content(
+				raw_content,
+				config,
+				style_override,
+			);
 
 			return this.create_segment_with_fallback(
 				content,

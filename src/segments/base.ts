@@ -102,26 +102,33 @@ export abstract class BaseSegment implements SegmentBuilder {
 		config: StatuslineConfig,
 		style_override?: SegmentStyleConfig,
 	): string {
-		const supported_types = [
-			'model',
-			'directory',
-			'git',
-			'session',
-			'context',
-			'session_id',
-			'rate_limits',
-		];
-		const segment_type = this.name;
-		if (!supported_types.includes(segment_type)) {
-			return text;
-		}
-
 		return truncate_segment_text(
 			text,
-			segment_type as any,
+			this.name,
 			style_override,
 			config,
 		);
+	}
+
+	/**
+	 * Apply truncation then minimum_width to full segment content.
+	 * Call this on the complete content string (including icons)
+	 * before passing to create_segment_with_fallback.
+	 */
+	protected finalize_content(
+		content: string,
+		config: StatuslineConfig,
+		style_override?: SegmentStyleConfig,
+	): string {
+		const resolved_style =
+			style_override ?? this.getSegmentConfig(config);
+		let result = this.truncate_text(
+			content,
+			config,
+			resolved_style,
+		);
+		result = this.apply_minimum_width(result, resolved_style);
+		return result;
 	}
 
 	/**

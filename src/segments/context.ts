@@ -24,16 +24,21 @@ export class ContextSegment extends BaseSegment {
 		const style_override = this.getSegmentConfig(config);
 		const brain_icon = get_symbol('brain', style_override?.icons);
 
-		let display = '';
+		let raw_display = '';
 		if (context_info.session_type === 'cold') {
-			display = `${brain_icon} Cold`;
+			raw_display = `${brain_icon} Cold`;
 		} else {
 			const formatted_tokens = format_tokens(
 				context_info.total_cache_tokens,
 			);
-			display = `${brain_icon} ${formatted_tokens} cached (${context_info.cache_hit_rate}% reused)`;
+			raw_display = `${brain_icon} ${formatted_tokens} cached (${context_info.cache_hit_rate}% reused)`;
 		}
 
+		const display = this.finalize_content(
+			raw_display,
+			config,
+			style_override,
+		);
 		const theme = config.current_theme?.segments.context;
 		if (!theme) {
 			// Fallback if theme is not available

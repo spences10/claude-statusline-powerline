@@ -51,7 +51,12 @@ export class UsageSegment extends BaseSegment {
 				: `$${week_data.total_cost.toFixed(2)}`;
 
 		const usage_icon = get_icon('cost');
-		const content = `${usage_icon} ${format_tokens(total_tokens)} • ${cost_str} 7d`;
+		const raw_content = `${usage_icon} ${format_tokens(total_tokens)} • ${cost_str} 7d`;
+		const content = this.finalize_content(
+			raw_content,
+			config,
+			style_override,
+		);
 
 		return this.create_segment_with_fallback(
 			content,
@@ -68,7 +73,11 @@ export class UsageSegment extends BaseSegment {
 		const { style_override, get_icon } = this.setup_segment(config);
 		const theme = config.current_theme?.segments.usage;
 		const error_icon = get_icon('error');
-		const content = `${error_icon} DB Error`;
+		const content = this.finalize_content(
+			`${error_icon} DB Error`,
+			config,
+			style_override,
+		);
 
 		return this.create_segment_with_fallback(
 			content,

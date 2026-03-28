@@ -11,16 +11,16 @@ export class ModelSegment extends BaseSegment {
 		const { style_override, get_icon } = this.setup_segment(config);
 
 		const model = data.model?.display_name || 'Claude';
-		const display_model = this.truncate_text(
-			model,
+		const ai_icon = get_icon('ai');
+		const content = this.finalize_content(
+			`${ai_icon} ${model}`,
 			config,
 			style_override,
 		);
-		const ai_icon = get_icon('ai');
 		const theme = config.current_theme?.segments.model;
 
 		return this.create_segment_with_fallback(
-			`${ai_icon} ${display_model}`,
+			content,
 			theme,
 			'model',
 			config.separators.model,

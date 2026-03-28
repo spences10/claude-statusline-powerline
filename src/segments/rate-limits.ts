@@ -26,8 +26,9 @@ export class RateLimitsSegment extends BaseSegment {
 			parts.push(`7d: ${Math.round(seven_day.used_percentage)}%`);
 		}
 
-		const content = this.apply_minimum_width(
+		const content = this.finalize_content(
 			`${warning_icon} ${parts.join(' | ')}`,
+			config,
 			style_override,
 		);
 
