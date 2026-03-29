@@ -13,7 +13,7 @@ function create_segment(
 	bg_color: string,
 	fg_color: string,
 ): string {
-	return `${bg_color}${fg_color}${content} ${ANSI_RESET}`;
+	return `${bg_color}${fg_color} ${content} ${ANSI_RESET}`;
 }
 
 function build_line_segments(
