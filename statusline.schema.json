@@ -37,13 +37,13 @@
 				"model": {
 					"type": "boolean"
 				},
+				"rate_limits": {
+					"type": "boolean"
+				},
 				"session": {
 					"type": "boolean"
 				},
 				"session_id": {
-					"type": "boolean"
-				},
-				"rate_limits": {
 					"type": "boolean"
 				},
 				"usage": {
@@ -196,6 +196,10 @@
 						}
 					}
 				},
+				"minimum_width": {
+					"description": "Minimum width - content will be padded with spaces if shorter",
+					"type": "number"
+				},
 				"separator": {
 					"description": "Separator styling",
 					"properties": {
@@ -218,10 +222,6 @@
 				"truncation_length": {
 					"description": "Maximum length before truncation",
 					"type": "number"
-				},
-				"minimum_width": {
-					"description": "Minimum width - content will be padded with spaces if shorter",
-					"type": "number"
 				}
 			},
 			"type": "object"
@@ -233,9 +233,9 @@
 				"directory",
 				"git",
 				"model",
+				"rate_limits",
 				"session",
 				"session_id",
-				"rate_limits",
 				"usage"
 			],
 			"type": "string"
@@ -275,12 +275,16 @@
 					"description": "Separator style for the directory segment"
 				},
 				"git": {
-					"$ref": "#/definitions/Record<GitState,SeparatorStyle>",
+					"$ref": "#/definitions/Record%3CGitState%2CSeparatorStyle%3E",
 					"description": "Separator styles for different git states"
 				},
 				"model": {
 					"$ref": "#/definitions/SeparatorStyle",
 					"description": "Separator style for the model segment"
+				},
+				"rate_limits": {
+					"$ref": "#/definitions/SeparatorStyle",
+					"description": "Separator style for the rate_limits segment"
 				},
 				"session": {
 					"$ref": "#/definitions/SeparatorStyle",
@@ -289,10 +293,6 @@
 				"session_id": {
 					"$ref": "#/definitions/SeparatorStyle",
 					"description": "Separator style for the session_id segment"
-				},
-				"rate_limits": {
-					"$ref": "#/definitions/SeparatorStyle",
-					"description": "Separator style for the rate_limits segment"
 				},
 				"usage": {
 					"$ref": "#/definitions/SeparatorStyle",
