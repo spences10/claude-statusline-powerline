@@ -65,6 +65,6 @@
 		"typescript-json-schema": "^0.66.0"
 	},
 	"dependencies": {
-		"better-sqlite3": "^12.2.0"
+		"better-sqlite3": "^13.0.0"
 	}
 }
